@@ -63,6 +63,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 
 
 
+
 .fi { --fi-green: #4f9a2a; --fi-yellow: #e2a400; --fi-red: #d9432b; --fi-plum: #7d3c98; --fi-blue: #2b7bbf; --fi-orange: #ea7a17; --fi-pink: #d24f86;
   --fi-paper: color-mix(in srgb, var(--color-panel) 90%, #f2c14e);
   font-family: var(--font-anthropic-sans); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
@@ -322,8 +323,8 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       <div class="fi-chart dash-skeleton" id="busy" data-source="load_hours"></div>
     </div>
     <div class="fi-card" style="--sec: var(--fi-blue)">
-      <h3 class="fi-h3" id="nights-title">Noční krmení za noc (22:00 až 06:00), po týdnech</h3>
-      <p class="fi-note">Průměrný počet nočních krmení v každém týdnu, rozdělený podle toho, kdo je zapsal. Klepnutím na týden uvidíte i noční odsávání, které přidává práci tomu, kdo odsává.</p>
+      <h3 class="fi-h3" id="nights-title">Noční krmení za týden (22:00 až 06:00)</h3>
+      <p class="fi-note">Celkový počet nočních krmení v každém týdnu, rozdělený podle toho, kdo je zapsal. Vybledlé sloupce jsou neúplné týdny, například ten aktuální, takže vycházejí níž. Klepnutím na týden uvidíte počty včetně nočního odsávání, které přidává práci tomu, kdo odsává.</p>
       <div class="fi-legend" id="nights-legend"></div>
       <div class="fi-chart dash-skeleton" id="nights" data-source="nights"></div>
     </div>
@@ -668,8 +669,8 @@ dash.calc('busiest', {
 });
 
 dash.calc('nights', {
-  title: 'Night feeds per night by week',
-  description: 'Average feeds and pump sessions per night (22:00 to 06:00) each week, split by who logged them. The night still in progress at export time is left out, and weeks with fewer than 4 nights are dropped.',
+  title: 'Night feeds each week',
+  description: 'Total feeds and pump sessions between 22:00 and 06:00 each week, split by who logged them, with the number of nights the week covers. The night still in progress at export time is left out; weeks with fewer than 7 nights are partial.',
   inputs: ['events', 'feeds'],
   fn: (events, feeds) => {
     const wk = d => { const t = Date.parse(d); return new Date(t - ((new Date(t).getUTCDay() + 6) % 7) * 864e5).toISOString().slice(0, 10); };
@@ -690,8 +691,7 @@ dash.calc('nights', {
     const out = [];
     Object.keys(nightsByWeek).sort().forEach(w => {
       const n = nightsByWeek[w].size;
-      if (n < 4) return;
-      people.forEach(p => { const v = c[w + '|' + p] || { feeds: 0, pumps: 0 }; out.push({ week: w, caregiver: p, nights: n, feeds_per_night: Math.round(v.feeds / n * 10) / 10, pumps_per_night: Math.round(v.pumps / n * 10) / 10 }); });
+      people.forEach(p => { const v = c[w + '|' + p] || { feeds: 0, pumps: 0 }; out.push({ week: w, caregiver: p, nights: n, feeds: v.feeds, pumps: v.pumps }); });
     });
     return out;
   }
@@ -1295,11 +1295,12 @@ function drawAll() {
   if (setState(nt, ['nights'])) {
     const r = rowsOf('nights');
     const weeks = [...new Set(r.map(d => d.week))].sort();
-    const data = weeks.map(w => { const o = { x: w }; ppl.forEach((p, i) => { const d = r.find(q => q.week === w && q.caregiver === p); o['f' + i] = d ? d.feeds_per_night : 0; o['p' + i] = d ? d.pumps_per_night : 0; o.n = d ? d.nights : 0; }); return o; });
+    const data = weeks.map(w => { const o = { x: w }; ppl.forEach((p, i) => { const d = r.find(q => q.week === w && q.caregiver === p); o['f' + i] = d ? d.feeds : 0; o['p' + i] = d ? d.pumps : 0; o.n = d ? d.nights : 0; }); return o; });
     stackBars(nt, {
-      data, keys: ppl.map((p, i) => ({ key: 'f' + i, name: p, color: cc[i % cc.length] })), height: 220, xFmt: weekLabel, yFmt: v => fmt1(v),
-      tipTitle: d => `Týden od ${weekLabel(d.x)} (${d.n} nocí)`,
-      tipLines: d => ppl.map((p, i) => ({ color: cc[i % cc.length], name: `${p}: krmení`, value: `${fmt1(d['f' + i])} za noc` })).concat(ppl.map((p, i) => d['p' + i] > 0 ? { name: `${p}: odsávání`, value: `${fmt1(d['p' + i])} za noc` } : null).filter(Boolean))
+      data, keys: ppl.map((p, i) => ({ key: 'f' + i, name: p, color: cc[i % cc.length] })), height: 220, xFmt: weekLabel, yFmt: v => fmtInt(v),
+      opacityFor: d => d.n < 7 ? 0.4 : 1,
+      tipTitle: d => d.n < 7 ? `Týden od ${weekLabel(d.x)}, neúplný (nocí: ${d.n})` : `Týden od ${weekLabel(d.x)}`,
+      tipLines: d => ppl.map((p, i) => ({ color: cc[i % cc.length], name: `${p}: krmení`, value: fmtInt(d['f' + i]) })).concat(ppl.map((p, i) => d['p' + i] > 0 ? { name: `${p}: odsávání`, value: fmtInt(d['p' + i]) } : null).filter(Boolean))
     });
   }
 

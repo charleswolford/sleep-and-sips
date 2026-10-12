@@ -63,6 +63,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 
 
 
+
 .fi { --fi-green: #4f9a2a; --fi-yellow: #e2a400; --fi-red: #d9432b; --fi-plum: #7d3c98; --fi-blue: #2b7bbf; --fi-orange: #ea7a17; --fi-pink: #d24f86;
   --fi-paper: color-mix(in srgb, var(--color-panel) 90%, #f2c14e);
   font-family: var(--font-anthropic-sans); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
@@ -322,8 +323,8 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       <div class="fi-chart dash-skeleton" id="busy" data-source="load_hours"></div>
     </div>
     <div class="fi-card" style="--sec: var(--fi-blue)">
-      <h3 class="fi-h3" id="nights-title">Night feeds per night (22:00 to 06:00), by week</h3>
-      <p class="fi-note">The average number of night feeds each week, split by who logged them. Tap a week to see night pump sessions too, which add to whoever is pumping's night.</p>
+      <h3 class="fi-h3" id="nights-title">Night feeds each week (22:00 to 06:00)</h3>
+      <p class="fi-note">The total number of night feeds each week, split by who logged them. Faded bars are partial weeks, such as the current one, so they read lower. Tap a week to see the counts, including night pump sessions, which add to whoever is pumping's night.</p>
       <div class="fi-legend" id="nights-legend"></div>
       <div class="fi-chart dash-skeleton" id="nights" data-source="nights"></div>
     </div>
@@ -661,8 +662,8 @@ dash.calc('busiest', {
 });
 
 dash.calc('nights', {
-  title: 'Night feeds per night by week',
-  description: 'Average feeds and pump sessions per night (22:00 to 06:00) each week, split by who logged them. The night still in progress at export time is left out, and weeks with fewer than 4 nights are dropped.',
+  title: 'Night feeds each week',
+  description: 'Total feeds and pump sessions between 22:00 and 06:00 each week, split by who logged them, with the number of nights the week covers. The night still in progress at export time is left out; weeks with fewer than 7 nights are partial.',
   inputs: ['events', 'feeds'],
   fn: (events, feeds) => {
     const wk = d => { const t = Date.parse(d); return new Date(t - ((new Date(t).getUTCDay() + 6) % 7) * 864e5).toISOString().slice(0, 10); };
@@ -683,8 +684,7 @@ dash.calc('nights', {
     const out = [];
     Object.keys(nightsByWeek).sort().forEach(w => {
       const n = nightsByWeek[w].size;
-      if (n < 4) return;
-      people.forEach(p => { const v = c[w + '|' + p] || { feeds: 0, pumps: 0 }; out.push({ week: w, caregiver: p, nights: n, feeds_per_night: Math.round(v.feeds / n * 10) / 10, pumps_per_night: Math.round(v.pumps / n * 10) / 10 }); });
+      people.forEach(p => { const v = c[w + '|' + p] || { feeds: 0, pumps: 0 }; out.push({ week: w, caregiver: p, nights: n, feeds: v.feeds, pumps: v.pumps }); });
     });
     return out;
   }
@@ -1288,11 +1288,12 @@ function drawAll() {
   if (setState(nt, ['nights'])) {
     const r = rowsOf('nights');
     const weeks = [...new Set(r.map(d => d.week))].sort();
-    const data = weeks.map(w => { const o = { x: w }; ppl.forEach((p, i) => { const d = r.find(q => q.week === w && q.caregiver === p); o['f' + i] = d ? d.feeds_per_night : 0; o['p' + i] = d ? d.pumps_per_night : 0; o.n = d ? d.nights : 0; }); return o; });
+    const data = weeks.map(w => { const o = { x: w }; ppl.forEach((p, i) => { const d = r.find(q => q.week === w && q.caregiver === p); o['f' + i] = d ? d.feeds : 0; o['p' + i] = d ? d.pumps : 0; o.n = d ? d.nights : 0; }); return o; });
     stackBars(nt, {
-      data, keys: ppl.map((p, i) => ({ key: 'f' + i, name: p, color: cc[i % cc.length] })), height: 220, xFmt: weekLabel, yFmt: v => fmt1(v),
-      tipTitle: d => `Week of ${weekLabel(d.x)} (${d.n} nights)`,
-      tipLines: d => ppl.map((p, i) => ({ color: cc[i % cc.length], name: `${p}: feeds`, value: `${fmt1(d['f' + i])} a night` })).concat(ppl.map((p, i) => d['p' + i] > 0 ? { name: `${p}: pump sessions`, value: `${fmt1(d['p' + i])} a night` } : null).filter(Boolean))
+      data, keys: ppl.map((p, i) => ({ key: 'f' + i, name: p, color: cc[i % cc.length] })), height: 220, xFmt: weekLabel, yFmt: v => fmtInt(v),
+      opacityFor: d => d.n < 7 ? 0.4 : 1,
+      tipTitle: d => d.n < 7 ? `Week of ${weekLabel(d.x)}, partial (${d.n} ${d.n === 1 ? 'night' : 'nights'})` : `Week of ${weekLabel(d.x)}`,
+      tipLines: d => ppl.map((p, i) => ({ color: cc[i % cc.length], name: `${p}: feeds`, value: fmtInt(d['f' + i]) })).concat(ppl.map((p, i) => d['p' + i] > 0 ? { name: `${p}: pump sessions`, value: fmtInt(d['p' + i]) } : null).filter(Boolean))
     });
   }
 
