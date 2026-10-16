@@ -64,6 +64,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 
 
 
+
 .fi { --fi-green: #4f9a2a; --fi-yellow: #e2a400; --fi-red: #d9432b; --fi-plum: #7d3c98; --fi-blue: #2b7bbf; --fi-orange: #ea7a17; --fi-pink: #d24f86;
   --fi-paper: color-mix(in srgb, var(--color-panel) 90%, #f2c14e);
   font-family: var(--font-anthropic-sans); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
@@ -217,7 +218,17 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-plum)">
       <div class="fi-tl">Breast milk pumped</div>
       <div class="fi-big"><span data-source="totals" data-where="metric=pumped_litres" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">litres</span></div>
-      <div class="fi-sub">Over <span data-source="totals" data-where="metric=pump_sessions" data-field="value" class="dash-skeleton">-</span> pump sessions and <span data-source="totals" data-where="metric=pump_hours" data-field="value" class="dash-skeleton">-</span> hours of pumping</div>
+      <div class="fi-sub">Over <span data-source="totals" data-where="metric=pump_sessions" data-field="value" class="dash-skeleton">-</span> pump sessions</div>
+    </div>
+    <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-plum)">
+      <div class="fi-tl">Time spent pumping</div>
+      <div class="fi-big"><span data-source="totals" data-where="metric=pump_minutes" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">minutes</span></div>
+      <div class="fi-sub">About <span data-source="totals" data-where="metric=pump_avg_min" data-field="value" class="dash-skeleton">-</span> minutes per session</div>
+    </div>
+    <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-pink)">
+      <div class="fi-tl">Direct breastfeeds</div>
+      <div class="fi-big"><span data-source="totals" data-where="metric=breastfeeds" data-field="value" class="dash-skeleton">-</span></div>
+      <div class="fi-sub">Last one on <span data-source="totals" data-where="metric=breastfeeds" data-field="since" class="dash-skeleton">-</span></div>
     </div>
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-blue)">
       <div class="fi-tl">Sleep logged</div>
@@ -237,8 +248,9 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
     </div>
     <div class="fi-card" style="--sec: var(--fi-plum)">
-      <h3 class="fi-h3" id="pumptime-title">Time spent pumping, hours per day</h3>
-      <p class="fi-note">The average time spent pumping each day, week by week, from the duration logged for each session. It doesn't include setting up, washing, or sterilising, so the real time is longer. Tap a week to see sessions per day and the typical session length.</p>
+      <h3 class="fi-h3" id="pumptime-title">Time spent pumping and milk pumped, per day</h3>
+      <p class="fi-note">Columns show the average minutes spent pumping each day, week by week (left scale). The line shows the average breast milk pumped each day, in ml (right scale). Time comes from the duration logged for each session, so it doesn't include setting up, washing, or sterilising. Tap a week to see sessions per day and the typical session length.</p>
+      <div class="fi-legend" id="pumptime-legend"></div>
       <div class="fi-chart dash-skeleton" id="pumptime" data-source="pumping"></div>
     </div>
   </section>
@@ -693,7 +705,7 @@ dash.calc('nights', {
 
 dash.calc('totals', {
   title: 'Totals since birth',
-  description: 'Running totals from every entry in the export: nappies (wet and dirty), feeds (a mixed bottle logged as two entries counts once), milk from bottles, formula, and breast milk pumped in litres, pump sessions, and sleep logged since sleep tracking began.',
+  description: 'Running totals from every entry in the export: nappies (wet and dirty), feeds (a mixed bottle logged as two entries counts once), milk from bottles, formula, and breast milk pumped in litres, pump sessions and minutes spent pumping, direct breastfeeding sessions with the date of the last one, and sleep logged since sleep tracking began.',
   inputs: ['events', 'feeds'],
   fn: (events, feeds) => {
     const nap = events.filter(e => e.type === 'Diaper');
@@ -710,7 +722,9 @@ dash.calc('totals', {
       { metric: 'formula_litres', value: litres(events.reduce((s, e) => s + e.formula_ml, 0)) },
       { metric: 'pumped_litres', value: litres(pumps.reduce((s, e) => s + e.pump_ml, 0)) },
       { metric: 'pump_sessions', value: pumps.length },
-      { metric: 'pump_hours', value: Math.round(pumps.reduce((s, e) => s + e.pump_min, 0) / 60) },
+      { metric: 'pump_minutes', value: Math.round(pumps.reduce((s, e) => s + e.pump_min, 0)) },
+      { metric: 'pump_avg_min', value: pumps.filter(e => e.pump_min > 0).length ? Math.round(pumps.reduce((s, e) => s + e.pump_min, 0) / pumps.filter(e => e.pump_min > 0).length) : null },
+      { metric: 'breastfeeds', value: events.filter(e => e.type === 'Breastfeed').length, since: (events.filter(e => e.type === 'Breastfeed').slice(-1)[0] || {}).day || null },
       { metric: 'sleep_hours', value: Math.round(sleeps.reduce((s, e) => s + e.sleep_h, 0)), since: firstSleep }
     ];
   }
@@ -718,8 +732,8 @@ dash.calc('totals', {
 
 
 dash.calc('pumping', {
-  title: 'Time spent pumping per week',
-  description: 'For each week from the first logged pump: average hours of pumping per day, pump sessions per day, and the average session length, from the duration logged for each pump. Full days only; weeks with fewer than 4 days are left out.',
+  title: 'Pumping time and volume per week',
+  description: 'For each week from the first logged pump: average minutes of pumping per day, average breast milk pumped per day in ml, pump sessions per day, and the average session length, from the duration and volume logged for each pump. Full days only; weeks with fewer than 4 days are left out.',
   inputs: ['events', 'daily'],
   fn: (events, daily) => {
     const wk = d => { const t = Date.parse(d); return new Date(t - ((new Date(t).getUTCDay() + 6) % 7) * 864e5).toISOString().slice(0, 10); };
@@ -727,12 +741,13 @@ dash.calc('pumping', {
     if (!pumps.length) return [];
     const full = daily.filter(d => !d.partial && d.day >= pumps[0].day);
     const weeks = {};
-    full.forEach(d => { const w = weeks[wk(d.day)] = weeks[wk(d.day)] || { week: wk(d.day), days: 0, sessions: 0, minutes: 0, timed: 0 }; w.days += 1; });
+    full.forEach(d => { const w = weeks[wk(d.day)] = weeks[wk(d.day)] || { week: wk(d.day), days: 0, sessions: 0, minutes: 0, timed: 0, ml: 0 }; w.days += 1; });
     const fullSet = new Set(full.map(d => d.day));
-    pumps.filter(e => fullSet.has(e.day)).forEach(e => { const w = weeks[wk(e.day)]; w.sessions += 1; w.minutes += e.pump_min; if (e.pump_min > 0) w.timed += 1; });
+    pumps.filter(e => fullSet.has(e.day)).forEach(e => { const w = weeks[wk(e.day)]; w.sessions += 1; w.minutes += e.pump_min; w.ml += e.pump_ml; if (e.pump_min > 0) w.timed += 1; });
     return Object.values(weeks).filter(w => w.days >= 4).sort((a, b) => a.week < b.week ? -1 : 1).map(w => ({
       week: w.week, days: w.days,
-      hours_per_day: Math.round(w.minutes / 60 / w.days * 100) / 100,
+      minutes_per_day: Math.round(w.minutes / w.days),
+      ml_per_day: Math.round(w.ml / w.days),
       sessions_per_day: Math.round(w.sessions / w.days * 10) / 10,
       avg_session_min: w.timed ? Math.round(w.minutes / w.timed) : null
     }));
@@ -983,6 +998,54 @@ function balanceBars(box, rows) {
     .on('pointerleave', (ev) => { if (ev.pointerType === 'touch') return; hlr.style('display', 'none'); hideTip(box); });
 }
 
+function comboChart(box, cfg) {
+  box.replaceChildren();
+  const data = cfg.data;
+  if (!data.length) { emptyMsg(box, cfg.emptyText || 'Nothing logged yet'); return; }
+  const W = Math.max(260, box.clientWidth), H = cfg.height || 240;
+  const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('class', 'fi-svg');
+  const top = 12, bot = H - 24, ticks = 4;
+  const yL = d3.scaleLinear([0, (d3.max(data, d => d.bar) || 1) * 1.08], [bot, top]).nice(ticks);
+  const yR = d3.scaleLinear([0, (d3.max(data, d => d.line) || 1) * 1.08], [bot, top]).nice(ticks);
+  const grid = svg.append('g').attr('class', 'fi-gridl');
+  const ml = yAxisFit(svg, yL, ticks, cfg.barFmt);
+  svg.selectAll('.fi-axis').filter((d, i, n) => i === n.length - 1).selectAll('text').style('fill', cfg.barColor);
+  const ra = stripAxis(svg.append('g').attr('class', 'fi-axis').call(d3.axisRight(yR).ticks(ticks).tickSize(0).tickPadding(6).tickFormat(cfg.lineFmt)));
+  ra.select('.domain').remove();
+  ra.selectAll('text').style('fill', cfg.lineColor);
+  let rw = 0; ra.selectAll('text').each(function () { rw = Math.max(rw, this.getComputedTextLength()); });
+  const mr = Math.ceil(rw) + 10;
+  ra.attr('transform', `translate(${W - mr},0)`);
+  grid.selectAll('line').data(yL.ticks(ticks)).join('line').attr('x1', ml).attr('x2', W - mr).attr('y1', d => yL(d)).attr('y2', d => yL(d));
+  const x = d3.scaleBand(data.map(d => d.x), [ml + 4, W - mr - 4]).padding(0.25);
+  const bw = Math.min(32, x.bandwidth()), off = (x.bandwidth() - bw) / 2;
+  svg.append('g').selectAll('rect').data(data).join('rect')
+    .attr('x', d => x(d.x) + off).attr('width', bw).attr('y', d => yL(d.bar)).attr('height', d => Math.max(0, bot - yL(d.bar)))
+    .attr('rx', 4).attr('fill', cfg.barColor).attr('opacity', 0.85);
+  const cx = d => x(d.x) + x.bandwidth() / 2;
+  svg.append('path').datum(data).attr('fill', 'none').attr('stroke', cfg.lineColor).attr('stroke-width', 2.5).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round')
+    .attr('d', d3.line().x(cx).y(d => yR(d.line)));
+  svg.append('g').selectAll('circle').data(data).join('circle').attr('cx', cx).attr('cy', d => yR(d.line)).attr('r', 3.5)
+    .attr('fill', cfg.lineColor).attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5);
+  const xa = stripAxis(svg.append('g').attr('class', 'fi-axis').attr('transform', `translate(0,${bot})`).call(d3.axisBottom(x).tickSize(0).tickPadding(6).tickFormat(cfg.xFmt || (v => v))));
+  xa.select('.domain').remove();
+  let last = -Infinity;
+  xa.selectAll('.tick').each(function () {
+    const len = d3.select(this).select('text').node().getComputedTextLength();
+    const tx = +this.getAttribute('transform').match(/translate\(([-\d.]+)/)[1];
+    if (tx - len / 2 < last + 6) d3.select(this).select('text').remove(); else last = tx + len / 2;
+  });
+  const hlr = svg.append('rect').attr('fill', 'none').attr('stroke', 'var(--color-fg-muted)').attr('rx', 4).style('display', 'none');
+  svg.append('g').selectAll('rect').data(data).join('rect')
+    .attr('x', d => x(d.x)).attr('width', x.bandwidth()).attr('y', top).attr('height', bot - top).attr('fill', 'transparent')
+    .on('pointerdown pointermove', (ev, d) => {
+      hlr.style('display', null).attr('x', x(d.x) + off - 2).attr('width', bw + 4).attr('y', yL(d.bar) - 2).attr('height', bot - yL(d.bar) + 2);
+      const [bx, by] = d3.pointer(ev, box);
+      showTip(box, bx, by, cfg.tipTitle(d), cfg.tipLines(d));
+    })
+    .on('pointerleave', (ev) => { if (ev.pointerType === 'touch') return; hlr.style('display', 'none'); hideTip(box); });
+}
+
 function rhythm(box, timeline, daily) {
   box.replaceChildren();
   if (!daily.length) { emptyMsg(box, 'Nothing logged yet'); return; }
@@ -1118,15 +1181,17 @@ function drawAll() {
     });
   }
 
-  // Time spent pumping
+  // Time spent pumping and milk pumped
+  legend('pumptime-legend', [{ name: 'Minutes pumping per day', color: PAL.plum }, { name: 'Milk pumped per day (ml)', color: PAL.green, line: 1 }]);
   const pt = document.getElementById('pumptime');
   if (setState(pt, ['pumping'])) {
-    const r = rowsOf('pumping').map(d => ({ x: d.week, v: d.hours_per_day, s: d.sessions_per_day, m: d.avg_session_min, days: d.days }));
-    stackBars(pt, {
-      data: r, keys: [{ key: 'v', name: 'Hours per day', color: PAL.plum }], xFmt: weekLabel, yFmt: v => `${fmt1(v)} h`, height: 220,
+    const r = rowsOf('pumping').map(d => ({ x: d.week, bar: d.minutes_per_day, line: d.ml_per_day, s: d.sessions_per_day, m: d.avg_session_min, days: d.days }));
+    comboChart(pt, {
+      data: r, barColor: PAL.plum, lineColor: PAL.green, xFmt: weekLabel,
+      barFmt: v => `${fmtInt(v)} min`, lineFmt: v => `${fmtInt(v)} ml`,
       emptyText: 'No pumping logged yet',
       tipTitle: d => `Week of ${weekLabel(d.x)}`,
-      tipLines: d => [{ name: 'Pumping', value: `${fmt1(d.v)} h a day` }, { name: 'Sessions', value: `${fmt1(d.s)} a day` }].concat(d.m ? [{ name: 'Typical session', value: `${d.m} min` }] : []).concat(d.days < 7 ? [{ name: 'Based on', value: `${d.days} full days` }] : [])
+      tipLines: d => [{ color: PAL.plum, name: 'Pumping', value: `${fmtInt(d.bar)} min a day` }, { color: PAL.green, name: 'Milk pumped', value: `${fmtInt(d.line)} ml a day` }, { name: 'Sessions', value: `${fmt1(d.s)} a day` }].concat(d.m ? [{ name: 'Typical session', value: `${d.m} min` }] : []).concat(d.days < 7 ? [{ name: 'Based on', value: `${d.days} full days` }] : [])
     });
   }
 
