@@ -65,6 +65,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 
 
 
+
 .fi { --fi-green: #4f9a2a; --fi-yellow: #e2a400; --fi-red: #d9432b; --fi-plum: #7d3c98; --fi-blue: #2b7bbf; --fi-orange: #ea7a17; --fi-pink: #d24f86;
   --fi-paper: color-mix(in srgb, var(--color-panel) 90%, #f2c14e);
   font-family: var(--font-anthropic-sans); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
@@ -96,6 +97,11 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 .fi-chart { position: relative; min-height: 240px; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; touch-action: pan-y; }
 .fi-chart .fi-svg, .fi-chart .fi-svg * { -webkit-user-select: none; user-select: none; }
 .fi-chart.fi-tall { min-height: 420px; }
+.fi-rhythm-ctl { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm) var(--cds-gap-md); align-items: center; }
+.fi-datenav { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+.fi-datenav[hidden] { display: none; }
+.fi-navbtn { font: inherit; font-size: 1.25rem; line-height: 1; width: 2.25rem; height: 2.25rem; border-radius: 999px; border: 1px solid var(--color-border-line); background: transparent; color: var(--color-fg); cursor: pointer; }
+.fi-date { font: inherit; font-size: var(--cds-font-size-body); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-radius: 10px; border: 1px solid var(--color-border-line); background: var(--color-panel); color: var(--color-fg); min-height: 2.25rem; }
 .fi-mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--cds-gap-lg) var(--cds-gap-md); }
 .fi-mini { display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
 .fi-mini-h { display: flex; align-items: center; gap: .45em; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
@@ -155,7 +161,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       <h1 class="fi-title" id="top" data-named="{name}, week by week">Sleep and Sips, week by week</h1>
       <div class="pip-slot pip-hero" data-pip="hero"></div>
     </div>
-    <p class="fi-take" id="takeaway">Over the last 7 full days, <span data-named="{name}">the baby</span> drank about <b><span data-source="headline" data-where="metric=total_ml" data-field="value" class="dash-skeleton">-</span> ml</b> of milk a day, <b><span data-source="headline" data-where="metric=breast_milk_share" data-field="value" class="dash-skeleton">-</span>%</b> of it breast milk. His longest single sleep averaged <b><span data-source="headline" data-where="metric=longest_sleep_h" data-field="value" class="dash-skeleton">-</span> hours</b>. Compared with the 7 days before, formula changed by <span data-source="headline" data-where="metric=formula_ml" data-field="change" class="dash-skeleton">-</span> ml a day (to <span data-source="headline" data-where="metric=formula_ml" data-field="value" class="dash-skeleton">-</span> ml) and pumping by <span data-source="headline" data-where="metric=pump_ml" data-field="change" class="dash-skeleton">-</span> ml a day (to <span data-source="headline" data-where="metric=pump_ml" data-field="value" class="dash-skeleton">-</span> ml).</p>
+    <p class="fi-take" id="takeaway">Over the last 7 full days, <span data-named="{name}">the baby</span> drank on average <b><span data-source="headline" data-where="metric=total_ml" data-field="value" class="dash-skeleton">-</span> ml</b> of milk a day, <b><span data-source="headline" data-where="metric=breast_milk_share" data-field="value" class="dash-skeleton">-</span>%</b> of it breast milk. His longest single sleep averaged <b><span data-source="headline" data-where="metric=longest_sleep_h" data-field="value" class="dash-skeleton">-</span> hours</b>. Compared with the 7 days before, formula changed by <span data-source="headline" data-where="metric=formula_ml" data-field="change" class="dash-skeleton">-</span> ml a day (to <span data-source="headline" data-where="metric=formula_ml" data-field="value" class="dash-skeleton">-</span> ml) and pumping by <span data-source="headline" data-where="metric=pump_ml" data-field="change" class="dash-skeleton">-</span> ml a day (to <span data-source="headline" data-where="metric=pump_ml" data-field="value" class="dash-skeleton">-</span> ml).</p>
     <div class="fi-strip" aria-hidden="true"></div>
   </header>
 
@@ -171,7 +177,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       <div class="fi-sub"><span data-source="headline" data-where="metric=weight_kg" data-field="change" class="dash-skeleton">-</span> kg since the previous weigh-in. <span data-source="headline" data-where="metric=who_centile" data-field="value" class="dash-skeleton">-</span><span class="fi-ord"></span> centile (see Growth)</div>
     </div>
     <div class="fi-tile" style="--sec: var(--fi-orange)">
-      <div class="fi-tl">Milk per day</div>
+      <div class="fi-tl">Average milk per day</div>
       <div class="fi-big"><span data-source="headline" data-where="metric=total_ml" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">ml</span></div>
       <div class="fi-sub">Last 7 days. <span data-source="headline" data-where="metric=total_ml" data-field="change" class="dash-skeleton">-</span> ml on the 7 days before</div>
     </div>
@@ -181,7 +187,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       <div class="fi-sub">Last 7 days. <span data-source="headline" data-where="metric=breast_milk_share" data-field="change" class="dash-skeleton">-</span> percentage points on the 7 days before</div>
     </div>
     <div class="fi-tile" style="--sec: var(--fi-plum)">
-      <div class="fi-tl">Breast milk pumped, per day</div>
+      <div class="fi-tl">Average breast milk pumped per day</div>
       <div class="fi-big"><span data-source="headline" data-where="metric=pump_ml" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">ml</span></div>
       <div class="fi-sub">Last 7 days. <span data-source="headline" data-where="metric=pump_ml" data-field="change" class="dash-skeleton">-</span> ml on the 7 days before</div>
     </div>
@@ -203,37 +209,42 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-pink)">
       <div class="fi-tl">Feeds</div>
       <div class="fi-big"><span data-source="totals" data-where="metric=feeds" data-field="value" class="dash-skeleton">-</span></div>
-      <div class="fi-sub">Including early breastfeeds</div>
+      <div class="fi-sub"></div>
     </div>
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-red)">
       <div class="fi-tl">Milk he drank</div>
       <div class="fi-big"><span data-source="totals" data-where="metric=bottle_litres" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">litres</span></div>
       <div class="fi-sub">Breast milk and formula</div>
     </div>
+    <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-green)">
+      <div class="fi-tl">Breast milk he drank</div>
+      <div class="fi-big"><span data-source="totals" data-where="metric=bm_litres" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">litres</span></div>
+      <div class="fi-sub"><span data-source="totals" data-where="metric=bm_litres" data-field="pct" class="dash-skeleton">-</span>% of all the milk he drank</div>
+    </div>
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-orange)">
       <div class="fi-tl">Formula he drank</div>
       <div class="fi-big"><span data-source="totals" data-where="metric=formula_litres" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">litres</span></div>
-      <div class="fi-sub">Included in the milk total</div>
+      <div class="fi-sub"><span data-source="totals" data-where="metric=formula_pct" data-field="value" class="dash-skeleton">-</span>% of all the milk he drank</div>
     </div>
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-plum)">
       <div class="fi-tl">Breast milk pumped</div>
       <div class="fi-big"><span data-source="totals" data-where="metric=pumped_litres" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">litres</span></div>
-      <div class="fi-sub">Over <span data-source="totals" data-where="metric=pump_sessions" data-field="value" class="dash-skeleton">-</span> pump sessions</div>
+      <div class="fi-sub">Since pumping began on <span data-source="totals" data-where="metric=pump_first" data-field="value" class="dash-skeleton">-</span></div>
+    </div>
+    <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-plum)">
+      <div class="fi-tl">Pump sessions</div>
+      <div class="fi-big"><span data-source="totals" data-where="metric=pump_sessions" data-field="value" class="dash-skeleton">-</span></div>
+      <div class="fi-sub">About <span data-source="totals" data-where="metric=pump_per_day" data-field="value" class="dash-skeleton">-</span> a day</div>
     </div>
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-plum)">
       <div class="fi-tl">Time spent pumping</div>
       <div class="fi-big"><span data-source="totals" data-where="metric=pump_minutes" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">minutes</span></div>
-      <div class="fi-sub">About <span data-source="totals" data-where="metric=pump_avg_min" data-field="value" class="dash-skeleton">-</span> minutes per session</div>
+      <div class="fi-sub">That's <span data-source="totals" data-where="metric=pump_minutes" data-field="hours" class="dash-skeleton">-</span> hours, or <span data-source="totals" data-where="metric=pump_minutes" data-field="days" class="dash-skeleton">-</span> days</div>
     </div>
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-pink)">
       <div class="fi-tl">Direct breastfeeds</div>
       <div class="fi-big"><span data-source="totals" data-where="metric=breastfeeds" data-field="value" class="dash-skeleton">-</span></div>
-      <div class="fi-sub">Last one on <span data-source="totals" data-where="metric=breastfeeds" data-field="since" class="dash-skeleton">-</span></div>
-    </div>
-    <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-blue)">
-      <div class="fi-tl">Sleep logged</div>
-      <div class="fi-big"><span data-source="totals" data-where="metric=sleep_hours" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">hours</span></div>
-      <div class="fi-sub">Since sleep tracking began on <span data-source="totals" data-where="metric=sleep_hours" data-field="since" class="dash-skeleton">-</span></div>
+      <div class="fi-sub"><span data-source="totals" data-where="metric=breastfeed_minutes" data-field="value" class="dash-skeleton">-</span> minutes in total, or <span data-source="totals" data-where="metric=breastfeed_minutes" data-field="hours" class="dash-skeleton">-</span> hours (<span data-source="totals" data-where="metric=breastfeed_minutes" data-field="days" class="dash-skeleton">-</span> days)</div>
     </div>
     </div>
   </section>
@@ -248,8 +259,8 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
     </div>
     <div class="fi-card" style="--sec: var(--fi-plum)">
-      <h3 class="fi-h3" id="pumptime-title">Time spent pumping and milk pumped, per day</h3>
-      <p class="fi-note">Columns show the average minutes spent pumping each day, week by week (left scale). The line shows the average breast milk pumped each day, in ml (right scale). Time comes from the duration logged for each session, so it doesn't include setting up, washing, or sterilising. Tap a week to see sessions per day and the typical session length.</p>
+      <h3 class="fi-h3" id="pumptime-title">Time spent pumping and breastfeeding, and milk pumped, per day</h3>
+      <p class="fi-note">Purple columns show the average minutes spent pumping each day, week by week, and the light grey columns beside them show the average minutes of direct breastfeeding (both on the left scale). The line shows the average breast milk pumped each day, in ml (right scale). Times come from the durations logged, so they don't include setting up, washing, or sterilising. Tap a week for sessions per day and the typical session length.</p>
       <div class="fi-legend" id="pumptime-legend"></div>
       <div class="fi-chart dash-skeleton" id="pumptime" data-source="pumping"></div>
     </div>
@@ -260,20 +271,38 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <p class="fi-intro">Every day so far on one chart, so you can watch his routine take shape.</p>
     <div class="fi-card" style="--sec: var(--fi-blue)">
       <h3 class="fi-h3" id="rhythm-title">Sleep and feeds, one row per day</h3>
-      <p class="fi-note">Each thin row is one day, with the oldest at the top and the newest at the bottom. Read each row left to right across the 24 hours shown along the top. Blue bands are sleep, orange marks are bottles, and pink marks are breastfeeds. A red mark at the left edge means that day's sleep log looks incomplete. Sleep was not logged in the first weeks, so the top rows show feeds only. Tap, or slide your finger along a row, to see details.</p>
+      <p class="fi-note">Each thin row is one day, with the oldest at the top and the newest at the bottom. Read each row left to right across the 24 hours shown along the top. Blue bands are sleep, orange marks are bottles, and pink marks are breastfeeds. A red mark at the left edge means that day has a long daytime gap with no sleep logged. Sleep was not logged in the first weeks, so the top rows show feeds only. Tap, or slide your finger along a row, to see details.</p>
       <p class="fi-note">"Noon to noon" starts each row at midday, so a whole night sits in the middle of one row instead of being split across two. Over time you should see the blue night bands get longer and more solid.</p>
       <div class="fi-seg" role="group" aria-label="Where each row starts">
         <button class="fi-btn" type="button" data-mode="noon" aria-pressed="true">Noon to noon</button>
         <button class="fi-btn" type="button" data-mode="midnight" aria-pressed="false">Midnight to midnight</button>
       </div>
+      <div class="fi-rhythm-ctl">
+        <div class="fi-seg" role="group" aria-label="How much to show">
+          <button class="fi-btn" type="button" data-span="all" aria-pressed="true">All days</button>
+          <button class="fi-btn" type="button" data-span="week" aria-pressed="false">One week</button>
+          <button class="fi-btn" type="button" data-span="day" aria-pressed="false">One day</button>
+        </div>
+        <div class="fi-datenav" id="rhythm-datenav" hidden>
+          <button class="fi-navbtn" type="button" id="rhythm-prev" aria-label="Previous">&#8249;</button>
+          <input class="fi-date" type="date" id="rhythm-date" aria-label="Date to show">
+          <button class="fi-navbtn" type="button" id="rhythm-next" aria-label="Next">&#8250;</button>
+        </div>
+      </div>
       <div class="fi-legend" id="rhythm-legend"></div>
       <div class="fi-chart fi-tall dash-skeleton" id="rhythm" data-source="timeline daily"></div>
+      <div class="fi-tablebox" id="rhythm-listbox" hidden>
+        <table class="fi-table" id="rhythm-list" data-source="events" data-row-key="id">
+          <thead><tr><th data-field="start">Time</th><th data-field="type">What</th><th data-field="detail" class="fi-num">Details</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
   </section>
 
   <section class="fi-sec" id="sleep" style="--sec: var(--fi-blue)">
     <div class="fi-h2-row"><h2 class="fi-h2">Sleep</h2><div class="pip-slot pip-sm" data-pip="sleep"></div></div>
-    <p class="fi-intro">Days where the sleep log looks incomplete (under 10 hours logged) are left out of these charts, so a missed log doesn't look like a bad day. The Data quality section at the bottom lists those days.</p>
+    <p class="fi-intro">Days with more than 6 hours between 06:00 and 21:00 with no sleep logged are left out of these charts, because a gap that long almost always means naps weren't logged rather than that he stayed awake. Days where he simply slept less are included. The Data quality section at the bottom lists the days left out.</p>
     <div class="fi-card" style="--sec: var(--fi-blue)">
       <h3 class="fi-h3" id="longest-title">Longest single sleep each day, hours</h3>
       <p class="fi-note">Each faint dot is one day's longest unbroken sleep. The solid line is the average of the 7 days up to that date. A rising line means longer stretches. The smaller chart underneath shows total sleep across the whole day, which changes much more slowly.</p>
@@ -301,7 +330,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       </div>
       <div class="fi-card" style="--sec: var(--fi-orange)">
         <h3 class="fi-h3" id="mix-title">How feeding has changed since birth</h3>
-        <p class="fi-note">One bar per week. Each bar adds up to 100% of that week's feeds, split by type. Tap or hover a bar to see the number of feeds per day.</p>
+        <p class="fi-note">One bar per week. Each bar adds up to 100% of that week's feeds, split by type. A bottle with both breast milk and formula is split between the two by volume, so 90 ml of breast milk and 30 ml of formula counts as three quarters of a breast milk feed and a quarter of a formula feed. Tap a bar to see the number of feeds per day.</p>
         <div class="fi-legend" id="mix-legend"></div>
         <div class="fi-chart dash-skeleton" id="mix" data-source="feedmix"></div>
       </div>
@@ -346,10 +375,10 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <div class="fi-h2-row"><h2 class="fi-h2">Data quality</h2><div class="pip-slot pip-sm" data-pip="magnify"></div></div>
     <div class="fi-card" style="--sec: var(--fi-yellow)">
       <h3 class="fi-h3" id="quality-title">Days left out of the sleep charts</h3>
-      <p class="fi-note">Partial days, days before sleep logging started, and days with under 10 hours of sleep logged. The milk charts still use every full day.</p>
+      <p class="fi-note">Partial days, days before sleep logging started, and days with more than 6 hours between 06:00 and 21:00 with no sleep logged. The milk charts still use every full day.</p>
       <div class="fi-tablebox">
         <table class="fi-table" id="quality-table" data-source="quality" data-row-key="day">
-          <thead><tr><th data-field="day">Day</th><th data-field="issue">Reason</th><th data-field="sleep_logged_h" class="fi-num">Sleep logged (hours)</th><th data-field="sleeps" class="fi-num">Sleeps logged</th></tr></thead>
+          <thead><tr><th data-field="day">Day</th><th data-field="issue">Reason</th><th data-field="sleep_logged_h" class="fi-num">Sleep logged (hours)</th><th data-field="day_gap_h" class="fi-num">Longest daytime gap (hours)</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -456,7 +485,7 @@ dash.calc('feeds', {
 
 dash.calc('daily', {
   title: 'Daily totals',
-  description: 'One row per day: bottle volumes, pumped volume, breastfeeds, and logged sleep. Birth day and export day are partial; days with under 10 h of logged sleep are treated as incomplete sleep logs.',
+  description: 'One row per day: bottle volumes, pumped volume, breastfeeds, and logged sleep. Birth day and export day are partial. A day counts as a complete sleep log unless it has a gap of more than 6 hours between 06:00 and 21:00 with no sleep logged, which points to naps that were not logged.',
   inputs: ['events', 'profile'],
   fn: (events, profile) => {
     const first = profile[0].birth_date, last = profile[0].last_logged_day;
@@ -464,6 +493,16 @@ dash.calc('daily', {
     for (let t = Date.parse(first); t <= Date.parse(last); t += 864e5) {
       const d = new Date(t).toISOString().slice(0, 10);
       byDay[d] = { day: d, bm_ml: 0, formula_ml: 0, other_ml: 0, bottles: 0, breastfeeds: 0, breastfeed_min: 0, pump_ml: 0, sleep_h: 0, sleeps: 0, longest_sleep_h: 0, partial: d === first || d === last };
+    }
+    const sl = events.filter(e => e.type === 'Sleep' && e.end).sort((a, b) => a.start - b.start);
+    const gapOf = {};
+    for (let i = 0; i < sl.length - 1; i++) {
+      const g0 = sl[i].end, g1 = sl[i + 1].start;
+      if (g1 <= g0) continue;
+      for (let t = Math.floor(g0 / 864e5) * 864e5; t < g1; t += 864e5) {
+        const a = Math.max(g0, t + 6 * 36e5), b = Math.min(g1, t + 21 * 36e5);
+        if (b > a) { const d = new Date(t).toISOString().slice(0, 10); gapOf[d] = Math.max(gapOf[d] || 0, (b - a) / 36e5); }
+      }
     }
     for (const e of events) {
       const r = byDay[e.day];
@@ -479,7 +518,8 @@ dash.calc('daily', {
       breastfeed_min: Math.round(r.breastfeed_min),
       sleep_h: Math.round(r.sleep_h * 100) / 100,
       longest_sleep_h: Math.round(r.longest_sleep_h * 100) / 100,
-      sleep_complete: !r.partial && r.sleeps > 0 && r.sleep_h >= 10
+      day_gap_h: Math.round((gapOf[r.day] || 0) * 10) / 10,
+      sleep_complete: !r.partial && r.sleeps > 0 && (gapOf[r.day] || 0) <= 6
     }));
   }
 });
@@ -576,15 +616,22 @@ dash.calc('intake', {
 
 dash.calc('feedmix', {
   title: 'Feeds by type per week',
-  description: 'Average feeds per day each week, split into direct breastfeeds and bottles of breast milk, formula, or both mixed. A mixed bottle logged as two entries counts as one mixed feed.',
+  description: 'Average feeds per day each week, split into direct breastfeeds, breast milk bottles, and formula bottles. A bottle with both is split between breast milk and formula by volume (for example 90 ml and 30 ml counts as 0.75 and 0.25 of a feed).',
   inputs: ['feeds', 'daily'],
   fn: (feeds, daily) => {
     const wk = d => { const t = Date.parse(d); return new Date(t - ((new Date(t).getUTCDay() + 6) % 7) * 864e5).toISOString().slice(0, 10); };
     const full = new Set(daily.filter(d => !d.partial).map(d => d.day));
     const days = {}, counts = {};
     full.forEach(d => { days[wk(d)] = (days[wk(d)] || 0) + 1; });
-    const modes = ['Breastfeed', 'Bottle: breast milk', 'Bottle: formula', 'Bottle: both'];
-    feeds.filter(f => full.has(f.day)).forEach(f => { const k = wk(f.day) + '|' + f.kind; counts[k] = (counts[k] || 0) + 1; });
+    const modes = ['Breastfeed', 'Bottle: breast milk', 'Bottle: formula'];
+    const add = (w, m, v) => { const k = w + '|' + m; counts[k] = (counts[k] || 0) + v; };
+    feeds.filter(f => full.has(f.day)).forEach(f => {
+      const w = wk(f.day);
+      if (f.type === 'Breastfeed') return add(w, modes[0], 1);
+      const tot = f.bm_ml + f.formula_ml;
+      if (f.bm_ml > 0 && f.formula_ml > 0) { add(w, modes[1], f.bm_ml / tot); add(w, modes[2], f.formula_ml / tot); }
+      else add(w, f.kind === 'Bottle: formula' ? modes[2] : modes[1], 1);
+    });
     const out = [];
     Object.keys(days).sort().forEach(w => {
       if (days[w] < 3) return;
@@ -635,15 +682,15 @@ dash.calc('timeline', {
 
 dash.calc('quality', {
   title: 'Days with logging gaps',
-  description: 'Days left out of sleep averages: partial days, days before sleep logging started, and days with under 10 h of sleep logged.',
+  description: 'Days left out of sleep averages: partial days, days before sleep logging started, and days with more than 6 hours between 06:00 and 21:00 with no sleep logged.',
   inputs: ['daily'],
   fn: (daily) => {
     const started = daily.find(d => d.sleeps > 0);
     return daily.filter(d => !d.sleep_complete).map(d => ({
       day: d.day,
-      issue: d.partial ? 'Partial day' : !started || d.day < started.day ? 'Before sleep logging began' : d.sleeps === 0 ? 'No sleep logged' : 'Under 10 h of sleep logged',
+      issue: d.partial ? 'Partial day' : !started || d.day < started.day ? 'Before sleep logging began' : d.sleeps === 0 ? 'No sleep logged' : 'Long daytime gap with no sleep logged',
       sleep_logged_h: Math.round(d.sleep_h * 10) / 10,
-      sleeps: d.sleeps
+      day_gap_h: d.day_gap_h
     }));
   }
 });
@@ -713,6 +760,11 @@ dash.calc('totals', {
     const pumps = events.filter(e => e.type === 'Pump');
     const firstSleep = sleeps.length ? sleeps[0].day : null;
     const litres = v => Math.round(v / 100) / 10;
+    const pumpMin = pumps.reduce((s, e) => s + e.pump_min, 0);
+    const pumpDays = pumps.length ? Math.round((Date.parse(events[events.length - 1].day) - Date.parse(pumps[0].day)) / 864e5) + 1 : 0;
+    const bfs = events.filter(e => e.type === 'Breastfeed');
+    const bfMin = bfs.reduce((s, e) => s + e.breastfeed_min, 0);
+    const bmMl = events.reduce((s, e) => s + e.bm_ml, 0), fmMl = events.reduce((s, e) => s + e.formula_ml, 0), allMl = events.reduce((s, e) => s + e.bm_ml + e.formula_ml + e.other_ml, 0);
     return [
       { metric: 'nappies', value: nap.length },
       { metric: 'nappies_wet', value: nap.filter(e => /Wet/.test(e.diaper_kind)).length },
@@ -722,9 +774,13 @@ dash.calc('totals', {
       { metric: 'formula_litres', value: litres(events.reduce((s, e) => s + e.formula_ml, 0)) },
       { metric: 'pumped_litres', value: litres(pumps.reduce((s, e) => s + e.pump_ml, 0)) },
       { metric: 'pump_sessions', value: pumps.length },
-      { metric: 'pump_minutes', value: Math.round(pumps.reduce((s, e) => s + e.pump_min, 0)) },
-      { metric: 'pump_avg_min', value: pumps.filter(e => e.pump_min > 0).length ? Math.round(pumps.reduce((s, e) => s + e.pump_min, 0) / pumps.filter(e => e.pump_min > 0).length) : null },
-      { metric: 'breastfeeds', value: events.filter(e => e.type === 'Breastfeed').length, since: (events.filter(e => e.type === 'Breastfeed').slice(-1)[0] || {}).day || null },
+      { metric: 'pump_minutes', value: Math.round(pumpMin), hours: Math.round(pumpMin / 60), days: Math.round(pumpMin / 1440 * 10) / 10 },
+      { metric: 'pump_per_day', value: pumpDays ? Math.round(pumps.length / pumpDays * 10) / 10 : null },
+      { metric: 'pump_first', value: pumps.length ? pumps[0].day : null },
+      { metric: 'breastfeeds', value: bfs.length },
+      { metric: 'breastfeed_minutes', value: Math.round(bfMin), hours: Math.round(bfMin / 60), days: Math.round(bfMin / 1440 * 10) / 10 },
+      { metric: 'bm_litres', value: litres(bmMl), pct: allMl ? Math.round(bmMl / allMl * 100) : null },
+      { metric: 'formula_pct', value: allMl ? Math.round(fmMl / allMl * 100) : null },
       { metric: 'sleep_hours', value: Math.round(sleeps.reduce((s, e) => s + e.sleep_h, 0)), since: firstSleep }
     ];
   }
@@ -732,24 +788,28 @@ dash.calc('totals', {
 
 
 dash.calc('pumping', {
-  title: 'Pumping time and volume per week',
-  description: 'For each week from the first logged pump: average minutes of pumping per day, average breast milk pumped per day in ml, pump sessions per day, and the average session length, from the duration and volume logged for each pump. Full days only; weeks with fewer than 4 days are left out.',
+  title: 'Pumping and breastfeeding time per week',
+  description: 'For each week from the first breastfeed or pump: average minutes of pumping per day, average breast milk pumped per day in ml, pump sessions per day and typical session length (averaged over days since the first pump), and average minutes of direct breastfeeding per day. Full days only; weeks with fewer than 4 days are left out.',
   inputs: ['events', 'daily'],
   fn: (events, daily) => {
     const wk = d => { const t = Date.parse(d); return new Date(t - ((new Date(t).getUTCDay() + 6) % 7) * 864e5).toISOString().slice(0, 10); };
     const pumps = events.filter(e => e.type === 'Pump');
-    if (!pumps.length) return [];
-    const full = daily.filter(d => !d.partial && d.day >= pumps[0].day);
+    const bfs = events.filter(e => e.type === 'Breastfeed');
+    if (!pumps.length && !bfs.length) return [];
+    const firstPump = pumps.length ? pumps[0].day : null;
+    const start = [firstPump, bfs.length ? bfs[0].day : null].filter(Boolean).sort()[0];
+    const full = daily.filter(d => !d.partial && d.day >= start);
     const weeks = {};
-    full.forEach(d => { const w = weeks[wk(d.day)] = weeks[wk(d.day)] || { week: wk(d.day), days: 0, sessions: 0, minutes: 0, timed: 0, ml: 0 }; w.days += 1; });
+    full.forEach(d => { const w = weeks[wk(d.day)] = weeks[wk(d.day)] || { week: wk(d.day), days: 0, pump_days: 0, sessions: 0, minutes: 0, timed: 0, ml: 0, bf_min: 0 }; w.days += 1; if (firstPump && d.day >= firstPump) w.pump_days += 1; w.bf_min += d.breastfeed_min; });
     const fullSet = new Set(full.map(d => d.day));
     pumps.filter(e => fullSet.has(e.day)).forEach(e => { const w = weeks[wk(e.day)]; w.sessions += 1; w.minutes += e.pump_min; w.ml += e.pump_ml; if (e.pump_min > 0) w.timed += 1; });
     return Object.values(weeks).filter(w => w.days >= 4).sort((a, b) => a.week < b.week ? -1 : 1).map(w => ({
-      week: w.week, days: w.days,
-      minutes_per_day: Math.round(w.minutes / w.days),
-      ml_per_day: Math.round(w.ml / w.days),
-      sessions_per_day: Math.round(w.sessions / w.days * 10) / 10,
-      avg_session_min: w.timed ? Math.round(w.minutes / w.timed) : null
+      week: w.week, days: w.days, pump_days: w.pump_days,
+      minutes_per_day: w.pump_days ? Math.round(w.minutes / w.pump_days) : null,
+      ml_per_day: w.pump_days ? Math.round(w.ml / w.pump_days) : null,
+      sessions_per_day: w.pump_days ? Math.round(w.sessions / w.pump_days * 10) / 10 : null,
+      avg_session_min: w.timed ? Math.round(w.minutes / w.timed) : null,
+      bf_min_per_day: Math.round(w.bf_min / w.days)
     }));
   }
 });
@@ -762,12 +822,16 @@ const fmtDay = d3.utcFormat('%-d %b');
 const fmtDayLong = d3.utcFormat('%a %-d %b');
 const fmtDayYear = d3.utcFormat('%-d %b %Y');
 const fmtHM = d3.utcFormat('%H:%M');
+const fmtWeekday = d3.utcFormat('%a %-d');
 const signed = (v, f) => v == null ? '-' : (v > 0 ? '+' : v < 0 ? '−' : '') + f(Math.abs(v));
 const pday = s => new Date(s + 'T00:00:00Z');
 const ok = v => v && v.y != null && isFinite(v.y);
 const BAD = ['error', 'connect', 'declined', 'missing'];
 const rowsOf = id => dash.data(id).data || [];
 let rhythmMode = 'noon';
+let rhythmSpan = 'all';
+let rhythmDate = null;
+const GREY = '#a9a296';
 let lastPointer = 'mouse';
 document.addEventListener('pointerdown', e => { lastPointer = e.pointerType || 'mouse'; if (!e.target.closest || !e.target.closest('.fi-chart')) document.querySelectorAll('.fi-chart > .fi-tip').forEach(t => { t.style.display = 'none'; }); }, true);
 document.addEventListener('pointermove', e => { lastPointer = e.pointerType || 'mouse'; }, true);
@@ -1005,8 +1069,8 @@ function comboChart(box, cfg) {
   const W = Math.max(260, box.clientWidth), H = cfg.height || 240;
   const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('class', 'fi-svg');
   const top = 12, bot = H - 24, ticks = 4;
-  const yL = d3.scaleLinear([0, (d3.max(data, d => d.bar) || 1) * 1.08], [bot, top]).nice(ticks);
-  const yR = d3.scaleLinear([0, (d3.max(data, d => d.line) || 1) * 1.08], [bot, top]).nice(ticks);
+  const yL = d3.scaleLinear([0, (d3.max(data, d => Math.max(d.bar || 0, d.bar2 || 0)) || 1) * 1.08], [bot, top]).nice(ticks);
+  const yR = d3.scaleLinear([0, (d3.max(data, d => d.line || 0) || 1) * 1.08], [bot, top]).nice(ticks);
   const grid = svg.append('g').attr('class', 'fi-gridl');
   const ml = yAxisFit(svg, yL, ticks, cfg.barFmt);
   svg.selectAll('.fi-axis').filter((d, i, n) => i === n.length - 1).selectAll('text').style('fill', cfg.barColor);
@@ -1018,14 +1082,20 @@ function comboChart(box, cfg) {
   ra.attr('transform', `translate(${W - mr},0)`);
   grid.selectAll('line').data(yL.ticks(ticks)).join('line').attr('x1', ml).attr('x2', W - mr).attr('y1', d => yL(d)).attr('y2', d => yL(d));
   const x = d3.scaleBand(data.map(d => d.x), [ml + 4, W - mr - 4]).padding(0.25);
-  const bw = Math.min(32, x.bandwidth()), off = (x.bandwidth() - bw) / 2;
-  svg.append('g').selectAll('rect').data(data).join('rect')
-    .attr('x', d => x(d.x) + off).attr('width', bw).attr('y', d => yL(d.bar)).attr('height', d => Math.max(0, bot - yL(d.bar)))
-    .attr('rx', 4).attr('fill', cfg.barColor).attr('opacity', 0.85);
+  const two = !!cfg.bar2Color;
+  const bw = two ? Math.min(16, (x.bandwidth() - 2) / 2) : Math.min(32, x.bandwidth());
+  const off = two ? (x.bandwidth() - (bw * 2 + 2)) / 2 : (x.bandwidth() - bw) / 2;
+  if (two) svg.append('g').selectAll('rect').data(data.filter(d => d.bar2)).join('rect')
+    .attr('x', d => x(d.x) + off).attr('width', bw).attr('y', d => yL(d.bar2)).attr('height', d => Math.max(0, bot - yL(d.bar2)))
+    .attr('rx', 3).attr('fill', cfg.bar2Color).attr('opacity', 0.6);
+  const bx0 = d => x(d.x) + off + (two ? bw + 2 : 0);
+  svg.append('g').selectAll('rect').data(data.filter(d => d.bar != null)).join('rect')
+    .attr('x', bx0).attr('width', bw).attr('y', d => yL(d.bar)).attr('height', d => Math.max(0, bot - yL(d.bar)))
+    .attr('rx', two ? 3 : 4).attr('fill', cfg.barColor).attr('opacity', 0.85);
   const cx = d => x(d.x) + x.bandwidth() / 2;
   svg.append('path').datum(data).attr('fill', 'none').attr('stroke', cfg.lineColor).attr('stroke-width', 2.5).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round')
-    .attr('d', d3.line().x(cx).y(d => yR(d.line)));
-  svg.append('g').selectAll('circle').data(data).join('circle').attr('cx', cx).attr('cy', d => yR(d.line)).attr('r', 3.5)
+    .attr('d', d3.line().defined(d => d.line != null).x(cx).y(d => yR(d.line)));
+  svg.append('g').selectAll('circle').data(data.filter(d => d.line != null)).join('circle').attr('cx', cx).attr('cy', d => yR(d.line)).attr('r', 3.5)
     .attr('fill', cfg.lineColor).attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5);
   const xa = stripAxis(svg.append('g').attr('class', 'fi-axis').attr('transform', `translate(0,${bot})`).call(d3.axisBottom(x).tickSize(0).tickPadding(6).tickFormat(cfg.xFmt || (v => v))));
   xa.select('.domain').remove();
@@ -1039,7 +1109,8 @@ function comboChart(box, cfg) {
   svg.append('g').selectAll('rect').data(data).join('rect')
     .attr('x', d => x(d.x)).attr('width', x.bandwidth()).attr('y', top).attr('height', bot - top).attr('fill', 'transparent')
     .on('pointerdown pointermove', (ev, d) => {
-      hlr.style('display', null).attr('x', x(d.x) + off - 2).attr('width', bw + 4).attr('y', yL(d.bar) - 2).attr('height', bot - yL(d.bar) + 2);
+      const hiV = Math.max(d.bar || 0, d.bar2 || 0);
+      hlr.style('display', null).attr('x', x(d.x) + off - 2).attr('width', (two ? bw * 2 + 2 : bw) + 4).attr('y', yL(hiV) - 2).attr('height', bot - yL(hiV) + 2);
       const [bx, by] = d3.pointer(ev, box);
       showTip(box, bx, by, cfg.tipTitle(d), cfg.tipLines(d));
     })
@@ -1053,13 +1124,20 @@ function rhythm(box, timeline, daily) {
   const off = rhythmMode === 'noon' ? 12 * 36e5 : 0;
   const d0 = Date.parse(daily[0].day), d1 = Date.parse(daily[daily.length - 1].day);
   const nDays = Math.round((d1 - d0) / DAY) + 1;
-  const rowH = Math.max(3, Math.min(6, Math.floor(640 / nDays)));
+  const rowH = nDays === 1 ? 64 : nDays <= 7 ? 34 : Math.max(3, Math.min(6, Math.floor(640 / nDays)));
   const top = 24, gridH = nDays * rowH, H = top + gridH + 8;
   box.style.minHeight = H + 'px';
   const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('class', 'fi-svg');
   const y = d3.scaleUtc([new Date(d0), new Date(d0 + nDays * DAY)], [top, top + gridH]);
-  const ya = stripAxis(svg.append('g').attr('class', 'fi-axis').call(d3.axisLeft(y).ticks(d3.utcMonth.every(1)).tickSize(0).tickPadding(10).tickFormat(d3.utcFormat('%b'))));
-  ya.select('.domain').remove();
+  let ya;
+  if (nDays <= 7) {
+    ya = svg.append('g').attr('class', 'fi-axis');
+    ya.selectAll('text').data(d3.range(nDays)).join('text').attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
+      .attr('x', -8).attr('y', i => top + i * rowH + rowH / 2).text(i => fmtWeekday(new Date(d0 + i * DAY)));
+  } else {
+    ya = stripAxis(svg.append('g').attr('class', 'fi-axis').call(d3.axisLeft(y).ticks(d3.utcMonth.every(1)).tickSize(0).tickPadding(10).tickFormat(d3.utcFormat('%b'))));
+    ya.select('.domain').remove();
+  }
   let w = 0; ya.selectAll('text').each(function () { w = Math.max(w, this.getComputedTextLength()); });
   const ml = Math.ceil(w) + 16;
   ya.attr('transform', `translate(${ml - 4},0)`);
@@ -1118,7 +1196,7 @@ function rhythm(box, timeline, daily) {
         hl.style('display', null).attr('x', x(hit.a) - 1).attr('width', Math.max(3, x(hit.b) - x(hit.a)) + 2).attr('y', top + row * rowH - 1).attr('height', rowH + 1);
       } else { lines.push({ name: 'Nothing logged', value: '' }); hl.style('display', 'none'); }
       const dd = daily[Math.min(row + (off && (m * 6e4 + off) >= DAY ? 1 : 0), daily.length - 1)];
-      if (dd && !dd.sleep_complete && dd.sleeps > 0) lines.push({ name: 'Sleep log looks incomplete this day', value: '' });
+      if (dd && !dd.sleep_complete && dd.sleeps > 0) lines.push({ name: 'Long daytime gap with no sleep logged this day', value: '' });
       const [bx, by] = d3.pointer(ev, box);
       showTip(box, bx, by, `${fmtDayLong(new Date(t))}, ${fmtHM(new Date(t))}`, lines);
     })
@@ -1161,7 +1239,7 @@ function drawAll() {
     const r = rowsOf('totals').find(q => q.metric === new URLSearchParams(el.dataset.where).get('metric'));
     const v = r ? r[el.dataset.field] : null;
     el.classList.remove('dash-skeleton');
-    el.textContent = v == null ? '-' : el.dataset.field === 'since' ? fmtDay(pday(v)) : /litres/.test(r.metric) ? d3.format(',.1f')(v) : fmtInt(v);
+    el.textContent = v == null ? '-' : (el.dataset.field === 'since' || r.metric === 'pump_first') ? fmtDay(pday(v)) : el.dataset.field === 'days' || (el.dataset.field === 'value' && /litres|per_day/.test(r.metric)) ? d3.format(',.1f')(v) : fmtInt(v);
   });
 
   // 1. Supply vs demand
@@ -1182,23 +1260,23 @@ function drawAll() {
   }
 
   // Time spent pumping and milk pumped
-  legend('pumptime-legend', [{ name: 'Minutes pumping per day', color: PAL.plum }, { name: 'Milk pumped per day (ml)', color: PAL.green, line: 1 }]);
+  legend('pumptime-legend', [{ name: 'Minutes pumping per day', color: PAL.plum }, { name: 'Minutes breastfeeding per day', color: GREY }, { name: 'Milk pumped per day (ml)', color: PAL.green, line: 1 }]);
   const pt = document.getElementById('pumptime');
   if (setState(pt, ['pumping'])) {
-    const r = rowsOf('pumping').map(d => ({ x: d.week, bar: d.minutes_per_day, line: d.ml_per_day, s: d.sessions_per_day, m: d.avg_session_min, days: d.days }));
+    const r = rowsOf('pumping').map(d => ({ x: d.week, bar: d.minutes_per_day, bar2: d.bf_min_per_day, line: d.ml_per_day, s: d.sessions_per_day, m: d.avg_session_min, days: d.days, pd: d.pump_days }));
     comboChart(pt, {
-      data: r, barColor: PAL.plum, lineColor: PAL.green, xFmt: weekLabel,
+      data: r, barColor: PAL.plum, bar2Color: GREY, lineColor: PAL.green, xFmt: weekLabel,
       barFmt: v => `${fmtInt(v)} min`, lineFmt: v => `${fmtInt(v)} ml`,
       emptyText: 'No pumping logged yet',
       tipTitle: d => `Week of ${weekLabel(d.x)}`,
-      tipLines: d => [{ color: PAL.plum, name: 'Pumping', value: `${fmtInt(d.bar)} min a day` }, { color: PAL.green, name: 'Milk pumped', value: `${fmtInt(d.line)} ml a day` }, { name: 'Sessions', value: `${fmt1(d.s)} a day` }].concat(d.m ? [{ name: 'Typical session', value: `${d.m} min` }] : []).concat(d.days < 7 ? [{ name: 'Based on', value: `${d.days} full days` }] : [])
+      tipLines: d => (d.bar != null ? [{ color: PAL.plum, name: 'Pumping', value: `${fmtInt(d.bar)} min a day` }] : []).concat(d.bar2 ? [{ color: GREY, name: 'Breastfeeding', value: `${fmtInt(d.bar2)} min a day` }] : []).concat(d.line != null ? [{ color: PAL.green, name: 'Milk pumped', value: `${fmtInt(d.line)} ml a day` }, { name: 'Sessions', value: `${fmt1(d.s)} a day` }] : []).concat(d.m ? [{ name: 'Typical session', value: `${d.m} min` }] : []).concat(d.days < 7 ? [{ name: 'Based on', value: `${d.days} full days` }] : [])
     });
   }
 
   // 2. Rhythm
-  legend('rhythm-legend', [{ name: 'Asleep', color: PAL.blue }, { name: 'Bottle', color: PAL.orange }, { name: 'Breastfeed', color: PAL.pink }, { name: 'Sleep log looks incomplete', color: 'var(--cds-chart-status-critical)' }]);
+  legend('rhythm-legend', [{ name: 'Asleep', color: PAL.blue }, { name: 'Bottle', color: PAL.orange }, { name: 'Breastfeed', color: PAL.pink }, { name: 'Long daytime gap with no sleep logged', color: 'var(--cds-chart-status-critical)' }]);
   const rh = document.getElementById('rhythm');
-  if (setState(rh, ['timeline', 'daily'])) rhythm(rh, rowsOf('timeline'), rowsOf('daily'));
+  drawRhythm();
 
   // 3. Longest stretch + total sleep
   legend('longest-legend', [{ name: 'Each day', color: PAL.blue, opacity: 0.4 }, { name: '7-day average', color: PAL.blue, line: 1 }]);
@@ -1262,7 +1340,7 @@ function drawAll() {
   }
 
   // 5. Feed mix
-  const modes = [['Breastfeed', PAL.pink, 'Breastfed directly'], ['Bottle: breast milk', PAL.green, 'Breast milk'], ['Bottle: formula', PAL.orange, 'Formula'], ['Bottle: both', PAL.yellow, 'Breast milk and formula mixed']];
+  const modes = [['Breastfeed', PAL.pink, 'Breastfed directly'], ['Bottle: breast milk', PAL.green, 'Breast milk'], ['Bottle: formula', PAL.orange, 'Formula']];
   legend('mix-legend', modes.map(([n, c, label]) => ({ name: label, color: c })));
   const mx = document.getElementById('mix');
   if (setState(mx, ['feedmix'])) {
@@ -1364,7 +1442,7 @@ function drawAll() {
 
   // Quality
   if (dash.data('quality').status === 'ok') fillTable('quality-table', rowsOf('quality').slice().reverse(), [
-    { k: 'day', f: v => fmtDayYear(pday(v)) }, { k: 'issue' }, { k: 'sleep_logged_h', num: 1, f: v => fmt1(v) }, { k: 'sleeps', num: 1 }
+    { k: 'day', f: v => fmtDayYear(pday(v)) }, { k: 'issue' }, { k: 'sleep_logged_h', num: 1, f: v => fmt1(v) }, { k: 'day_gap_h', num: 1, f: v => v ? fmt1(v) : '-' }
   ], 'day');
 }
 
@@ -1372,8 +1450,55 @@ document.querySelectorAll('.fi-btn[data-mode]').forEach(b => b.addEventListener(
   rhythmMode = b.dataset.mode;
   document.querySelectorAll('.fi-btn[data-mode]').forEach(o => o.setAttribute('aria-pressed', String(o === b)));
   const rh = document.getElementById('rhythm');
-  if (setState(rh, ['timeline', 'daily'])) rhythm(rh, rowsOf('timeline'), rowsOf('daily'));
+  drawRhythm();
 }));
+
+function rhythmRange(daily) {
+  const days = daily.map(d => d.day);
+  if (!days.length) return daily;
+  const lastFull = (daily.filter(d => !d.partial).slice(-1)[0] || daily[daily.length - 1]).day;
+  if (!rhythmDate || rhythmDate < days[0] || rhythmDate > days[days.length - 1]) rhythmDate = lastFull;
+  if (rhythmSpan === 'day') return daily.filter(d => d.day === rhythmDate);
+  if (rhythmSpan === 'week') {
+    const t = Date.parse(rhythmDate), mon = t - ((new Date(t).getUTCDay() + 6) % 7) * DAY;
+    const a = new Date(mon).toISOString().slice(0, 10), b = new Date(mon + 6 * DAY).toISOString().slice(0, 10);
+    return daily.filter(d => d.day >= a && d.day <= b);
+  }
+  return daily;
+}
+function drawRhythm() {
+  const rh = document.getElementById('rhythm');
+  const nav = document.getElementById('rhythm-datenav'), inp = document.getElementById('rhythm-date');
+  const listbox = document.getElementById('rhythm-listbox');
+  if (nav) nav.hidden = rhythmSpan === 'all';
+  if (!setState(rh, ['timeline', 'daily'])) { if (listbox) listbox.hidden = true; return; }
+  const daily = rowsOf('daily');
+  const sub = rhythmRange(daily);
+  if (inp && daily.length) { inp.min = daily[0].day; inp.max = daily[daily.length - 1].day; inp.value = rhythmDate; }
+  rhythm(rh, rowsOf('timeline'), sub);
+  if (!listbox) return;
+  listbox.hidden = rhythmSpan !== 'day' || dash.data('events').status !== 'ok';
+  if (listbox.hidden || !sub.length) return;
+  const off = rhythmMode === 'noon' ? 12 * 36e5 : 0, t0 = Date.parse(sub[0].day) + off, t1 = t0 + DAY;
+  const evs = rowsOf('events').filter(e => e.start >= t0 && e.start < t1 && e.type !== 'Growth');
+  const what = e => ({ 'Sleep': 'Sleep', 'Bottle Feed': 'Bottle', 'Breastfeed': 'Breastfeed', 'Pump': 'Pump', 'Diaper': 'Nappy' }[e.type] || e.type);
+  const detail = e => e.type === 'Sleep' ? `until ${fmtHM(new Date(e.end || e.start + e.sleep_h * 36e5))} (${fmt1(e.sleep_h)} h)`
+    : e.type === 'Bottle Feed' ? [e.bm_ml ? `${fmtInt(e.bm_ml)} ml breast milk` : '', e.formula_ml ? `${fmtInt(e.formula_ml)} ml formula` : '', e.other_ml ? `${fmtInt(e.other_ml)} ml` : ''].filter(Boolean).join(', ') || 'no volume'
+    : e.type === 'Breastfeed' ? (e.breastfeed_min ? `${fmtInt(e.breastfeed_min)} min` : 'no duration')
+    : e.type === 'Pump' ? [e.pump_ml ? `${fmtInt(e.pump_ml)} ml` : '', e.pump_min ? `${fmtInt(e.pump_min)} min` : ''].filter(Boolean).join(', ')
+    : e.type === 'Diaper' ? (e.diaper_kind === 'Dirty Wet' ? 'Wet and dirty' : e.diaper_kind === 'Dirty' ? 'Dirty' : e.diaper_kind === 'Wet' ? 'Wet' : e.diaper_kind || '') : '';
+  fillTable('rhythm-list', evs, [{ k: 'start', f: v => fmtHM(new Date(v)) }, { k: 'type', f: (v, r) => what(r) }, { k: 'detail', num: 1, f: (v, r) => detail(r) }], 'id');
+}
+document.querySelectorAll('.fi-btn[data-span]').forEach(b => b.addEventListener('click', () => {
+  rhythmSpan = b.dataset.span;
+  document.querySelectorAll('.fi-btn[data-span]').forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+  drawRhythm();
+}));
+const rhythmStep = n => { if (!rhythmDate) return; rhythmDate = new Date(Date.parse(rhythmDate) + n * (rhythmSpan === 'week' ? 7 : 1) * DAY).toISOString().slice(0, 10); drawRhythm(); };
+(document.getElementById('rhythm-prev') || {}).onclick = () => rhythmStep(-1);
+(document.getElementById('rhythm-next') || {}).onclick = () => rhythmStep(1);
+const rdi = document.getElementById('rhythm-date');
+if (rdi) rdi.addEventListener('change', () => { if (rdi.value) { rhythmDate = rdi.value; drawRhythm(); } });
 
 dash.onData(drawAll);
 </script>
