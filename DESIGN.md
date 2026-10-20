@@ -230,6 +230,8 @@ Light mode is white paper; dark mode is deep oxblood-black paper (the cover goes
 - Printed form-field rows: hairline cells, small label above value, square corners.
 - One typeface (Public Sans, embedded) at every size, with tabular numerals on every number.
 - Flat record paper: only the glance cards and the chart tooltip lift off the page.
+- One authored motion moment: once per loaded export, the glance-card numbers count up from the week before. Charts never animate.
+- Milestone flags in muted print ink mark the firsts on the charts.
 
 ## Colors
 
@@ -254,7 +256,7 @@ A record-book palette: one cover red, navy print on white paper and a family of 
 
 ### Neutral
 - **Record Paper** (record-paper) and **Paper Shade** (record-paper-shade): the page and sheet ground; the shade fills table headers, hovered controls and loading skeletons.
-- **Navy Print** (navy-print, navy-print-2, navy-print-3): body text, secondary labels and notes, and muted chart text and shading.
+- **Navy Print** (navy-print, navy-print-2, navy-print-3): body text, secondary labels and notes, and muted chart text and shading. Muted print ink (navy-print-2) is also the chart annotation ink: milestone-flag rules and dots, and dotted reference rules.
 - **Form Rules** (form-rule, form-rule-strong): hairline sheet borders and dividers; the strong rule draws record-row cells, controls, table frames and axes.
 - **Graph Paper** (grid-minor, grid-major): the chart grid; major lines also frame the plot area.
 
@@ -328,6 +330,7 @@ Six link cards, playful but organised, that answer "how is he doing" before the 
 - **Content:** card label, an 800-weight number with its unit, and a sub-line at the bottom with the change in bold. Weight sets its number in his own red and adds a nine-tick centile scale (ticks in centile blue, the 50th heavier, a red dot ringed in the card colour where he sits). Breast milk share adds an 8px split bar: the filled share in the card ink over a 22% tint of it.
 - **Pip:** one Pip variant per card (bib, tape, bottle, magnify, clock, sleep), 128px at the bottom right (72px on phones), each at its own rotation; sub-lines and bars stop short of it.
 - **States:** hover, focus and active lift the card 3px onto the card-lift shadow and wiggle the Pip; active settles back with a slight press. Focus-visible is a 3px ink outline, offset 3px, over a 3px white inner ring. Under reduced motion the wiggle and transitions are off.
+- **Count-up (the page's one authored motion moment):** once per loaded export, each card number counts up from the week before (Weight from the previous weigh-in) to the current value over 1.1s with an exponential ease-out (1 - 2^(-10t)), and the breast-milk split bar grows from the prior share over the same 1.1s (cubic-bezier(.16, 1, .3, 1)). It never repeats on resize or redraw and is skipped entirely under prefers-reduced-motion.
 
 ### Segmented controls and date navigation
 - **Style:** a 1px strong-rule frame with 6px corners, 38px tall, label-size semibold text in secondary ink, internal dividers in the strong rule.
@@ -350,6 +353,9 @@ Printed form fields. A grid of cells drawn with a shared 1px strong rule (top an
 ### Graph paper and the centile chart (signature)
 Every chart is drawn on centile-chart paper: major lines on the y-axis ticks, minor lines dividing each major square into five (or two, when squares get small), the same pitch across, and a major-colour frame around the plot. The growth chart reproduces the boys' chart page in chart units (0.1 kg and one-week squares, heavier every kilo and every four weeks), with the nine centile lines 0.4th to 99.6th labelled at the right edge, the 50th heavier, and the baby's weigh-ins as a red line with paper-ringed dots on top.
 
+### Milestone flags
+Small flags for the baby's firsts, drawn over the graph paper in neutral annotation ink, so a flag never reads as a data series. Each is a dotted 1.2px rule in muted print ink (navy-print-2; dash 1 3, round caps) the full plot height, a 3.5px dot in the same ink on the plot's top edge with a 1.5px paper ring, and an 11px weight-600 label in print ink with a 3px paper halo. Labels sit beside the rule (to the right, or to the left near the right edge) in up to three stacked rows 15px apart, starting below any shaded band's label; a label that cannot fit without overlapping is dropped, and its rule and dot stay. In use: First N h and the longest so far on the longest-sleep chart, First pump and First formula on the milk chart, and Back to birth weight on the centile chart.
+
 ### Tooltip
 Paper background, 1px strong rule, 4px corners, tooltip lift, label-size text with a bold title row and tabular values right-aligned against colour swatches. On touch it sits clear of the finger.
 
@@ -365,6 +371,8 @@ On the dashboard, Pip appears only on the glance cards, one variant per card. On
 - **Do** keep a new glance card to the existing pattern: one of the five sticker fields, label, 800-weight number, bottom sub-line, its own Pip and rotation, and a link to its section.
 - **Do** keep red for the cover, section rules, the active state, alerts and the one series or figure that is his own measure.
 - **Do** keep dark mode on the oxblood-black paper (dark-record-paper) with the dark token set, never an inverted light theme.
+- **Do** mark a new first or record on a chart with a milestone flag (dotted muted-ink rule, ringed top dot, haloed 11px label) rather than a callout box or icon; never draw a flag in a series ink.
+- **Do** describe direct breastfeeding as history once the last logged breastfeed is more than 14 days before the export: its key and totals carry the end date ("Minutes breastfeeding a day, until <date>"; "The last one was on <date>").
 - **Do** keep tap targets at 44px on the cover and at least 38px for chart controls, and keep every motion off under reduced motion.
 
 ### Don't:
@@ -372,5 +380,6 @@ On the dashboard, Pip appears only on the glance cards, one variant per card. On
 - **Don't** use rounded colour cards outside the glance strip; sheets and record rows stay square hairline paper.
 - **Don't** put Pip on record paper or in charts, or let Pip lead a record page.
 - **Don't** add shadows to sheets, rows, tabs or buttons; only the glance cards and the tooltip lift.
+- **Don't** animate charts, record rows or tabs, or replay the count-up; it runs once per loaded export.
 - **Don't** introduce a second typeface or set labels in uppercase or wide letter-spacing.
 - **Don't** use the sticker field colours as chart series, add series colours outside the chart inks and his own red, or reassign an ink's meaning from one chart to the next.

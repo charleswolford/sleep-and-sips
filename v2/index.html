@@ -250,6 +250,11 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
   .rb-c-navy { --bg: #1a2240; --fg: #eef1fb; --fg-2: #b6c0de; box-shadow: inset 0 0 0 1px #2f3a60, 0 12px 26px -12px rgba(0, 0, 0, .7); }
 }
 
+/* milestone flags */
+.rb-mark-line { stroke: var(--ink-2); stroke-width: 1.2; stroke-dasharray: 1 3; stroke-linecap: round; }
+.rb-mark-dot { fill: var(--ink-2); stroke: var(--paper); stroke-width: 1.5; }
+.rb-mark-label { font: 600 11px var(--font); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 3px; stroke-linejoin: round; }
+
 /* footer */
 .rb-foot { margin-top: 56px; border-top: 1px solid var(--rule); padding: 20px 0 48px; font-size: var(--t-xs); color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 8px 24px; }
 .rb-foot p { margin: 0; }
@@ -328,7 +333,7 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
           <div class="rb-field"><span class="rb-label">Breast milk pumped</span><span class="rb-value"><span data-source="totals" data-where="metric=pumped_litres" data-field="value" class="dash-skeleton">-</span> <span class="rb-unit">litres</span></span><span class="rb-sub">Since pumping began on <span data-source="totals" data-where="metric=pump_first" data-field="value" class="dash-skeleton">-</span></span></div>
           <div class="rb-field"><span class="rb-label">Pump sessions</span><span class="rb-value"><span data-source="totals" data-where="metric=pump_sessions" data-field="value" class="dash-skeleton">-</span></span><span class="rb-sub">About <span data-source="totals" data-where="metric=pump_per_day" data-field="value" class="dash-skeleton">-</span> a day</span></div>
           <div class="rb-field"><span class="rb-label">Time spent pumping</span><span class="rb-value"><span data-source="totals" data-where="metric=pump_minutes" data-field="hours" class="dash-skeleton">-</span> <span class="rb-unit">hours</span></span><span class="rb-sub"><span data-source="totals" data-where="metric=pump_minutes" data-field="value" class="dash-skeleton">-</span> minutes, or <span data-source="totals" data-where="metric=pump_minutes" data-field="days" class="dash-skeleton">-</span> days</span></div>
-          <div class="rb-field"><span class="rb-label">Direct breastfeeds</span><span class="rb-value"><span data-source="totals" data-where="metric=breastfeeds" data-field="value" class="dash-skeleton">-</span></span><span class="rb-sub"><span data-source="totals" data-where="metric=breastfeed_minutes" data-field="value" class="dash-skeleton">-</span> minutes, or <span data-source="totals" data-where="metric=breastfeed_minutes" data-field="hours" class="dash-skeleton">-</span> hours (<span data-source="totals" data-where="metric=breastfeed_minutes" data-field="days" class="dash-skeleton">-</span> days)</span></div>
+          <div class="rb-field"><span class="rb-label">Direct breastfeeds</span><span class="rb-value"><span data-source="totals" data-where="metric=breastfeeds" data-field="value" class="dash-skeleton">-</span></span><span class="rb-sub"><span data-source="totals" data-where="metric=breastfeed_minutes" data-field="value" class="dash-skeleton">-</span> minutes, or <span data-source="totals" data-where="metric=breastfeed_minutes" data-field="hours" class="dash-skeleton">-</span> hours (<span data-source="totals" data-where="metric=breastfeed_minutes" data-field="days" class="dash-skeleton">-</span> days)<span id="bf-last"></span></span></div>
         </div>
       </div>
     </section>
@@ -362,17 +367,17 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
           <div class="fi-chart dash-skeleton" id="perkg" data-source="intake"></div>
           <p class="rb-foot-note" id="perkg-stale"></p>
           <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
-            <p>His daily milk total divided by his weight, averaged for each week. Bigger babies drink more, so this gives a fairer comparison over time than raw ml. Weight between weigh-ins is estimated on a straight line between them, and the chart stops at the latest weigh-in. Faded bars are weeks with direct breastfeeds, which have no volume, so they read too low.</p>
+            <p>His daily milk total divided by his weight, averaged for each week. Bigger babies drink more, so this gives a fairer comparison over time than raw ml. Weight between weigh-ins is estimated on a straight line between them, and the chart stops at the latest weigh-in. The pale outlined bars are the early weeks when he was also breastfed directly, which has no volume, so they read too low.</p>
           </details>
         </div>
       </div>
 
       <div class="rb-sheet">
-        <h3 class="rb-h3" id="pumptime-title">Time spent pumping and breastfeeding, and milk pumped, per day</h3>
+        <h3 class="rb-h3" id="pumptime-title">Time spent pumping each day, and milk pumped</h3>
         <div class="fi-legend" id="pumptime-legend"></div>
         <div class="fi-chart dash-skeleton" id="pumptime" data-source="pumping"></div>
         <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
-          <p>One set of columns shows the average minutes spent pumping each day, week by week, and the columns beside them show the average minutes of direct breastfeeding (both on the left scale). The line shows the average breast milk pumped each day, in ml (right scale). Times come from the durations logged, so they don't include setting up, washing, or sterilising. Tap a week for sessions per day and the typical session length.</p>
+          <p>One set of columns shows the average minutes spent pumping each day, week by week, and the columns beside them show the average minutes of direct breastfeeding in the early weeks, before he moved to bottles (both on the left scale). The line shows the average breast milk pumped each day, in ml (right scale). Times come from the durations logged, so they don't include setting up, washing, or sterilising. Tap a week for sessions per day and the typical session length.</p>
         </details>
       </div>
     </section>
@@ -1065,11 +1070,12 @@ function lineChart(box, cfg) {
   const x = (linear ? d3.scaleLinear : d3.scaleUtc)(xDom, [ml + 4, W - 10]);
   paper(grid, ml + 4, W - 10, top, bot, y, ticks);
   xTicksFit(svg, x, bot, { values: cfg.xTickValues, count: Math.max(2, Math.floor((W - ml) / 80)), fmt: cfg.xFmt || fmtDay });
+  let shadeEnd = -Infinity;
   (cfg.shades || []).forEach(s => {
     const x0 = Math.max(x(s.x0), ml + 4), x1 = Math.min(x(s.x1), W - 10);
     if (x1 <= x0) return;
     svg.append('rect').attr('class', 'fi-shade').attr('x', x0).attr('y', top).attr('width', x1 - x0).attr('height', bot - top);
-    if (x1 - x0 > 90) svg.append('text').attr('class', 'fi-shade-label').attr('x', x0 + 6).attr('y', top + 14).text(s.label);
+    if (x1 - x0 > 90) { const t = svg.append('text').attr('class', 'fi-shade-label').attr('x', x0 + 6).attr('y', top + 14).text(s.label); shadeEnd = Math.max(shadeEnd, x0 + 6 + t.node().getComputedTextLength()); }
   });
   (cfg.areas || []).forEach(a => {
     svg.append('path').datum(a.values).attr('fill', a.color).attr('opacity', a.opacity)
@@ -1086,6 +1092,7 @@ function lineChart(box, cfg) {
       .attr('d', d3.line().defined(ok).x(d => x(d.x)).y(d => y(d.y)));
     if (s.dots) svg.append('g').selectAll('circle').data(vals).join('circle').attr('cx', d => x(d.x)).attr('cy', d => y(d.y)).attr('r', 4).attr('fill', s.color).attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5);
   });
+  if (cfg.marks && cfg.marks.length) milestoneFlags(svg, cfg.marks.map(m => ({ ...m, px: x(m.x) })), ml + 4, W - 10, top, bot, shadeEnd);
   const hoverSeries = cfg.series.filter(s => !s.noHover);
   const hx = [...new Set(hoverSeries.flatMap(s => s.values.filter(ok).map(v => +v.x)))].sort((a, b) => a - b);
   const rule = svg.append('line').attr('class', 'fi-rule').attr('y1', top).attr('y2', bot).style('display', 'none');
@@ -1409,6 +1416,8 @@ function centileChart(box, wts, who, prof) {
   const own = wts.map(w => ({ x: w.age_days, y: w.weight_kg, w }));
   svg.append('path').datum(own).attr('fill', 'none').attr('stroke', PAL.red).attr('stroke-width', 2.2).attr('stroke-linejoin', 'round').attr('d', line);
   svg.append('g').selectAll('circle').data(own).join('circle').attr('cx', d => x(d.x)).attr('cy', d => y(d.y)).attr('r', 3.8).attr('fill', PAL.red).attr('stroke', 'var(--paper)').attr('stroke-width', 1.5);
+  const back = rowsOf('milestones').find(m => m.chart === 'growth');
+  if (back) milestoneFlags(svg, [{ px: x(back.age_days), label: back.label }], x(0), x(maxAge), top, bot, -Infinity);
   const ring = svg.append('circle').attr('r', 7).attr('fill', 'none').attr('stroke', PAL.red).attr('stroke-width', 1.5).style('display', 'none');
   svg.append('rect').attr('x', x(0)).attr('y', top).attr('width', x(maxAge) - x(0)).attr('height', bot - top).attr('fill', 'transparent')
     .on('pointerdown pointermove', ev => {
@@ -1549,6 +1558,83 @@ function drawLedes() {
   }
 }
 
+// Milestones: firsts worth marking on the charts.
+dash.calc('milestones', {
+  title: 'Milestones',
+  description: 'First complete-log day with a single sleep of 4, 5, 6, 7 or 8 hours and the longest so far; the first pump and first formula; the first weigh-in back at or above birth weight.',
+  inputs: ['daily', 'weight'],
+  fn: (daily, weight) => {
+    const out = [], ok = daily.filter(d => d.sleep_complete);
+    const best = ok.reduce((m, d) => (!m || d.longest_sleep_h > m.longest_sleep_h ? d : m), null);
+    [4, 5, 6, 7, 8].forEach(h => { const d = ok.find(q => q.longest_sleep_h >= h); if (d) out.push({ chart: 'sleep', day: d.day, label: `First ${h} h` }); });
+    if (best) {
+      const same = out.find(m => m.chart === 'sleep' && m.day === best.day);
+      const txt = `Longest, ${Math.round(best.longest_sleep_h * 10) / 10} h`;
+      if (same) same.label = `${same.label}, longest yet`; else out.push({ chart: 'sleep', day: best.day, label: txt });
+    }
+    const fp = daily.find(d => d.pump_ml > 0), ff = daily.find(d => d.formula_ml > 0);
+    if (fp) out.push({ chart: 'milk', day: fp.day, label: 'First pump' });
+    if (ff) out.push({ chart: 'milk', day: ff.day, label: 'First formula' });
+    if (weight.length > 1) {
+      const birth = weight[0].weight_kg;
+      const dipped = weight.findIndex((w, i) => i > 0 && w.weight_kg < birth);
+      const back = dipped > 0 ? weight.slice(dipped).find(w => w.weight_kg >= birth) : null;
+      if (back) out.push({ chart: 'growth', day: back.date, age_days: back.age_days, label: 'Back to birth weight' });
+    }
+    return out;
+  }
+});
+
+// A marigold flag per milestone: a dotted rule, a dot on the top edge and a label kept clear of its neighbours.
+function milestoneFlags(svg, marks, x0, x1, top, bot, shadeEnd) {
+  const g = svg.append('g').attr('class', 'rb-marks');
+  const rows = [shadeEnd + 8, -Infinity, -Infinity];
+  marks.filter(m => m.px >= x0 && m.px <= x1).sort((a, b) => a.px - b.px).forEach(m => {
+    const t = g.append('text').attr('class', 'rb-mark-label').text(m.label);
+    const len = t.node().getComputedTextLength();
+    let row = -1;
+    for (let r = 0; r < rows.length && row < 0; r++) {
+      const right = m.px + 8 + len <= x1, a = right ? m.px - 4 : m.px - 8 - len, b = right ? m.px + 8 + len : m.px + 4;
+      if (a >= rows[r]) { row = r; t.attr('x', right ? m.px + 8 : m.px - 8).attr('text-anchor', right ? 'start' : 'end'); rows[r] = b + 10; }
+    }
+    const ly = top + 14 + Math.max(0, row) * 15;
+    if (row < 0) t.remove(); else t.attr('y', ly);
+    g.append('line').attr('class', 'rb-mark-line').attr('x1', m.px).attr('x2', m.px).attr('y1', row < 0 ? top : ly + 5).attr('y2', bot);
+    g.append('circle').attr('class', 'rb-mark-dot').attr('cx', m.px).attr('cy', row < 0 ? top : ly - 4).attr('r', 3.5);
+  });
+}
+
+// Card numbers count up from the week before, once per export.
+function countUp() {
+  if (document.hidden || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  const rows = rowsOf('headline');
+  const runs = [];
+  document.querySelectorAll('.rb-cards .rb-card-value [data-source="headline"][data-field="value"]').forEach(el => {
+    const r = rows.find(h => h.metric === new URLSearchParams(el.dataset.where).get('metric'));
+    if (!r || r.prior == null || r.value == null || r.prior === r.value) return;
+    const dp = ['longest_sleep_h', 'sleep_h'].includes(r.metric) ? fmt1 : r.metric === 'weight_kg' ? d3.format('.2f') : fmtInt;
+    el.textContent = dp(r.prior);
+    runs.push({ el, a: r.prior, b: r.value, dp });
+  });
+  if (!runs.length) return;
+  const dur = 1100, ease = t => 1 - Math.pow(2, -10 * t);
+  let t0 = null, done = false;
+  const finish = () => { if (done) return; done = true; runs.forEach(o => { o.el.textContent = o.dp(o.b); }); };
+  const step = now => {
+    if (done) return;
+    if (t0 == null) t0 = now;
+    const p = Math.min(1, Math.max(0, (now - t0) / dur));
+    if (p >= 1) { finish(); return; }
+    const k = ease(p);
+    runs.forEach(o => { o.el.textContent = o.dp(o.a + (o.b - o.a) * k); });
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+  setTimeout(finish, dur + 300);
+  const share = rows.find(h => h.metric === 'breast_milk_share'), bar = document.getElementById('card-split-bar');
+  if (bar && share && share.prior != null) { bar.style.transition = 'none'; bar.style.width = `${share.prior}%`; bar.offsetWidth; bar.style.transition = 'width 1.1s cubic-bezier(.16, 1, .3, 1)'; bar.style.width = `${share.value}%`; }
+}
+
 function drawAll() {
   // Headline marks
   const hs = dash.data('headline').status;
@@ -1567,6 +1653,7 @@ function drawAll() {
   if (pEl) { const ps = dash.data('profile').status; if (ps === 'ok') { pEl.classList.remove('dash-skeleton'); pEl.textContent = fmtDayYear(pday(rowsOf('profile')[0].birth_date)); } else pEl.classList.toggle('dash-skeleton', !BAD.includes(ps)); }
 
   drawToday(); drawLedes();
+  if (hs === 'ok' && !window.__counted) { window.__counted = true; countUp(); }
 
   // Totals since birth
   const tst = dash.data('totals').status;
@@ -1591,12 +1678,20 @@ function drawAll() {
       tipFmt: v => `${fmtInt(v)} ml`,
       tipTitle: v => `Daily average, 7 days to ${fmtDayLong(new Date(v))}`,
       shades: bfDays.length ? [{ x0: pday(daily[0].day), x1: pday(bfDays[bfDays.length - 1].day), label: 'Also breastfed directly' }] : [],
+      marks: rowsOf('milestones').filter(m => m.chart === 'milk').map(m => ({ x: pday(m.day), label: m.label })),
       tipExtra: xs => { const d = r.find(q => +pday(q.day) === xs); if (!d || d.pump_ml == null || d.bm_ml == null) return []; const g = d.pump_ml - d.bm_ml; return [{ name: g >= 0 ? 'Pumped more than he drank by' : 'He drank more than was pumped by', value: `${fmtInt(Math.abs(g))} ml a day` }]; }
     });
   }
 
+  // Direct breastfeeding is history once the last one is more than two weeks before the export
+  const evs = dash.data('events').status === 'ok' ? rowsOf('events') : [];
+  const lastBf = evs.filter(e => e.type === 'Breastfeed').pop(), lastAny = evs.length ? evs[evs.length - 1] : null;
+  const bfEnded = lastBf && lastAny && Date.parse(lastAny.day) - Date.parse(lastBf.day) > 14 * DAY;
+  const bfl = document.getElementById('bf-last');
+  if (bfl) bfl.textContent = bfEnded ? `. The last one was on ${fmtDay(pday(lastBf.day))}` : '';
+
   // Time spent pumping and milk pumped
-  legend('pumptime-legend', [{ name: 'Minutes pumping per day', color: PAL.blue }, { name: 'Minutes breastfeeding per day', color: PAL.rose }, { name: 'Milk pumped per day (ml)', color: PAL.ink, line: 1 }]);
+  legend('pumptime-legend', [{ name: 'Minutes pumping per day', color: PAL.blue }, { name: bfEnded ? `Minutes breastfeeding a day, until ${fmtDay(pday(lastBf.day))}` : 'Minutes breastfeeding per day', color: PAL.rose }, { name: 'Milk pumped per day (ml)', color: PAL.ink, line: 1 }]);
   const pt = document.getElementById('pumptime');
   if (setState(pt, ['pumping'])) {
     const r = rowsOf('pumping').map(d => ({ x: d.week, bar: d.minutes_per_day, bar2: d.bf_min_per_day, line: d.ml_per_day, s: d.sessions_per_day, m: d.avg_session_min, days: d.days, pd: d.pump_days }));
@@ -1622,7 +1717,8 @@ function drawAll() {
     lineChart(lg, {
       series: [{ name: 'That day', color: PAL.blue, dotsOnly: true, values: ok7.map(d => ({ x: pday(d.day), y: d.longest_sleep_h })), fmt: v => `${fmt1(v)} h` },
                { name: '7-day average', color: PAL.ink, values: r.map(d => ({ x: pday(d.day), y: d.longest_sleep_h })), fmt: v => `${fmt1(v)} h` }],
-      yFmt: v => `${v} h`
+      yFmt: v => `${v} h`,
+      marks: rowsOf('milestones').filter(m => m.chart === 'sleep').map(m => ({ x: pday(m.day), label: m.label }))
     });
   }
   legend('total-legend', [{ name: 'Each day', color: PAL.blue, opacity: 0.75 }, { name: '7-day average', color: PAL.ink, line: 1 }]);
@@ -1885,6 +1981,10 @@ document.querySelectorAll('[data-pip]').forEach(el => { el.innerHTML = pipSVG(el
 
 <script>
 (function () {
+  // Always open at the top: no browser scroll restore, and no jump to a section link left in the address.
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  if (location.hash) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
+  window.scrollTo(0, 0);
   const KEY = 'sleep-and-sips-nara-csv';
   const landing = document.getElementById('landing'), dashEl = document.getElementById('dashboard');
   const err = document.getElementById('err'), asof = document.getElementById('asof');
@@ -1905,7 +2005,7 @@ document.querySelectorAll('[data-pip]').forEach(el => { el.innerHTML = pipSVG(el
       Object.keys(STORE).forEach(k => delete STORE[k]); READY = false;
       STORE.nara = rows; STORE.who = WHO;
       for (const [id, o] of CALCS) STORE[id] = o.fn(...o.inputs.map(i => STORE[i]));
-      READY = true;
+      READY = true; window.__counted = false;
     } catch (e) {
       READY = false;
       err.textContent = "That file doesn't look like a Nara Baby export. Export it again from Nara Baby and pick the .csv file.";
@@ -1921,8 +2021,7 @@ document.querySelectorAll('[data-pip]').forEach(el => { el.innerHTML = pipSVG(el
     show(true);
     requestAnimationFrame(() => {
       DRAW && DRAW();
-      let target = null; try { target = location.hash && document.querySelector(location.hash); } catch (e) {}
-      if (target) target.scrollIntoView();
+      window.scrollTo(0, 0);
       spy();
     });
   }
