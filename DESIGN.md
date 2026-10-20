@@ -376,10 +376,7 @@ Every chart is drawn on centile-chart paper: major lines on the y-axis ticks, mi
 The daily rhythm chart opens on One week on phones and on All days on larger screens. Its One day view lists the entries as a timeline: the time in bold, then an 8px dot per entry type before the entry (sleep blue, bottle marigold, breastfeed rose, pump navy ink, anything else grey).
 
 ### Tables
-Hairline tables on paper with sticky paper-shade headers. The weigh-in table shows every row with no height cap. Any table that still scrolls has a small secondary-ink note under it giving the row count. On phones the weigh-in, Notes and Notes from the log tables stack: each row becomes a two-column record, with a small 11px semibold label from its heading above each value, and long text cells span both columns.
-
-### Log notes
-Notes typed into the log appear as pins on the row-per-day and last-seven-nights charts, drawn like the milestone dot: a small muted-ink (navy-print-2) circle with a 1.5px paper ring, with the note shown in the tooltip. The sleep charts' keys list them as "Note from the log" with a round swatch. Notes also fill a "Notes from the log" table in Notes. Notes that are only a number are left out.
+Hairline tables on paper with sticky paper-shade headers. The weigh-in table shows every row with no height cap. Any table that still scrolls has a small secondary-ink note under it giving the row count. On phones the weigh-in table and the days-left-out table in Notes stack: each row becomes a two-column record, with a small 11px semibold label from its heading above each value, and long text cells span both columns.
 
 ### Last seven nights chart
 One 44px row per night from 19:00 to 07:00 on hourly graph paper (major line every 2 hours). Sleep is a chart-blue band; the night's longest stretch is outlined 2px in navy ink; bottles are 4px marigold marks with a paper edge. Each row has a bold 12.5px label and an 11.5px sub-line at the left, and the row fills with paper shade on hover.
