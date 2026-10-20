@@ -220,7 +220,7 @@ components:
 
 # Design System: Sleep and Sips
 
-Scope: this system governs the Red Book world shipped in `v2/index.html`. The repo root's `index.html` and `cs.html` predate it (cream paper, Fraunces and Nunito, coloured cards) and are not governed by it. A Czech page in this world, when it comes, follows this file.
+Scope: this system governs the Red Book world shipped in `v2/index.html` and its Czech twin `v2/cs.html`, which is generated from the same source (a translation table, Czech grammar functions and a Czech d3 locale), so every rule here applies to both languages. The repo root's `index.html` and `cs.html` predate it (cream paper, Fraunces and Nunito, coloured cards) and are not governed by it.
 
 ## Overview
 
@@ -230,10 +230,10 @@ The page is a record the parents keep beside the personal child health record: a
 
 The record pages are dense like a filled-in form. Each section opens with a red rule, a heading and an answer sentence, then printed record rows (small label above a large tabular value) and chart sheets framed by a hairline. The one exception, added at the parents' request, is a strip of six glance cards tucked half over the bottom of the cover band, like coloured stickers slipped into the book's front: warm field colours, soft corners, big numbers and a Pip on each, and each card opens its section. Below the tabs everything is flat paper and ink again. Outside the glance strip, the world still refuses the baby-tracker default of pastel rounded cards.
 
-Light mode is white paper; dark mode is deep oxblood-black paper (the cover goes slightly deeper, the grid turns ink-blue on near-black, the navy chart ink becomes a warm pale stone so it differs in hue from the dark chart blue, the baby's own red brightens to stay legible, the card fields darken to deep marigold, sky, plum and navy). The direction contract named #170d0f for dark paper; the build ships #160c0f and that is the recorded value.
+Light mode is white paper; dark mode is deep oxblood-black paper (the cover goes slightly deeper, the grid turns ink-blue on near-black, the navy chart ink becomes a warm pale stone so it differs in hue from the dark chart blue, the baby's own red brightens to stay legible, the card fields darken to deep marigold, sky, plum and navy). The colours switch on the band chooses follow device, always dark or always light (stored as 'sas-theme'): the dark set applies under prefers-color-scheme: dark unless the page is forced light (data-theme="light"), and always when forced dark (data-theme="dark"). Print is always the light palette. The direction contract named #170d0f for dark paper; the build ships #160c0f and that is the recorded value.
 
 **Key Characteristics:**
-- Red cover band at the top: the name and the load button on one row, then the export time, a this-week sentence in white, and a small line saying weekly figures are 7-day averages against the 7 days before.
+- Red cover band at the top: the name and the band actions (language link, colours switch, Load newer export) on one row, then the export time, a this-week sentence in white, and a small line saying weekly figures are 7-day averages against the 7 days before.
 - Six glance cards tucked over the cover's bottom edge: the one playful, rounded, coloured place in the system.
 - Blue graph paper with minor and major lines under every chart.
 - Printed form-field rows: hairline cells, small label above value, square corners.
@@ -290,7 +290,7 @@ Public Sans is embedded in the page as base64 woff2 (variable weight 400 to 800,
 - **Card value** (800, 2.75rem, 1, -0.035em, tabular; 1.875rem on phones): the glance-card numbers, with the unit at 1.0625rem, weight 600, in the card's secondary ink.
 - **Headline** (700, 1.625rem, 1.2): each section heading, always under the red section rule.
 - **Title** (700, 1.0625rem, 1.3): group and chart-sheet titles; an inline small note at the label size may follow on the same baseline.
-- **Card label** (700, 0.9375rem; 0.8125rem on phones): the glance-card name, in sentence case.
+- **Card label** (700, 0.9375rem; 0.8125rem on phones): the glance-card name, in sentence case. On phones Czech labels may wrap to two lines (line height 1.3); every label then reserves two lines (2.6em) so the numbers stay aligned across cards, and Pip drops to 52px from the top.
 - **Record value** (700, 1.75rem, 1.15, tabular; 1.5rem in dense rows and on mobile): the numbers in record rows, with the unit at 0.9375rem, weight 500, in secondary ink.
 - **Week sentence** (600, 1.0625rem, 1.45, white, max 62ch): the this-week sentence on the cover band, above a 0.8125rem explainer line in blush.
 - **Lede** (400, 1.0625rem, 1.55, max 64ch): the answer sentence that opens each section; key figures in bold.
@@ -305,9 +305,9 @@ Public Sans is embedded in the page as base64 woff2 (variable weight 400 to 800,
 
 ## Layout
 
-A single centred column (max 72rem) with 16px side padding, 32px from 768px up. The cover band is a small grid with no wordmark: the name and the Load newer export button share the first row (20px column gap, 12px on phones), and the export time, the week sentence and the small 7-day explainer line run full width below. The glance strip pulls up 68px into the band (the band keeps 92px of bottom padding for it; 48px and 64px on phones), three cards across, two across under 900px, with a 14px gap (8px on phones). The Share this week as an image button and its status note sit under the cards. Then a sticky tab bar on paper with a hairline bottom rule holds the six sections (Since birth, Milk, Sleep, Growth, Shifts, Notes), with Since birth first, directly under the glance cards; on narrow screens it scrolls horizontally with a fade at the right edge. Each section is a record page: 44px above, a 2px red rule, the headline, the lede, then groups 28px apart.
+A single centred column (max 72rem) with 16px side padding, 32px from 768px up. The cover band is a small grid with no wordmark. On desktop the name and the actions row (language link, colours switch, Load newer export; 8px apart) share the first row, 20px apart, and the export time, the week sentence and the small 7-day explainer line run full width below. On phones the band text comes first and the actions sit in one row under it, 12px down, with the load button stretching to fill. When the export is more than 8 days old a white reminder tag appears under the band text. The glance strip pulls up 68px into the band (the band keeps 92px of bottom padding for it; 48px and 64px on phones), three cards across, two across under 900px, with a 14px gap (8px on phones). The Share this week as an image button and its status note sit under the cards. Then a sticky tab bar on paper with a hairline bottom rule holds the six sections (Since birth, Milk, Sleep, Growth, Shifts, Notes), with Since birth first, directly under the glance cards; on narrow screens it scrolls horizontally with a fade at the right edge. Each section is a record page: 44px above, a 2px red rule, the headline, the lede, then groups 28px apart.
 
-Record rows are an auto-fit grid of cells at least 13rem wide; dense rows are three across. Under 600px they become two across, and an odd last cell spans both columns. Chart sheets stack 24px apart; pairs sit side by side when each can have 27rem, with a 20px gap, otherwise they stack. Small-multiple charts use an auto-fit grid of 15rem minimum. The footer, behind a hairline, holds the privacy line, the link to the previous version and "Forget data on this device". Interactive targets are at least 44px on the cover and 38px for chart controls.
+Record rows are an auto-fit grid of cells at least 13rem wide; dense rows are three across. Under 600px they become two across, and an odd last cell spans both columns. Chart sheets stack 24px apart; pairs sit side by side when each can have 27rem, with a 20px gap, aligned to the top rather than stretched to equal height; otherwise they stack. Small-multiple charts use an auto-fit grid of 15rem minimum. The footer, behind a hairline, holds the privacy line, the link to the previous version and "Forget data on this device". Interactive targets are at least 44px on the cover and 38px for chart controls.
 
 ## Elevation & Depth
 
@@ -333,6 +333,10 @@ Few and firm.
 - **Cover button:** white on the cover band with deep-red text and a stroked upload icon, 0.9375rem bold; the file input fills it invisibly. It is the page's one primary action ("Load newer export"; "Load Nara export" on the landing).
 - **Hover / Focus:** hover tints to a pale blush (#ffeceb); press drops 1px; focus on the cover is a 2px white outline offset 2px.
 - **Secondary (Share this week as an image):** paper fill, 1px strong rule, 6px corners, 40px tall, 0.8125rem semibold print ink with a 16px stroked icon; hover fills with paper shade; disabled at 0.6 opacity while the image is made. A small status note in secondary ink sits beside it.
+- **Print:** the same secondary style, on the growth sheet header and in the footer; it opens the health visitor printout.
+- **Language link:** "Česky" / "English", an underlined 0.8125rem semibold text link in blush in the band actions (white on hover) and on the landing, 44px tall; the choice is remembered as 'sas-lang'.
+- **Colours switch:** a 44px-tall outlined button in the band with a 1px translucent white outline (55%) and 6px corners, transparent fill (12% white on hover), showing its state in words (Auto, Dark, Light) beside a 20px icon; on phones only the word shows. It cycles follow device, always dark and always light.
+- **Stale-export reminder:** a white tag with 4px corners and deep-red 0.8125rem semibold text ("This export is N days old…"), shown only when the export is more than 8 days old; hidden in print.
 - **Forget link:** an underlined text button in the footer, in secondary ink, navy on hover.
 
 ### Glance cards (signature)
@@ -357,7 +361,7 @@ A native checkbox under the sheet title ("Compare with 4 weeks earlier"): 16px b
 - **Mobile:** horizontal scroll with no scrollbar and a right-edge fade.
 
 ### Record rows
-Printed form fields, used for the Since birth totals and for "Pumping, last 7 full days" in Milk (Sessions a day, Typical session, Time pumping a day, Milk per session), which sits above the pumping chart, carries a worded change against the 7 days before in each sub-line ("10 ml less than the week before", "Same as the week before"), and hides itself when the export has no pump entries. A grid of cells drawn with a shared 1px strong rule (top and left on the row, right and bottom on each cell), square corners, padding 9px 14px 14px. Inside: a small semibold label, the large tabular value with its unit, and a short sub-line in secondary ink with its key change in bold.
+Printed form fields, used for the Since birth totals (three dense rows under small headings: Milk, Pumping, Nappies and feeds) and for "Pumping, last 7 full days" in Milk (Sessions a day, Typical session, Time pumping a day, Milk per session), which sits above the pumping chart, carries a worded change against the 7 days before in each sub-line ("10 ml less than the week before", "Same as the week before"), and hides itself when the export has no pump entries. A grid of cells drawn with a shared 1px strong rule (top and left on the row, right and bottom on each cell), square corners, padding 9px 14px 14px. Inside: a small semibold label, the large tabular value with its unit, and a short sub-line in secondary ink with its key change in bold.
 
 ### Chart sheets
 - **Corner Style:** square.
@@ -367,6 +371,15 @@ Printed form fields, used for the Since birth totals and for "Pumping, last 7 fu
 
 ### Graph paper and the centile chart (signature)
 Every chart is drawn on centile-chart paper: major lines on the y-axis ticks, minor lines dividing each major square into five (or two, when squares get small), the same pitch across, and a major-colour frame around the plot. The growth chart reproduces the boys' chart page in chart units (0.1 kg and one-week squares, heavier every kilo and every four weeks), with the nine centile lines 0.4th to 99.6th labelled at the right edge, the 50th heavier, and the baby's weigh-ins as a red line with paper-ringed dots on top.
+
+### Row-per-day chart and the one-day timeline
+The daily rhythm chart opens on One week on phones and on All days on larger screens. Its One day view lists the entries as a timeline: the time in bold, then an 8px dot per entry type before the entry (sleep blue, bottle marigold, breastfeed rose, pump navy ink, anything else grey).
+
+### Tables
+Hairline tables on paper with sticky paper-shade headers. The weigh-in table shows every row with no height cap. Any table that still scrolls has a small secondary-ink note under it giving the row count. On phones the weigh-in, Notes and Notes from the log tables stack: each row becomes a two-column record, with a small 11px semibold label from its heading above each value, and long text cells span both columns.
+
+### Log notes
+Notes typed into the log appear as pins on the row-per-day and last-seven-nights charts, drawn like the milestone dot: a small muted-ink (navy-print-2) circle with a 1.5px paper ring, with the note shown in the tooltip. The sleep charts' keys list them as "Note from the log" with a round swatch. Notes also fill a "Notes from the log" table in Notes. Notes that are only a number are left out.
 
 ### Last seven nights chart
 One 44px row per night from 19:00 to 07:00 on hourly graph paper (major line every 2 hours). Sleep is a chart-blue band; the night's longest stretch is outlined 2px in navy ink; bottles are 4px marigold marks with a paper edge. Each row has a bold 12.5px label and an 11.5px sub-line at the left, and the row fills with paper shade on hover.
@@ -380,6 +393,16 @@ Paper background, 1px strong rule, 4px corners, tooltip lift, label-size text wi
 ### Share image
 A 1080px-wide PNG drawn in the light palette whatever the mode, 1314px tall for a sentence of up to three lines and growing with it: the cards start at max(404, 272 + (lines - 1) x 44 + 72)px and the cover-red band runs 116px past that start (520px at the base size). The band holds the name (800, 92px), "Week to <date>" in blush, labelled by the week's last full day, and the week sentence in white (600, 32px, 44px lines), then the six glance cards in a 2 x 3 grid with 30px corners, a soft oxblood shadow, the white cards edged in the hairline rule, and each Pip at the top right. It carries no footer text. It is shared through the native share sheet or downloaded.
 
+### Health visitor printout
+Two A4 pages with 12mm margins, always in the light palette, with the band colour forced to print.
+- **Page 1:** a compact red band with the name, the export time, a print-only line saying it is a summary printed for the health visitor, and a print-only record row of six facts from the last 7 full days (Born, Age today, Feeds a day, Milk a day, Wet nappies a day, Dirty nappies a day). The row has white-ruled cells on the red, 8pt blush labels and 12pt white tabular values. The week sentence follows, then Growth: the centile chart at 260px tall and the full weigh-in table.
+- **Page 2:** starts at Milk with feed mix and ml per kg (190px) side by side, then the pumping record row and the last seven nights at 30px rows.
+- **Hidden on paper:** the cards, tabs, actions, footer, section summary sentences, the longest-sleep chart, the ml-per-kg footnote, every other chart, the how-to text and all controls.
+- Charts are redrawn at the A4 width (186mm) before printing. Sheets, rows and the pumping table never break across pages (the weigh-in table may), and sheet borders print in the strong rule.
+
+### Icon
+Pip's head on cover red: a teal face (#2bb3a9), an orange hat (#f2711c) with a yellow band and pom-pom (#ffd84a), dark eyes with white highlights and pink cheeks. The SVG favicon has 112/512 rounded corners; the PNGs (512, 180 for the touch icon, 32) are full-bleed so the platform applies its own mask.
+
 ### Pip
 On the dashboard, Pip appears only on the glance cards, one variant per card. On the landing, the hero Pip is a die-cut sticker (11rem) above the title. Pip never sits on record paper or in a chart.
 
@@ -392,7 +415,10 @@ On the dashboard, Pip appears only on the glance cards, one variant per card. On
 - **Do** label every weekly figure as an average ("Average milk a day"), on cards, rows and the share image alike.
 - **Do** keep a new glance card to the existing pattern: one of the five sticker fields, label, 800-weight number, bottom sub-line, its own Pip and rotation, and a link to its section.
 - **Do** keep red for the cover, section rules, the active state, alerts and the one series or figure that is his own measure.
-- **Do** keep dark mode on the oxblood-black paper (dark-record-paper) with the dark token set, never an inverted light theme.
+- **Do** keep dark mode on the oxblood-black paper (dark-record-paper) with the dark token set, never an inverted light theme, and respect the stored colours choice over the device setting.
+- **Do** write every new string for both languages; Czech copy is generated from the same source, so layouts must allow for longer Czech words (two-line card labels on phones).
+- **Do** follow the Czech copy rules: decimal days take "dne"; decimal centiles have no ordinal dot ("0,4", "99,6"); centile positions read "na čáře 25. percentilu" or "mezi čarami 9. a 25. percentilu"; average cards name the average ("Vypité mléko denně (průměr)", "Odsáté mléko denně (průměr)").
+- **Do** keep the printout to two light A4 pages limited to what a health visitor reads: the facts row and growth on page 1; feed mix, milk for size, pumping and the last seven nights on page 2.
 - **Do** mark a new first or record on a chart with a milestone flag (dotted muted-ink rule, ringed top dot, haloed 11px label) rather than a callout box or icon; never draw a flag in a series ink.
 - **Do** write every change against the week before out in full: "<amount> <unit> more/less/higher/lower/longer/shorter than the week before", and for weight "up/down <kg> since the weigh-in before"; never "on last week" or a bare signed number; no change reads "Same as the week before". In the week sentence, a change under 5% (0.25 h for sleep) reads "about the same", never "steady".
 - **Do** describe direct breastfeeding as history once the last logged breastfeed is more than 14 days before the export: its key and totals carry the end date ("Minutes breastfeeding a day, until <date>"; "The last one was on <date>").
