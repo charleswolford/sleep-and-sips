@@ -66,6 +66,8 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 
 
 
+
+
 .fi { --fi-green: #4f9a2a; --fi-yellow: #e2a400; --fi-red: #d9432b; --fi-plum: #7d3c98; --fi-blue: #2b7bbf; --fi-orange: #ea7a17; --fi-pink: #d24f86;
   --fi-paper: color-mix(in srgb, var(--color-panel) 90%, #f2c14e);
   font-family: var(--font-anthropic-sans); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
@@ -229,12 +231,12 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-plum)">
       <div class="fi-tl">Odsáté mateřské mléko</div>
       <div class="fi-big"><span data-source="totals" data-where="metric=pumped_litres" data-field="value" class="dash-skeleton">-</span> <span class="fi-unit">l</span></div>
-      <div class="fi-sub">Od začátku odsávání <span data-source="totals" data-where="metric=pump_first" data-field="value" class="dash-skeleton">-</span></div>
+      <div class="fi-sub"></div>
     </div>
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-plum)">
       <div class="fi-tl">Počet odsávání</div>
       <div class="fi-big"><span data-source="totals" data-where="metric=pump_sessions" data-field="value" class="dash-skeleton">-</span></div>
-      <div class="fi-sub">Zhruba <span data-source="totals" data-where="metric=pump_per_day" data-field="value" class="dash-skeleton">-</span> denně</div>
+      <div class="fi-sub"></div>
     </div>
     <div class="fi-tile fi-tile-sm" style="--sec: var(--fi-plum)">
       <div class="fi-tl">Čas strávený odsáváním</div>
@@ -259,8 +261,8 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
     </div>
     <div class="fi-card" style="--sec: var(--fi-plum)">
-      <h3 class="fi-h3" id="pumptime-title">Čas odsávání a kojení a odsáté mléko, denně</h3>
-      <p class="fi-note">Fialové sloupce ukazují průměrný počet minut odsávání za den, po týdnech, a světle šedé sloupce vedle nich průměrný počet minut kojení přímo z prsu (obojí na levé stupnici). Čára ukazuje průměrné množství odsátého mateřského mléka za den v ml (pravá stupnice). Časy vycházejí ze zaznamenaných délek, takže nezahrnují přípravu, mytí ani sterilizaci. Klepnutím na týden uvidíte počet odsávání za den a typickou délku.</p>
+      <h3 class="fi-h3" id="pumptime-title">Čas odsávání a odsáté mléko, denně</h3>
+      <p class="fi-note">Sloupce ukazují průměrný počet minut odsávání za den, po týdnech (levá stupnice). Světle šedé sloupce ukazují průměrný počet minut kojení přímo z prsu za den v těchto týdnech (také levá stupnice). Čára ukazuje průměrné množství odsátého mateřského mléka za den v ml (pravá stupnice). Čas vychází ze zaznamenané délky každého odsávání, takže nezahrnuje přípravu, mytí ani sterilizaci. Klepnutím na týden uvidíte počet odsávání za den a typickou délku.</p>
       <div class="fi-legend" id="pumptime-legend"></div>
       <div class="fi-chart dash-skeleton" id="pumptime" data-source="pumping"></div>
     </div>
@@ -271,7 +273,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <p class="fi-intro">Všechny dny na jednom grafu, abyste viděli, jak se jeho režim ustaluje.</p>
     <div class="fi-card" style="--sec: var(--fi-blue)">
       <h3 class="fi-h3" id="rhythm-title">Spánek a krmení, jeden řádek na den</h3>
-      <p class="fi-note">Každý tenký řádek je jeden den, nejstarší nahoře a nejnovější dole. Řádek čtěte zleva doprava přes 24 hodin vyznačených nahoře. Modré pruhy jsou spánek, oranžové značky lahve a růžové kojení. Červená značka u levého okraje znamená, že ten den přes den dlouho chybí záznam spánku. V prvních týdnech se spánek nezaznamenával, takže horní řádky ukazují jen krmení. Podrobnosti uvidíte klepnutím nebo posunutím prstu po řádku.</p>
+      <p class="fi-note">Každý tenký řádek je jeden den, nejstarší nahoře a nejnovější dole. Řádek čtěte zleva doprava přes 24 hodin vyznačených nahoře. Modré pruhy jsou spánek, oranžové značky lahve a růžové kojení. Červená značka u levého okraje znamená, že záznam spánku ten den vypadá neúplně. V prvních týdnech se spánek nezaznamenával, takže horní řádky ukazují jen krmení. Podrobnosti uvidíte klepnutím nebo posunutím prstu po řádku.</p>
       <p class="fi-note">„Od poledne do poledne“ začíná každý řádek v poledne, takže celá noc leží uprostřed jednoho řádku a nerozdělí se do dvou. Časem by se modré noční pruhy měly prodlužovat a zcelovat.</p>
       <div class="fi-seg" role="group" aria-label="Kde začíná každý řádek">
         <button class="fi-btn" type="button" data-mode="noon" aria-pressed="true">Od poledne do poledne</button>
@@ -302,7 +304,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 
   <section class="fi-sec" id="sleep" style="--sec: var(--fi-blue)">
     <div class="fi-h2-row"><h2 class="fi-h2">Spánek</h2><div class="pip-slot pip-sm" data-pip="sleep"></div></div>
-    <p class="fi-intro">Dny, kdy mezi 06:00 a 21:00 chybí záznam spánku déle než 6 hodin, jsou z těchto grafů vynechané, protože tak dlouhá mezera téměř vždy znamená nezaznamenané spaní přes den, ne že by byl celou dobu vzhůru. Dny, kdy prostě spal méně, jsou zahrnuté. Seznam vynechaných dní je v sekci Kvalita dat dole.</p>
+    <p class="fi-intro">Neúplné dny (den narození a den exportu) jsou z těchto grafů vynechané. Seznam těchto dní je v sekci Kvalita dat dole.</p>
     <div class="fi-card" style="--sec: var(--fi-blue)">
       <h3 class="fi-h3" id="longest-title">Nejdelší souvislý spánek každý den, hodiny</h3>
       <p class="fi-note">Každá světlá tečka je nejdelší nepřerušený spánek jednoho dne. Plná čára je průměr 7 dní do daného data. Stoupající čára znamená delší úseky spánku. Menší graf pod ním ukazuje celkový spánek za celý den, který se mění mnohem pomaleji.</p>
@@ -330,7 +332,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       </div>
       <div class="fi-card" style="--sec: var(--fi-orange)">
         <h3 class="fi-h3" id="mix-title">Jak se krmení měnilo od narození</h3>
-        <p class="fi-note">Jeden sloupec na týden. Každý sloupec dává dohromady 100 % krmení v daném týdnu, rozdělených podle typu. Lahev s mateřským i umělým mlékem se rozdělí podle objemu, takže 90 ml mateřského a 30 ml umělého mléka se počítá jako tři čtvrtiny krmení mateřským mlékem a čtvrtina krmení umělým. Klepnutím na sloupec uvidíte počet krmení za den.</p>
+        <p class="fi-note">Jeden sloupec na týden. Každý sloupec dává dohromady 100 % krmení v daném týdnu, rozdělených podle typu. Klepnutím na sloupec uvidíte počet krmení za den.</p>
         <div class="fi-legend" id="mix-legend"></div>
         <div class="fi-chart dash-skeleton" id="mix" data-source="feedmix"></div>
       </div>
@@ -375,10 +377,10 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <div class="fi-h2-row"><h2 class="fi-h2">Kvalita dat</h2><div class="pip-slot pip-sm" data-pip="magnify"></div></div>
     <div class="fi-card" style="--sec: var(--fi-yellow)">
       <h3 class="fi-h3" id="quality-title">Dny vynechané z grafů spánku</h3>
-      <p class="fi-note">Neúplné dny, dny před začátkem záznamu spánku a dny, kdy mezi 06:00 a 21:00 chybí záznam spánku déle než 6 hodin. Grafy mléka dál používají všechny celé dny.</p>
+      <p class="fi-note">Neúplné dny a dny před začátkem záznamu spánku. Grafy mléka dál používají všechny celé dny.</p>
       <div class="fi-tablebox">
         <table class="fi-table" id="quality-table" data-source="quality" data-row-key="day">
-          <thead><tr><th data-field="day">Den</th><th data-field="issue">Důvod</th><th data-field="sleep_logged_h" class="fi-num">Zaznamenaný spánek (h)</th><th data-field="day_gap_h" class="fi-num">Nejdelší mezera přes den (h)</th></tr></thead>
+          <thead><tr><th data-field="day">Den</th><th data-field="issue">Důvod</th><th data-field="sleep_logged_h" class="fi-num">Zaznamenaný spánek (h)</th><th data-field="sleeps" class="fi-num">Počet spánků</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -492,7 +494,7 @@ dash.calc('feeds', {
 
 dash.calc('daily', {
   title: 'Daily totals',
-  description: 'One row per day: bottle volumes, pumped volume, breastfeeds, and logged sleep. Birth day and export day are partial. A day counts as a complete sleep log unless it has a gap of more than 6 hours between 06:00 and 21:00 with no sleep logged, which points to naps that were not logged.',
+  description: 'One row per day: bottle volumes, pumped volume, breastfeeds, and logged sleep. Birth day and export day are partial; every other day with sleep logged counts as a complete sleep log.',
   inputs: ['events', 'profile'],
   fn: (events, profile) => {
     const first = profile[0].birth_date, last = profile[0].last_logged_day;
@@ -500,16 +502,6 @@ dash.calc('daily', {
     for (let t = Date.parse(first); t <= Date.parse(last); t += 864e5) {
       const d = new Date(t).toISOString().slice(0, 10);
       byDay[d] = { day: d, bm_ml: 0, formula_ml: 0, other_ml: 0, bottles: 0, breastfeeds: 0, breastfeed_min: 0, pump_ml: 0, sleep_h: 0, sleeps: 0, longest_sleep_h: 0, partial: d === first || d === last };
-    }
-    const sl = events.filter(e => e.type === 'Sleep' && e.end).sort((a, b) => a.start - b.start);
-    const gapOf = {};
-    for (let i = 0; i < sl.length - 1; i++) {
-      const g0 = sl[i].end, g1 = sl[i + 1].start;
-      if (g1 <= g0) continue;
-      for (let t = Math.floor(g0 / 864e5) * 864e5; t < g1; t += 864e5) {
-        const a = Math.max(g0, t + 6 * 36e5), b = Math.min(g1, t + 21 * 36e5);
-        if (b > a) { const d = new Date(t).toISOString().slice(0, 10); gapOf[d] = Math.max(gapOf[d] || 0, (b - a) / 36e5); }
-      }
     }
     for (const e of events) {
       const r = byDay[e.day];
@@ -525,8 +517,7 @@ dash.calc('daily', {
       breastfeed_min: Math.round(r.breastfeed_min),
       sleep_h: Math.round(r.sleep_h * 100) / 100,
       longest_sleep_h: Math.round(r.longest_sleep_h * 100) / 100,
-      day_gap_h: Math.round((gapOf[r.day] || 0) * 10) / 10,
-      sleep_complete: !r.partial && r.sleeps > 0 && (gapOf[r.day] || 0) <= 6
+      sleep_complete: !r.partial && r.sleeps > 0
     }));
   }
 });
@@ -689,15 +680,15 @@ dash.calc('timeline', {
 
 dash.calc('quality', {
   title: 'Days with logging gaps',
-  description: 'Days left out of sleep averages: partial days, days before sleep logging started, and days with more than 6 hours between 06:00 and 21:00 with no sleep logged.',
+  description: 'Days left out of sleep averages: partial days, days before sleep logging started, and days with no sleep logged.',
   inputs: ['daily'],
   fn: (daily) => {
     const started = daily.find(d => d.sleeps > 0);
     return daily.filter(d => !d.sleep_complete).map(d => ({
       day: d.day,
-      issue: d.partial ? 'Neúplný den' : !started || d.day < started.day ? 'Před začátkem záznamu spánku' : d.sleeps === 0 ? 'Spánek nezaznamenán' : 'Dlouhá mezera bez záznamu spánku přes den',
+      issue: d.partial ? 'Neúplný den' : !started || d.day < started.day ? 'Před začátkem záznamu spánku' : 'Spánek nezaznamenán',
       sleep_logged_h: Math.round(d.sleep_h * 10) / 10,
-      day_gap_h: d.day_gap_h
+      sleeps: d.sleeps
     }));
   }
 });
@@ -768,7 +759,6 @@ dash.calc('totals', {
     const firstSleep = sleeps.length ? sleeps[0].day : null;
     const litres = v => Math.round(v / 100) / 10;
     const pumpMin = pumps.reduce((s, e) => s + e.pump_min, 0);
-    const pumpDays = pumps.length ? Math.round((Date.parse(events[events.length - 1].day) - Date.parse(pumps[0].day)) / 864e5) + 1 : 0;
     const bfs = events.filter(e => e.type === 'Breastfeed');
     const bfMin = bfs.reduce((s, e) => s + e.breastfeed_min, 0);
     const bmMl = events.reduce((s, e) => s + e.bm_ml, 0), fmMl = events.reduce((s, e) => s + e.formula_ml, 0), allMl = events.reduce((s, e) => s + e.bm_ml + e.formula_ml + e.other_ml, 0);
@@ -782,8 +772,6 @@ dash.calc('totals', {
       { metric: 'pumped_litres', value: litres(pumps.reduce((s, e) => s + e.pump_ml, 0)) },
       { metric: 'pump_sessions', value: pumps.length },
       { metric: 'pump_minutes', value: Math.round(pumpMin), hours: Math.round(pumpMin / 60), days: Math.round(pumpMin / 1440 * 10) / 10 },
-      { metric: 'pump_per_day', value: pumpDays ? Math.round(pumps.length / pumpDays * 10) / 10 : null },
-      { metric: 'pump_first', value: pumps.length ? pumps[0].day : null },
       { metric: 'breastfeeds', value: bfs.length },
       { metric: 'breastfeed_minutes', value: Math.round(bfMin), hours: Math.round(bfMin / 60), days: Math.round(bfMin / 1440 * 10) / 10 },
       { metric: 'bm_litres', value: litres(bmMl), pct: allMl ? Math.round(bmMl / allMl * 100) : null },
@@ -796,15 +784,15 @@ dash.calc('totals', {
 
 dash.calc('pumping', {
   title: 'Pumping and breastfeeding time per week',
-  description: 'For each week from the first breastfeed or pump: average minutes of pumping per day, average breast milk pumped per day in ml, pump sessions per day and typical session length (averaged over days since the first pump), and average minutes of direct breastfeeding per day. Full days only; weeks with fewer than 4 days are left out.',
+  description: 'For each week from the first logged pump: average minutes of pumping per day, average breast milk pumped per day in ml, pump sessions per day, the average session length, and average minutes of direct breastfeeding per day. Full days only; weeks with fewer than 4 days are left out.',
   inputs: ['events', 'daily'],
   fn: (events, daily) => {
     const wk = d => { const t = Date.parse(d); return new Date(t - ((new Date(t).getUTCDay() + 6) % 7) * 864e5).toISOString().slice(0, 10); };
     const pumps = events.filter(e => e.type === 'Pump');
     const bfs = events.filter(e => e.type === 'Breastfeed');
-    if (!pumps.length && !bfs.length) return [];
-    const firstPump = pumps.length ? pumps[0].day : null;
-    const start = [firstPump, bfs.length ? bfs[0].day : null].filter(Boolean).sort()[0];
+    if (!pumps.length) return [];
+    const firstPump = pumps[0].day;
+    const start = firstPump;
     const full = daily.filter(d => !d.partial && d.day >= start);
     const weeks = {};
     full.forEach(d => { const w = weeks[wk(d.day)] = weeks[wk(d.day)] || { week: wk(d.day), days: 0, pump_days: 0, sessions: 0, minutes: 0, timed: 0, ml: 0, bf_min: 0 }; w.days += 1; if (firstPump && d.day >= firstPump) w.pump_days += 1; w.bf_min += d.breastfeed_min; });
@@ -1203,7 +1191,7 @@ function rhythm(box, timeline, daily) {
         hl.style('display', null).attr('x', x(hit.a) - 1).attr('width', Math.max(3, x(hit.b) - x(hit.a)) + 2).attr('y', top + row * rowH - 1).attr('height', rowH + 1);
       } else { lines.push({ name: 'Nic nezaznamenáno', value: '' }); hl.style('display', 'none'); }
       const dd = daily[Math.min(row + (off && (m * 6e4 + off) >= DAY ? 1 : 0), daily.length - 1)];
-      if (dd && !dd.sleep_complete && dd.sleeps > 0) lines.push({ name: 'Tento den přes den dlouho chybí záznam spánku', value: '' });
+      if (dd && !dd.sleep_complete && dd.sleeps > 0) lines.push({ name: 'Záznam spánku za tento den vypadá neúplně', value: '' });
       const [bx, by] = d3.pointer(ev, box);
       showTip(box, bx, by, `${fmtDayLong(new Date(t))}, ${fmtHM(new Date(t))}`, lines);
     })
@@ -1246,7 +1234,7 @@ function drawAll() {
     const r = rowsOf('totals').find(q => q.metric === new URLSearchParams(el.dataset.where).get('metric'));
     const v = r ? r[el.dataset.field] : null;
     el.classList.remove('dash-skeleton');
-    el.textContent = v == null ? '-' : (el.dataset.field === 'since' || r.metric === 'pump_first') ? fmtDay(pday(v)) : el.dataset.field === 'days' || (el.dataset.field === 'value' && /litres|per_day/.test(r.metric)) ? d3.format(',.1f')(v) : fmtInt(v);
+    el.textContent = v == null ? '-' : el.dataset.field === 'since' ? fmtDay(pday(v)) : el.dataset.field === 'days' || (el.dataset.field === 'value' && /litres/.test(r.metric)) ? d3.format(',.1f')(v) : fmtInt(v);
   });
 
   // 1. Supply vs demand
@@ -1281,7 +1269,7 @@ function drawAll() {
   }
 
   // 2. Rhythm
-  legend('rhythm-legend', [{ name: 'Spí', color: PAL.blue }, { name: 'Lahev', color: PAL.orange }, { name: 'Kojení', color: PAL.pink }, { name: 'Dlouhá mezera bez záznamu spánku', color: 'var(--cds-chart-status-critical)' }]);
+  legend('rhythm-legend', [{ name: 'Spí', color: PAL.blue }, { name: 'Lahev', color: PAL.orange }, { name: 'Kojení', color: PAL.pink }, { name: 'Neúplný záznam spánku', color: 'var(--cds-chart-status-critical)' }]);
   const rh = document.getElementById('rhythm');
   drawRhythm();
 
@@ -1449,7 +1437,7 @@ function drawAll() {
 
   // Quality
   if (dash.data('quality').status === 'ok') fillTable('quality-table', rowsOf('quality').slice().reverse(), [
-    { k: 'day', f: v => fmtDayYear(pday(v)) }, { k: 'issue' }, { k: 'sleep_logged_h', num: 1, f: v => fmt1(v) }, { k: 'day_gap_h', num: 1, f: v => v ? fmt1(v) : '-' }
+    { k: 'day', f: v => fmtDayYear(pday(v)) }, { k: 'issue' }, { k: 'sleep_logged_h', num: 1, f: v => fmt1(v) }, { k: 'sleeps', num: 1 }
   ], 'day');
 }
 
