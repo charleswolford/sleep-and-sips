@@ -308,7 +308,7 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
   .rb-stack td { display: block; padding: 0; border: 0; white-space: normal; text-align: left; font-size: var(--t-xs); }
   .rb-stack td::before { content: attr(data-label); display: block; font-size: 11px; font-weight: 600; color: var(--ink-2); margin-bottom: 1px; }
   .rb-stack td.fi-num { text-align: left; }
-  #lognotes-table td:last-child, #quality-table td:nth-child(2) { grid-column: 1 / -1; }
+  #quality-table td:nth-child(2) { grid-column: 1 / -1; }
   .rb-actions { flex-wrap: wrap; }
   .rb-actions .rb-btn { order: -1; flex: 1 1 100%; }
 }
@@ -320,7 +320,6 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
 #rhythm-list tr[data-kind="Breastfeed"] td:nth-child(2)::before { background: var(--s-rose); }
 #rhythm-list tr[data-kind="Pump"] td:nth-child(2)::before { background: var(--s-ink); }
 #rhythm-list td:first-child { font-weight: 700; width: 4.5rem; }
-.rb-note-pin { fill: var(--ink-2); stroke: var(--paper); stroke-width: 1.5; }
 .rb-print { white-space: nowrap; }
 
 /* milestone flags */
@@ -686,15 +685,6 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
         <div class="fi-tablebox">
           <table class="fi-table rb-stack" id="quality-table" data-source="quality" data-row-key="day">
             <thead><tr><th data-field="day">Den</th><th data-field="issue">Důvod</th><th data-field="sleep_logged_h" class="fi-num">Zapsaný spánek (h)</th><th data-field="day_gap_h" class="fi-num">Nejdelší mezera přes den (h)</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-      <div class="rb-group" id="lognotes-box" hidden>
-        <h3 class="rb-h3">Poznámky ze záznamů</h3>
-        <div class="fi-tablebox">
-          <table class="fi-table rb-stack" id="lognotes-table" data-source="lognotes" data-row-key="id">
-            <thead><tr><th data-field="start">Kdy</th><th data-field="entry">Záznam</th><th data-field="text">Poznámka</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -1524,13 +1514,6 @@ function rhythm(box, timeline, daily) {
     .attr('y', s => top + s.row * rowH).attr('height', Math.max(1, rowH - 1)).attr('rx', Math.min(2, rowH / 2))
     .attr('fill', color[kind]);
   draw('sleep', 1); draw('breastfeed', 2); draw('bottle', 2);
-  const notePts = [];
-  (dash.data('lognotes').status === 'ok' ? rowsOf('lognotes') : []).forEach(n => {
-    const t = n.start - off, ds = Math.floor(t / DAY) * DAY, row = Math.round((ds - d0) / DAY);
-    if (row >= 0 && row < nDays) notePts.push({ row, m: (t - ds) / 6e4, n });
-  });
-  g.append('g').selectAll('circle').data(notePts).join('circle').attr('class', 'rb-note-pin')
-    .attr('cx', p => x(p.m)).attr('cy', p => top + p.row * rowH + rowH / 2).attr('r', Math.max(3, Math.min(5, rowH / 2 + 1)));
   const flagged = daily.map((d, i) => ({ d, i })).filter(o => !o.d.sleep_complete && o.d.sleeps > 0);
   g.append('g').selectAll('rect').data(flagged).join('rect')
     .attr('x', ml - 4).attr('width', 3).attr('y', o => top + o.i * rowH).attr('height', Math.max(1, rowH - 1))
@@ -1554,7 +1537,6 @@ function rhythm(box, timeline, daily) {
         if (it.kind === 'breastfeed') lines.push({ color: color.breastfeed, name: `Kojení v ${fmtHM(new Date(it.start))}`, value: it.minutes ? `${it.minutes} min` : 'bez délky' });
         hl.style('display', null).attr('x', x(hit.a) - 1).attr('width', Math.max(3, x(hit.b) - x(hit.a)) + 2).attr('y', top + row * rowH - 1).attr('height', rowH + 1);
       } else { lines.push({ name: 'Nic nezapsáno', value: '' }); hl.style('display', 'none'); }
-      notePts.filter(p => p.row === row && Math.abs(p.m - m) <= tol * 1.5).forEach(p => lines.push({ name: `Poznámka v ${fmtHM(new Date(p.n.start))}`, value: noteShort(p.n.text) }));
       const dd = daily[Math.min(row + (off && (m * 6e4 + off) >= DAY ? 1 : 0), daily.length - 1)];
       if (dd && !dd.sleep_complete && dd.sleeps > 0) lines.push({ name: 'Tento den přes den dlouho chybí záznam spánku', value: '' });
       const [bx, by] = d3.pointer(ev, box);
@@ -1927,7 +1909,7 @@ function lastNights(box) {
   const ax = svg.append('g').attr('class', 'fi-axis');
   d3.range(0, 721, narrow ? 180 : 120).forEach(m => ax.append('text').attr('x', x(m)).attr('y', top - 8).attr('text-anchor', m === 0 ? 'start' : m === 720 ? 'end' : 'middle').text(`${String((19 + m / 60) % 24).padStart(2, '0')}:00`));
   const anyBf = tl.some(t => t.kind === 'breastfeed' && t.end > starts[0] && t.start < starts[n - 1] + 12 * 36e5);
-  legend('nights7-legend', [{ name: 'Spí', color: PAL.blue }, { name: 'Nejdelší úsek', color: PAL.ink, outline: 1 }, { name: 'Lahev', color: PAL.gold }].concat(anyBf ? [{ name: 'Kojení', color: PAL.rose }] : []).concat(rowsOf('lognotes').some(n => n.start >= starts[0] && n.start < starts[starts.length - 1] + 12 * 36e5) ? [{ name: 'Poznámka ze záznamu', color: 'var(--ink-2)', dot: 1 }] : []));
+  legend('nights7-legend', [{ name: 'Spí', color: PAL.blue }, { name: 'Nejdelší úsek', color: PAL.ink, outline: 1 }, { name: 'Lahev', color: PAL.gold }].concat(anyBf ? [{ name: 'Kojení', color: PAL.rose }] : []));
   const fmtM = m => (m < 0 ? 0 : m > 720 ? 720 : m);
   starts.forEach((s, i) => {
     const e = s + 12 * 36e5, y = top + i * rowH, g = svg.append('g');
@@ -1952,14 +1934,11 @@ function lastNights(box) {
       g.append('text').attr('class', 'rb-n-label').attr('x', W - statW + 4).attr('y', y + rowH * (PRINTING() ? 0.4 : 0.43)).text(`${fmt1(asleep)} h spánku`);
       g.append('text').attr('class', 'rb-n-sub').attr('x', W - statW + 4).attr('y', y + rowH * (PRINTING() ? 0.86 : 0.78)).text(longest ? `Nejdelší ${fmt1((longest.end - longest.start) / 36e5)} h` : 'Spánek nezapsán');
     }
-    const nn = (dash.data('lognotes').status === 'ok' ? rowsOf('lognotes') : []).filter(n => n.start >= s && n.start < e);
-    nn.forEach(n => g.append('circle').attr('class', 'rb-note-pin').attr('cx', x(fmtM((n.start - s) / 6e4))).attr('cy', y + rowH / 2).attr('r', 5));
     g.on('pointerdown pointermove', ev => {
       const [bx, by] = d3.pointer(ev, box);
       const lines = [{ color: PAL.blue, name: 'Spánek', value: `${fmt1(asleep)} h` }];
       if (longest) lines.push({ name: 'Nejdelší úsek', value: `${fmtHM(new Date(longest.start))} až ${fmtHM(new Date(longest.end))} (${fmt1((longest.end - longest.start) / 36e5)} h)` });
       lines.push({ color: PAL.gold, name: 'Lahve', value: String(feeds.filter(t => t.kind === 'bottle').length) });
-      nn.forEach(n => lines.push({ name: `Poznámka v ${fmtHM(new Date(n.start))}`, value: noteShort(n.text) }));
       const nb = feeds.filter(t => t.kind === 'breastfeed').length;
       if (nb) lines.push({ color: PAL.rose, name: 'Kojení', value: String(nb) });
       showTip(box, bx, by, `Noc ${fmtDayLong(new Date(s))}`, lines);
@@ -2079,23 +2058,6 @@ function fillPumpWeek() {
   });
 }
 
-// Notes typed into Nara Baby. Bare numbers are left out: they are timings, not notes.
-dash.calc('lognotes', {
-  title: 'Notes from the log',
-  description: 'Every entry with a note that contains words, with its time and the kind of entry.',
-  inputs: ['nara'],
-  fn: (nara) => {
-    const t = s => { const m = String(s || '').match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/); return m ? Date.UTC(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0)) : null; };
-    const kind = { 'Bottle Feed': 'Lahev', 'Breastfeed': 'Kojení', 'Pump': 'Odsávání', 'Diaper': 'Plena', 'Sleep': 'Spánek', 'Growth': 'Růst' };
-    return nara.filter(r => r.Type && r.Type !== 'Profile' && /\p{L}/u.test(String(r.Note || ''))).map((r, i) => ({ id: String(r._activityKey || i), start: t(r['Start Date/time']), entry: kind[r.Type] || r.Type, text: String(r.Note).trim() })).filter(r => r.start != null).sort((a, b) => a.start - b.start);
-  }
-});
-const noteShort = s => s.length > 60 ? s.slice(0, 57) + '...' : s;
-function fillLogNotes() {
-  const box = document.getElementById('lognotes-box'), ok = dash.data('lognotes').status === 'ok', rows = ok ? rowsOf('lognotes') : [];
-  if (box) box.hidden = !rows.length;
-  if (rows.length) fillTable('lognotes-table', rows.slice().reverse(), [{ k: 'start', f: v => `${fmtDayLong(new Date(v))}, ${fmtHM(new Date(v))}` }, { k: 'entry' }, { k: 'text' }], 'id');
-}
 // A gentle note when the export is more than 8 days old.
 function staleNote() {
   const el = document.getElementById('stale'); if (!el) return;
@@ -2251,7 +2213,7 @@ function drawAll() {
   const pEl = document.querySelector('[data-source="profile"]');
   if (pEl) { const ps = dash.data('profile').status; if (ps === 'ok') { pEl.classList.remove('dash-skeleton'); pEl.textContent = fmtDayYear(pday(rowsOf('profile')[0].birth_date)); } else pEl.classList.toggle('dash-skeleton', !BAD.includes(ps)); }
 
-  drawToday(); drawLedes(); fillChanges(); fillPumpWeek(); fillLogNotes(); staleNote();
+  drawToday(); drawLedes(); fillChanges(); fillPumpWeek(); staleNote();
   const wsEl = document.getElementById('week-summary'); if (wsEl) wsEl.textContent = hs === 'ok' ? weekSentence() : '';
   if (hs === 'ok' && !window.__counted) { window.__counted = true; countUp(); }
 
@@ -2310,7 +2272,7 @@ function drawAll() {
   }
 
   // 2. Rhythm
-  legend('rhythm-legend', [{ name: 'Spí', color: PAL.blue }, { name: 'Lahev', color: PAL.gold }, { name: 'Kojení', color: PAL.rose }, { name: 'Dlouhá mezera bez záznamu spánku', color: 'var(--cds-chart-status-critical)' }].concat(dash.data('lognotes').status === 'ok' && rowsOf('lognotes').length ? [{ name: 'Poznámka ze záznamu', color: 'var(--ink-2)', dot: 1 }] : []));
+  legend('rhythm-legend', [{ name: 'Spí', color: PAL.blue }, { name: 'Lahev', color: PAL.gold }, { name: 'Kojení', color: PAL.rose }, { name: 'Dlouhá mezera bez záznamu spánku', color: 'var(--cds-chart-status-critical)' }]);
   const rh = document.getElementById('rhythm');
   drawRhythm();
   const n7 = document.getElementById('nights7');
