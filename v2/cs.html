@@ -291,8 +291,8 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
   .rb-id .rb-name { grid-area: auto; }
   .rb-actions { grid-area: auto; grid-column: 1 / -1; margin-top: 12px; }
   .rb-actions .rb-btn { flex: 1; white-space: nowrap; }
-  :lang(cs) .rb-card-label { white-space: normal; min-height: 2.6em; line-height: 1.3; }
-  :lang(cs) .rb-card-pip { top: 52px; }
+  .rb-card-label { white-space: normal; min-height: 2.6em; line-height: 1.3; }
+  .rb-card-pip { top: 52px; }
 }
 /* tables: the weigh-in record shows every row; others say when they scroll; phones stack each row */
 .fi-tablebox:has(#weight-table) { max-height: none; }
@@ -511,8 +511,8 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
         <div class="fi-legend" id="supply-legend"></div>
         <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
         <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>Jak graf číst</summary>
-          <p>Každá čára je průměr 7 dní do daného data, aby denní výkyvy nezakryly trend. Když je čára odsátého mléka nad vypitým mateřským mlékem, odsává se víc, než vypije. Když čára umělého mléka roste a odsáté klesá, umělé mléko dorovnává rozdíl. Červená čára je vše, co vypil. V podbarvených prvních týdnech byl také kojen přímo z prsu, což nemá objem, takže čáry z lahví tam vypité mléko podhodnocují. Odsávání se zobrazuje až od prvního zapsaného odsávání. Klepnutím na den uvidíte rozdíl mezi odsátým a vypitým mateřským mlékem.</p>
-          <p>Týdny začínají pondělím a jsou označené datem toho pondělí. Neúplné dny (den narození a den exportu) jsou vynechané.</p>
+          <p>Každá čára je průměr 7 dní do daného data, aby denní výkyvy nezakryly trend. Když je čára odsátého mléka nad čarou vypitého mateřského mléka, odsává se víc, než vypije. Když čára umělého mléka roste a odsáté klesá, umělé mléko dorovnává rozdíl. Červená čára je vše, co vypil. V podbarvených prvních týdnech byl také kojen přímo z prsu, což nemá objem, takže čáry z lahví tam vypité mléko podhodnocují. Odsávání se zobrazuje až od prvního zapsaného odsávání. Klepnutím na den uvidíte rozdíl mezi odsátým a vypitým mateřským mlékem.</p>
+          <p>Neúplné dny (den narození a den exportu) jsou vynechané.</p>
         </details>
       </div>
 
@@ -522,7 +522,7 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
           <div class="fi-legend" id="mix-legend"></div>
           <div class="fi-chart dash-skeleton" id="mix" data-source="feedmix" style="min-height:190px"></div>
           <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>Jak graf číst</summary>
-            <p>Jeden sloupec na týden. Každý sloupec dává dohromady 100 % krmení v daném týdnu, rozdělených podle typu. Lahev s mateřským i umělým mlékem se rozdělí podle objemu, takže 90 ml mateřského a 30 ml umělého mléka se počítá jako tři čtvrtiny krmení mateřským a čtvrtina krmení umělým mlékem. Klepnutím na sloupec uvidíte počet krmení za den.</p>
+            <p>Jeden sloupec na týden. Každý sloupec dává dohromady 100 % krmení v daném týdnu, rozdělených podle typu. Lahev s mateřským i umělým mlékem se rozdělí podle objemu, takže 90 ml mateřského a 30 ml umělého mléka se počítá jako tři čtvrtiny krmení mateřským a čtvrtina krmení umělým mlékem. Klepnutím na sloupec uvidíte počet krmení za den. Týdny začínají pondělím a jsou označené datem toho pondělí.</p>
           </details>
         </div>
         <div class="rb-sheet">
@@ -542,7 +542,7 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
           <div class="rb-field"><span class="rb-label">Počet odsávání denně</span><span class="rb-value"><span data-pw="sessions" class="dash-skeleton">-</span></span><span class="rb-sub" data-pwc="sessions"></span></div>
           <div class="rb-field"><span class="rb-label">Typická délka</span><span class="rb-value"><span data-pw="session_min" class="dash-skeleton">-</span> <span class="rb-unit">min</span></span><span class="rb-sub" data-pwc="session_min"></span></div>
           <div class="rb-field"><span class="rb-label">Čas odsávání denně</span><span class="rb-value"><span data-pw="minutes" class="dash-skeleton">-</span> <span class="rb-unit">min</span></span><span class="rb-sub" data-pwc="minutes"></span></div>
-          <div class="rb-field"><span class="rb-label">Mléka na jedno odsávání</span><span class="rb-value"><span data-pw="ml_session" class="dash-skeleton">-</span> <span class="rb-unit">ml</span></span><span class="rb-sub" data-pwc="ml_session"></span></div>
+          <div class="rb-field"><span class="rb-label">Mléko na jedno odsávání</span><span class="rb-value"><span data-pw="ml_session" class="dash-skeleton">-</span> <span class="rb-unit">ml</span></span><span class="rb-sub" data-pwc="ml_session"></span></div>
         </div>
       </div>
 
@@ -655,7 +655,7 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
     <section class="rb-page" id="shifts" aria-labelledby="shifts-h">
       <h2 id="shifts-h">Směny</h2>
-      <p class="rb-lede" id="busy-callout">Nejrušnější hodiny za posledních 28 dní: <b><span data-source="busiest" data-where="rank=1" data-field="hour" class="dash-skeleton">-</span></b>, <b><span data-source="busiest" data-where="rank=2" data-field="hour" class="dash-skeleton">-</span></b> a <b><span data-source="busiest" data-where="rank=3" data-field="hour" class="dash-skeleton">-</span></b>. Grafy vycházejí z toho, kdo záznam zapsal, což nemusí být ten, kdo se o miminko postaral, takže je berte jako výchozí bod k domluvě, kdo co pokryje, ne jako hodnocení.</p>
+      <p class="rb-lede" id="busy-callout">Nejrušnější hodiny za posledních 28 dní, seřazené od nejrušnější: <b><span data-source="busiest" data-where="rank=1" data-field="hour" class="dash-skeleton">-</span></b>, <b><span data-source="busiest" data-where="rank=2" data-field="hour" class="dash-skeleton">-</span></b> a <b><span data-source="busiest" data-where="rank=3" data-field="hour" class="dash-skeleton">-</span></b>. Grafy vycházejí z toho, kdo záznam zapsal, což nemusí být ten, kdo se o miminko postaral, takže je berte jako výchozí bod k domluvě, kdo co pokryje, ne jako hodnocení.</p>
 
       <div class="rb-pair">
         <div class="rb-sheet">
@@ -671,7 +671,7 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
           <div class="fi-legend" id="nights-legend"></div>
           <div class="fi-chart dash-skeleton" id="nights" data-source="nights"></div>
           <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>Jak graf číst</summary>
-            <p>Celkový počet nočních krmení v každém týdnu, rozdělený podle toho, kdo je zapsal. Vybledlé sloupce jsou neúplné týdny, například ten aktuální, takže vycházejí níž. Klepnutím na týden uvidíte počty včetně nočního odsávání, které přidává noc tomu, kdo odsává.</p>
+            <p>Celkový počet nočních krmení v každém týdnu, rozdělený podle toho, kdo je zapsal. Vybledlé sloupce jsou neúplné týdny, například ten aktuální, takže vycházejí níž. Klepnutím na týden uvidíte počty. Ukazuje se tam i noční odsávání, protože i to zabírá čas v noci.</p>
           </details>
         </div>
       </div>
@@ -1742,10 +1742,8 @@ function drawLedes() {
     const bm = d3.mean(full, d => d.bm_ml), pump = d3.mean(full, d => d.pump_ml), fm = d3.mean(full, d => d.formula_ml);
     ml.replaceChildren();
     const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
-    if (pump > 0 && bm > 0) {
-      ml.append('Over the last 7 days, ', b(`${fmtInt(pump)} ml`), ' a day was pumped and he drank ', b(`${fmtInt(bm)} ml`), ' of breast milk a day. ');
-    } else ml.append('Is enough breast milk being pumped to cover what he drinks? ');
-    ml.append('Formula made up ', b(`${fmtInt(fm || 0)} ml`), ' a day.');
+    if (pump > 0) ml.append('Over the last 7 days, an average of ', b(`${fmtInt(pump)} ml`), ' of breast milk a day was pumped. ');
+    ml.append('He drank ', b(`${fmtInt(bm || 0)} ml`), ' of breast milk and ', b(`${fmtInt(fm || 0)} ml`), ' of formula a day.');
   }
   const sl = document.getElementById('sleep-lede');
   if (sl && dash.data('headline').status === 'ok' && h('longest_sleep_h').value != null) {
@@ -1761,9 +1759,15 @@ function drawLedes() {
     if (w) {
       gl.replaceChildren();
       const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
-      gl.append('Poslední vážení: ', b(`${d3.format('.2f')(w.weight_kg)} kg`), ` on ${fmtDayLong(pday(w.date))}, at ${ageWD(w.age_days).replace('wk', 'weeks').replace(' d', ' days')}. `);
-      if (w.who_centile != null) { const bl = betweenLines(w.z_score).toLowerCase(); gl.append("That's the ", b(`${w.who_centile}${ordinal(w.who_centile)} centile`), `, ${bl}${bl.startsWith('between') ? ' lines' : ''}. `); }
-      if (w0 && w0.who_centile != null) gl.append(`At the weigh-in before he was on the ${w0.who_centile}${ordinal(w0.who_centile)}.`);
+      const wk = Math.floor(w.age_days / 7), dd = w.age_days % 7;
+      const age = `${wk ? `${wk} ${wk === 1 ? 'week' : 'weeks'}` : ''}${wk && dd ? ' and ' : ''}${dd || !wk ? `${dd} ${dd === 1 ? 'day' : 'days'}` : ''}`;
+      gl.append('Poslední vážení: ', b(`${d3.format('.2f')(w.weight_kg)} kg`), ` on ${fmtDayLong(pday(w.date))}, at ${age} old. `);
+      if (w.who_centile != null) {
+        const near = CENTILES.find(c => Math.abs(w.z_score - c.z) < 0.1), i = CENTILES.findIndex(c => c.z > w.z_score);
+        const where = near ? `on the ${near.name} centile line` : i === 0 ? 'below the 0.4th centile line' : i === -1 ? 'above the 99.6th centile line' : `between the ${CENTILES[i - 1].name} and ${CENTILES[i].name} centile lines`;
+        gl.append("That's the ", b(`${w.who_centile}${ordinal(w.who_centile)} centile`), `, ${where}. `);
+      }
+      if (w0 && w0.who_centile != null) gl.append(`At the weigh-in before, he was on the ${w0.who_centile}${ordinal(w0.who_centile)} centile.`);
     }
   }
 }
@@ -1779,7 +1783,7 @@ dash.calc('milestones', {
     [4, 5, 6, 7, 8].forEach(h => { const d = ok.find(q => q.longest_sleep_h >= h); if (d) out.push({ chart: 'sleep', day: d.day, label: `První ${h} h` }); });
     if (best) {
       const same = out.find(m => m.chart === 'sleep' && m.day === best.day);
-      const txt = `Nejdelší, ${Math.round(best.longest_sleep_h * 10) / 10} h`;
+      const txt = `Zatím nejdelší, ${fmt1(best.longest_sleep_h)} h`;
       if (same) same.label = `${same.label}, zatím nejdelší`; else out.push({ chart: 'sleep', day: best.day, label: txt });
     }
     const fp = daily.find(d => d.pump_ml > 0), ff = daily.find(d => d.formula_ml > 0);
@@ -1871,19 +1875,16 @@ function weekSentence() {
   const h = id => rowsOf('headline').find(r => r.metric === id) || {};
   const parts = [];
   const ls = h('longest_sleep_h');
-  if (ls.value != null) parts.push(ls.change == null || Math.abs(ls.change) < 0.25 ? `longest sleep is about the same at ${fmt1(ls.value)} h` : `longest sleep is ${ls.change > 0 ? 'up' : 'down'} ${fmt1(Math.abs(ls.change))} h to ${fmt1(ls.value)} h`);
-  const rel = (r, word, unit) => {
-    if (r.value == null) return;
-    const steady = r.change == null || !r.prior || Math.abs(r.change / r.prior) < 0.05;
-    parts.push(steady ? `${word} is about the same at ${fmtInt(r.value)} ${unit}` : `${word} is ${r.change > 0 ? 'up' : 'down'} ${fmtInt(Math.abs(r.change))} ml to ${fmtInt(r.value)} ${unit}`);
-  };
-  rel(h('total_ml'), 'milk', 'ml a day');
-  rel(h('pump_ml'), 'pumping', 'ml a day');
+  if (ls.value != null) parts.push(ls.change == null || Math.abs(ls.change) < 0.25 ? `his longest sleep is about the same (${fmt1(ls.value)} h)` : `his longest sleep is ${ls.change > 0 ? 'up' : 'down'} ${fmt1(Math.abs(ls.change))} h to ${fmt1(ls.value)} h`);
+  const steady = r => r.change == null || !r.prior || Math.abs(r.change / r.prior) < 0.05;
+  const milk = h('total_ml'), pump = h('pump_ml');
+  if (milk.value != null) parts.push(steady(milk) ? `he's drinking about the same (${fmtInt(milk.value)} ml a day)` : `he's drinking ${fmtInt(Math.abs(milk.change))} ml a day ${milk.change > 0 ? 'more' : 'less'} (${fmtInt(milk.value)} ml)`);
+  if (pump.value != null) parts.push(steady(pump) ? `pumping is about the same (${fmtInt(pump.value)} ml a day)` : `pumping is ${pump.change > 0 ? 'up' : 'down'} ${fmtInt(Math.abs(pump.change))} ml a day (${fmtInt(pump.value)} ml)`);
   const ws = rowsOf('weight'), lw = ws[ws.length - 1], full = rowsOf('daily').filter(d => !d.partial), lastFull = full.length ? full[full.length - 1].day : null;
   if (lw && lastFull && Date.parse(lastFull) - Date.parse(lw.date) <= 6 * DAY) parts.push(`there's a new weigh-in of ${d3.format('.2f')(lw.weight_kg)} kg${lw.who_centile != null ? ` (${lw.who_centile}${ordinal(lw.who_centile)} centile)` : ''}`);
   if (!parts.length) return '';
   const list = parts.length === 1 ? parts[0] : parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1];
-  return `This week, ${list}.`;
+  return `This week ${list}.`;
 }
 
 // Posledních sedm nocí, 19:00 až 07:00, one row each.
@@ -2093,17 +2094,15 @@ if (CS) {
   weekSentence = () => {
     const h = id => rowsOf('headline').find(r => r.metric === id) || {};
     const parts = [], ls = h('longest_sleep_h');
-    if (ls.value != null) parts.push(ls.change == null || Math.abs(ls.change) < 0.25 ? `nejdelší spánek je zhruba stejný, ${fmt1(ls.value)} h` : `nejdelší spánek se ${ls.change > 0 ? 'prodloužil' : 'zkrátil'} o ${fmt1(Math.abs(ls.change))} h na ${fmt1(ls.value)} h`);
-    const rel = (r, word) => {
-      if (r.value == null) return;
-      const steady = r.change == null || !r.prior || Math.abs(r.change / r.prior) < 0.05;
-      parts.push(steady ? `${word} je zhruba stejně, ${fmtInt(r.value)} ml denně` : `${word} je o ${fmtInt(Math.abs(r.change))} ml ${r.change > 0 ? 'víc' : 'méně'}, ${fmtInt(r.value)} ml denně`);
-    };
-    rel(h('total_ml'), 'mléka'); rel(h('pump_ml'), 'odsátého mléka');
+    if (ls.value != null) parts.push(ls.change == null || Math.abs(ls.change) < 0.25 ? `je jeho nejdelší spánek zhruba stejný (${fmt1(ls.value)} h)` : `se jeho nejdelší spánek ${ls.change > 0 ? 'prodloužil' : 'zkrátil'} o ${fmt1(Math.abs(ls.change))} h na ${fmt1(ls.value)} h`);
+    const steady = r => r.change == null || !r.prior || Math.abs(r.change / r.prior) < 0.05;
+    const milk = h('total_ml'), pump = h('pump_ml');
+    if (milk.value != null) parts.push(steady(milk) ? `pije zhruba stejně (${fmtInt(milk.value)} ml denně)` : `pije o ${fmtInt(Math.abs(milk.change))} ml denně ${milk.change > 0 ? 'víc' : 'méně'} (${fmtInt(milk.value)} ml)`);
+    if (pump.value != null) parts.push(steady(pump) ? `odsává se zhruba stejně (${fmtInt(pump.value)} ml denně)` : `odsává se o ${fmtInt(Math.abs(pump.change))} ml denně ${pump.change > 0 ? 'víc' : 'méně'} (${fmtInt(pump.value)} ml)`);
     const ws = rowsOf('weight'), lw = ws[ws.length - 1], full = rowsOf('daily').filter(d => !d.partial), lastFull = full.length ? full[full.length - 1].day : null;
     if (lw && lastFull && Date.parse(lastFull) - Date.parse(lw.date) <= 6 * DAY) parts.push(`nové vážení ukázalo ${d3.format('.2f')(lw.weight_kg)} kg${lw.who_centile != null ? ` (${lw.who_centile}. percentil)` : ''}`);
     if (!parts.length) return '';
-    return `Tento týden: ${parts.length === 1 ? parts[0] : parts.slice(0, -1).join(', ') + ' a ' + parts[parts.length - 1]}.`;
+    return `Tento týden ${parts.length === 1 ? parts[0] : parts.slice(0, -1).join(', ') + ' a ' + parts[parts.length - 1]}.`;
   };
   const baseFillChanges = fillChanges;
   fillChanges = () => {
@@ -2157,9 +2156,8 @@ if (CS) {
       const full = rowsOf('daily').filter(d => !d.partial).slice(-7);
       const bm = d3.mean(full, d => d.bm_ml), pump = d3.mean(full, d => d.pump_ml), fm = d3.mean(full, d => d.formula_ml);
       ml.replaceChildren();
-      if (pump > 0 && bm > 0) ml.append('Za posledních 7 dní se odsálo ', b(`${fmtInt(pump)} ml`), ' denně a vypil ', b(`${fmtInt(bm)} ml`), ' mateřského mléka denně. ');
-      else ml.append('Odsává se dost mateřského mléka na to, co vypije? ');
-      ml.append('Umělé mléko tvořilo ', b(`${fmtInt(fm || 0)} ml`), ' denně.');
+      if (pump > 0) ml.append('Za posledních 7 dní se v průměru odsálo ', b(`${fmtInt(pump)} ml`), ' mateřského mléka denně. ');
+      ml.append('Vypil ', b(`${fmtInt(bm || 0)} ml`), ' mateřského a ', b(`${fmtInt(fm || 0)} ml`), ' umělého mléka denně.');
     }
     const sl = document.getElementById('sleep-lede');
     if (sl && dash.data('headline').status === 'ok' && h('longest_sleep_h').value != null) {
@@ -2172,7 +2170,9 @@ if (CS) {
       const ws = rowsOf('weight'), w = ws[ws.length - 1], w0 = ws[ws.length - 2];
       if (w) {
         gl.replaceChildren();
-        gl.append('Poslední vážení: ', b(`${d3.format('.2f')(w.weight_kg)} kg`), `, ${fmtDayLong(pday(w.date))}, ve věku ${ageWD(w.age_days)} `);
+        const wk = Math.floor(w.age_days / 7), dd = w.age_days % 7;
+        const age = `${wk ? `${wk} ${wk === 1 ? 'týdne' : 'týdnů'}` : ''}${wk && dd ? ' a ' : ''}${dd || !wk ? `${dd} ${dd === 1 ? 'dne' : 'dnů'}` : ''}`;
+        gl.append('Poslední vážení: ', b(`${d3.format('.2f')(w.weight_kg)} kg`), `, ${fmtDayLong(pday(w.date))}, ve věku ${age}. `);
         if (w.who_centile != null) gl.append('To je ', b(`${w.who_centile}. percentil`), `, tedy ${betweenLines(w.z_score).toLowerCase()}. `);
         if (w0 && w0.who_centile != null) gl.append(`Při předchozím vážení to byl ${w0.who_centile}. percentil.`);
       }

@@ -291,8 +291,8 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
   .rb-id .rb-name { grid-area: auto; }
   .rb-actions { grid-area: auto; grid-column: 1 / -1; margin-top: 12px; }
   .rb-actions .rb-btn { flex: 1; white-space: nowrap; }
-  :lang(cs) .rb-card-label { white-space: normal; min-height: 2.6em; line-height: 1.3; }
-  :lang(cs) .rb-card-pip { top: 52px; }
+  .rb-card-label { white-space: normal; min-height: 2.6em; line-height: 1.3; }
+  .rb-card-pip { top: 52px; }
 }
 /* tables: the weigh-in record shows every row; others say when they scroll; phones stack each row */
 .fi-tablebox:has(#weight-table) { max-height: none; }
@@ -446,8 +446,8 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
         <a class="rb-card rb-c-marigold" href="#growth"><span class="rb-card-label">Age</span><span class="rb-card-value"><span id="card-age" class="dash-skeleton">-</span><span class="rb-card-unit">weeks</span></span><span class="rb-card-sub" id="card-age-sub"></span><span class="rb-card-pip" data-pip="bib"></span></a>
         <a class="rb-card rb-c-white" href="#growth"><span class="rb-card-label">Weight</span><span class="rb-card-value"><span class="rb-own"><span data-source="headline" data-where="metric=weight_kg" data-field="value" class="dash-skeleton">-</span></span><span class="rb-card-unit">kg</span></span><span class="rb-cscale" id="card-cscale" role="img" aria-label="Position among the centile lines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b id="card-cdot" hidden></b></span><span class="rb-card-sub"><b><span data-source="headline" data-where="metric=who_centile" data-field="value" class="dash-skeleton">-</span><span class="fi-ord"></span> centile</b><span id="card-wchange"></span></span><span class="rb-card-pip" data-pip="tape"></span></a>
         <a class="rb-card rb-c-sky" href="#milk"><span class="rb-card-label">Average milk a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=total_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub" data-change="total_ml" data-unit="ml" data-up="more" data-down="less"></span><span class="rb-card-pip" data-pip="bottle"></span></a>
-        <a class="rb-card rb-c-pink" href="#milk"><span class="rb-card-label">Breast milk share</span><span class="rb-card-value"><span data-source="headline" data-where="metric=breast_milk_share" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">%</span></span><span class="rb-split" role="img" id="card-split" aria-label="Breast milk share of all milk"><span id="card-split-bar" style="width:0"></span></span><span class="rb-card-sub" data-change="breast_milk_share" data-unit="points" data-up="higher" data-down="lower"></span><span class="rb-card-pip" data-pip="magnify"></span></a>
-        <a class="rb-card rb-c-white" href="#milk"><span class="rb-card-label">Average pumped a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=pump_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub" data-change="pump_ml" data-unit="ml" data-up="more" data-down="less"></span><span class="rb-card-pip" data-pip="clock"></span></a>
+        <a class="rb-card rb-c-pink" href="#milk"><span class="rb-card-label">Breast milk share</span><span class="rb-card-value"><span data-source="headline" data-where="metric=breast_milk_share" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">%</span></span><span class="rb-split" role="img" id="card-split" aria-label="Breast milk share of all milk"><span id="card-split-bar" style="width:0"></span></span><span class="rb-card-sub" data-change="breast_milk_share" data-unit="percentage points" data-up="higher" data-down="lower"></span><span class="rb-card-pip" data-pip="magnify"></span></a>
+        <a class="rb-card rb-c-white" href="#milk"><span class="rb-card-label">Average milk pumped a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=pump_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub" data-change="pump_ml" data-unit="ml" data-up="more" data-down="less"></span><span class="rb-card-pip" data-pip="clock"></span></a>
         <a class="rb-card rb-c-navy" href="#sleep"><span class="rb-card-label">Average longest sleep</span><span class="rb-card-value"><span data-source="headline" data-where="metric=longest_sleep_h" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">hours</span></span><span class="rb-card-sub" data-change="longest_sleep_h" data-unit="h" data-up="longer" data-down="shorter"></span><span class="rb-card-pip" data-pip="sleep"></span></a>
       </div>
       <div class="rb-card-actions">
@@ -511,8 +511,8 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
         <div class="fi-legend" id="supply-legend"></div>
         <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
         <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
-          <p>Each line is a smoothed average of the 7 days up to that date, so day-to-day noise doesn't hide the trend. If the pumped line sits above the breast milk he drank, more is being pumped than he drinks. If the formula line rises while the pumped line falls, formula is making up the difference. The red line is everything he drank. In the shaded early weeks he was also breastfed directly, which has no volume, so the bottle lines there undercount what he drank. Pumping only appears from the first logged pump. Tap a day to see the gap between breast milk pumped and breast milk he drank.</p>
-          <p>Weeks start on a Monday and are labelled with that Monday's date. Partial days (the day he was born and the day of the export) are left out.</p>
+          <p>Each line is a smoothed average of the 7 days up to that date, so day-to-day noise doesn't hide the trend. If the line for milk pumped sits above the line for breast milk he drank, more is being pumped than he drinks. If the formula line rises while the pumped line falls, formula is making up the difference. The red line is everything he drank. In the shaded early weeks he was also breastfed directly, which has no volume, so the bottle lines there undercount what he drank. Pumping only appears from the first logged pump. Tap a day to see the gap between breast milk pumped and breast milk he drank.</p>
+          <p>Partial days (the day he was born and the day of the export) are left out.</p>
         </details>
       </div>
 
@@ -522,7 +522,7 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
           <div class="fi-legend" id="mix-legend"></div>
           <div class="fi-chart dash-skeleton" id="mix" data-source="feedmix" style="min-height:190px"></div>
           <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
-            <p>One bar per week. Each bar adds up to 100% of that week's feeds, split by type. A bottle with both breast milk and formula is split between the two by volume, so 90 ml of breast milk and 30 ml of formula counts as three quarters of a breast milk feed and a quarter of a formula feed. Tap a bar to see the number of feeds per day.</p>
+            <p>One bar per week. Each bar adds up to 100% of that week's feeds, split by type. A bottle with both breast milk and formula is split between the two by volume, so 90 ml of breast milk and 30 ml of formula counts as three quarters of a breast milk feed and a quarter of a formula feed. Tap a bar to see the number of feeds a day. Weeks start on a Monday and are labelled with that Monday's date.</p>
           </details>
         </div>
         <div class="rb-sheet">
@@ -551,7 +551,7 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
         <div class="fi-legend" id="pumptime-legend"></div>
         <div class="fi-chart dash-skeleton" id="pumptime" data-source="pumping"></div>
         <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
-          <p>One set of columns shows the average minutes spent pumping each day, week by week, and the columns beside them show the average minutes of direct breastfeeding in the early weeks, before he moved to bottles (both on the left scale). The line shows the average breast milk pumped each day, in ml (right scale). Times come from the durations logged, so they don't include setting up, washing, or sterilising. Tap a week for sessions per day and the typical session length.</p>
+          <p>One set of columns shows the average minutes spent pumping each day, week by week, and the columns beside them show the average minutes of direct breastfeeding in the early weeks, before he moved to bottles (both on the left scale). The line shows the average breast milk pumped each day, in ml (right scale). Times come from the durations logged, so they don't include setting up, washing, or sterilising. Tap a week for sessions a day and the typical session length.</p>
         </details>
       </div>
     </section>
@@ -627,7 +627,7 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
         <div class="fi-chart dash-skeleton" id="wake" data-source="wake"></div>
         <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
           <p>Often called wake windows: how long he stays awake from waking up to falling asleep again. There is one small chart for each part of the day, all on the same scale so you can compare them. Each point is the typical (median) time awake that week. The night chart shows how long he was up during night wakings. A break in a line is a week without enough complete sleep logs. Gaps over 5 hours are treated as missed logs and left out.</p>
-          <p>Days with more than 6 hours between 06:00 and 21:00 with no sleep logged are left out of the sleep charts, because a gap that long almost always means naps weren't logged rather than that he stayed awake. Days where he simply slept less are included. Notes lists the days left out.</p>
+          <p>Days with more than 6 hours between 06:00 and 21:00 with no sleep logged are left out of the sleep charts, because a gap that long almost always means naps weren't logged rather than that he stayed awake. Days where he simply slept less are included. The Notes section lists the days left out.</p>
         </details>
       </div>
     </section>
@@ -655,7 +655,7 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
     <section class="rb-page" id="shifts" aria-labelledby="shifts-h">
       <h2 id="shifts-h">Shifts</h2>
-      <p class="rb-lede" id="busy-callout">Busiest hours over the last 28 days: <b><span data-source="busiest" data-where="rank=1" data-field="hour" class="dash-skeleton">-</span></b>, <b><span data-source="busiest" data-where="rank=2" data-field="hour" class="dash-skeleton">-</span></b> and <b><span data-source="busiest" data-where="rank=3" data-field="hour" class="dash-skeleton">-</span></b>. These charts go by who logged each entry, which isn't always who did the care, so use them as a starting point for working out who covers what, not as a scorecard.</p>
+      <p class="rb-lede" id="busy-callout">Busiest hours over the last 28 days, busiest first: <b><span data-source="busiest" data-where="rank=1" data-field="hour" class="dash-skeleton">-</span></b>, <b><span data-source="busiest" data-where="rank=2" data-field="hour" class="dash-skeleton">-</span></b> and <b><span data-source="busiest" data-where="rank=3" data-field="hour" class="dash-skeleton">-</span></b>. These charts go by who logged each entry, which isn't always who did the care, so use them as a starting point for working out who covers what, not as a scorecard.</p>
 
       <div class="rb-pair">
         <div class="rb-sheet">
@@ -671,7 +671,7 @@ html.printing .rb-record { grid-template-columns: repeat(4, minmax(0, 1fr)); }
           <div class="fi-legend" id="nights-legend"></div>
           <div class="fi-chart dash-skeleton" id="nights" data-source="nights"></div>
           <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
-            <p>The total number of night feeds each week, split by who logged them. Faded bars are partial weeks, such as the current one, so they read lower. Tap a week to see the counts, including night pump sessions, which add to whoever is pumping's night.</p>
+            <p>The total number of night feeds each week, split by who logged them. Faded bars are partial weeks, such as the current one, so they read lower. Tap a week to see the counts. Night pump sessions are shown there too, because pumping also takes time in the night.</p>
           </details>
         </div>
       </div>
@@ -1735,10 +1735,8 @@ function drawLedes() {
     const bm = d3.mean(full, d => d.bm_ml), pump = d3.mean(full, d => d.pump_ml), fm = d3.mean(full, d => d.formula_ml);
     ml.replaceChildren();
     const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
-    if (pump > 0 && bm > 0) {
-      ml.append('Over the last 7 days, ', b(`${fmtInt(pump)} ml`), ' a day was pumped and he drank ', b(`${fmtInt(bm)} ml`), ' of breast milk a day. ');
-    } else ml.append('Is enough breast milk being pumped to cover what he drinks? ');
-    ml.append('Formula made up ', b(`${fmtInt(fm || 0)} ml`), ' a day.');
+    if (pump > 0) ml.append('Over the last 7 days, an average of ', b(`${fmtInt(pump)} ml`), ' of breast milk a day was pumped. ');
+    ml.append('He drank ', b(`${fmtInt(bm || 0)} ml`), ' of breast milk and ', b(`${fmtInt(fm || 0)} ml`), ' of formula a day.');
   }
   const sl = document.getElementById('sleep-lede');
   if (sl && dash.data('headline').status === 'ok' && h('longest_sleep_h').value != null) {
@@ -1754,9 +1752,15 @@ function drawLedes() {
     if (w) {
       gl.replaceChildren();
       const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
-      gl.append('Latest weigh-in: ', b(`${d3.format('.2f')(w.weight_kg)} kg`), ` on ${fmtDayLong(pday(w.date))}, at ${ageWD(w.age_days).replace('wk', 'weeks').replace(' d', ' days')}. `);
-      if (w.who_centile != null) { const bl = betweenLines(w.z_score).toLowerCase(); gl.append("That's the ", b(`${w.who_centile}${ordinal(w.who_centile)} centile`), `, ${bl}${bl.startsWith('between') ? ' lines' : ''}. `); }
-      if (w0 && w0.who_centile != null) gl.append(`At the weigh-in before he was on the ${w0.who_centile}${ordinal(w0.who_centile)}.`);
+      const wk = Math.floor(w.age_days / 7), dd = w.age_days % 7;
+      const age = `${wk ? `${wk} ${wk === 1 ? 'week' : 'weeks'}` : ''}${wk && dd ? ' and ' : ''}${dd || !wk ? `${dd} ${dd === 1 ? 'day' : 'days'}` : ''}`;
+      gl.append('Latest weigh-in: ', b(`${d3.format('.2f')(w.weight_kg)} kg`), ` on ${fmtDayLong(pday(w.date))}, at ${age} old. `);
+      if (w.who_centile != null) {
+        const near = CENTILES.find(c => Math.abs(w.z_score - c.z) < 0.1), i = CENTILES.findIndex(c => c.z > w.z_score);
+        const where = near ? `on the ${near.name} centile line` : i === 0 ? 'below the 0.4th centile line' : i === -1 ? 'above the 99.6th centile line' : `between the ${CENTILES[i - 1].name} and ${CENTILES[i].name} centile lines`;
+        gl.append("That's the ", b(`${w.who_centile}${ordinal(w.who_centile)} centile`), `, ${where}. `);
+      }
+      if (w0 && w0.who_centile != null) gl.append(`At the weigh-in before, he was on the ${w0.who_centile}${ordinal(w0.who_centile)} centile.`);
     }
   }
 }
@@ -1772,7 +1776,7 @@ dash.calc('milestones', {
     [4, 5, 6, 7, 8].forEach(h => { const d = ok.find(q => q.longest_sleep_h >= h); if (d) out.push({ chart: 'sleep', day: d.day, label: `First ${h} h` }); });
     if (best) {
       const same = out.find(m => m.chart === 'sleep' && m.day === best.day);
-      const txt = `Longest, ${Math.round(best.longest_sleep_h * 10) / 10} h`;
+      const txt = `Longest so far, ${fmt1(best.longest_sleep_h)} h`;
       if (same) same.label = `${same.label}, longest yet`; else out.push({ chart: 'sleep', day: best.day, label: txt });
     }
     const fp = daily.find(d => d.pump_ml > 0), ff = daily.find(d => d.formula_ml > 0);
@@ -1864,19 +1868,16 @@ function weekSentence() {
   const h = id => rowsOf('headline').find(r => r.metric === id) || {};
   const parts = [];
   const ls = h('longest_sleep_h');
-  if (ls.value != null) parts.push(ls.change == null || Math.abs(ls.change) < 0.25 ? `longest sleep is about the same at ${fmt1(ls.value)} h` : `longest sleep is ${ls.change > 0 ? 'up' : 'down'} ${fmt1(Math.abs(ls.change))} h to ${fmt1(ls.value)} h`);
-  const rel = (r, word, unit) => {
-    if (r.value == null) return;
-    const steady = r.change == null || !r.prior || Math.abs(r.change / r.prior) < 0.05;
-    parts.push(steady ? `${word} is about the same at ${fmtInt(r.value)} ${unit}` : `${word} is ${r.change > 0 ? 'up' : 'down'} ${fmtInt(Math.abs(r.change))} ml to ${fmtInt(r.value)} ${unit}`);
-  };
-  rel(h('total_ml'), 'milk', 'ml a day');
-  rel(h('pump_ml'), 'pumping', 'ml a day');
+  if (ls.value != null) parts.push(ls.change == null || Math.abs(ls.change) < 0.25 ? `his longest sleep is about the same (${fmt1(ls.value)} h)` : `his longest sleep is ${ls.change > 0 ? 'up' : 'down'} ${fmt1(Math.abs(ls.change))} h to ${fmt1(ls.value)} h`);
+  const steady = r => r.change == null || !r.prior || Math.abs(r.change / r.prior) < 0.05;
+  const milk = h('total_ml'), pump = h('pump_ml');
+  if (milk.value != null) parts.push(steady(milk) ? `he's drinking about the same (${fmtInt(milk.value)} ml a day)` : `he's drinking ${fmtInt(Math.abs(milk.change))} ml a day ${milk.change > 0 ? 'more' : 'less'} (${fmtInt(milk.value)} ml)`);
+  if (pump.value != null) parts.push(steady(pump) ? `pumping is about the same (${fmtInt(pump.value)} ml a day)` : `pumping is ${pump.change > 0 ? 'up' : 'down'} ${fmtInt(Math.abs(pump.change))} ml a day (${fmtInt(pump.value)} ml)`);
   const ws = rowsOf('weight'), lw = ws[ws.length - 1], full = rowsOf('daily').filter(d => !d.partial), lastFull = full.length ? full[full.length - 1].day : null;
   if (lw && lastFull && Date.parse(lastFull) - Date.parse(lw.date) <= 6 * DAY) parts.push(`there's a new weigh-in of ${d3.format('.2f')(lw.weight_kg)} kg${lw.who_centile != null ? ` (${lw.who_centile}${ordinal(lw.who_centile)} centile)` : ''}`);
   if (!parts.length) return '';
   const list = parts.length === 1 ? parts[0] : parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1];
-  return `This week, ${list}.`;
+  return `This week ${list}.`;
 }
 
 // The last seven nights, 19:00 to 07:00, one row each.
@@ -1970,8 +1971,8 @@ async function shareWeek(btn) {
       { c: 'marigold', label: 'Age', value: String(Math.floor(prof.age_days / 7)), unit: 'weeks', sub: prof.age_days % 7 ? `and ${prof.age_days % 7} ${prof.age_days % 7 === 1 ? 'day' : 'days'}` : '', pip: 'bib' },
       { c: 'white', label: 'Weight', value: w.value == null ? '-' : d3.format('.2f')(w.value), unit: 'kg', sub: cen.value == null ? '' : `${cen.value}${ordinal(cen.value)} centile`, pip: 'tape', red: true },
       { c: 'sky', label: 'Average milk a day', value: fmtInt(hl('total_ml').value), unit: 'ml', sub: words('total_ml', 'ml', 'more', 'less'), pip: 'bottle' },
-      { c: 'pink', label: 'Breast milk share', value: fmtInt(share.value), unit: '%', sub: words('breast_milk_share', 'points', 'higher', 'lower'), pip: 'magnify', bar: share.value },
-      { c: 'white', label: 'Average pumped a day', value: fmtInt(hl('pump_ml').value), unit: 'ml', sub: words('pump_ml', 'ml', 'more', 'less'), pip: 'clock' },
+      { c: 'pink', label: 'Breast milk share', value: fmtInt(share.value), unit: '%', sub: words('breast_milk_share', 'percentage points', 'higher', 'lower'), pip: 'magnify', bar: share.value },
+      { c: 'white', label: 'Average milk pumped a day', value: fmtInt(hl('pump_ml').value), unit: 'ml', sub: words('pump_ml', 'ml', 'more', 'less'), pip: 'clock' },
       { c: 'navy', label: 'Average longest sleep', value: fmt1(hl('longest_sleep_h').value), unit: 'hours', sub: words('longest_sleep_h', 'h', 'longer', 'shorter'), pip: 'sleep' }
     ];
     const pips = await Promise.all(cards.map(k => pipImage(k.pip).catch(() => null)));
@@ -2086,17 +2087,15 @@ if (CS) {
   weekSentence = () => {
     const h = id => rowsOf('headline').find(r => r.metric === id) || {};
     const parts = [], ls = h('longest_sleep_h');
-    if (ls.value != null) parts.push(ls.change == null || Math.abs(ls.change) < 0.25 ? `nejdelší spánek je zhruba stejný, ${fmt1(ls.value)} h` : `nejdelší spánek se ${ls.change > 0 ? 'prodloužil' : 'zkrátil'} o ${fmt1(Math.abs(ls.change))} h na ${fmt1(ls.value)} h`);
-    const rel = (r, word) => {
-      if (r.value == null) return;
-      const steady = r.change == null || !r.prior || Math.abs(r.change / r.prior) < 0.05;
-      parts.push(steady ? `${word} je zhruba stejně, ${fmtInt(r.value)} ml denně` : `${word} je o ${fmtInt(Math.abs(r.change))} ml ${r.change > 0 ? 'víc' : 'méně'}, ${fmtInt(r.value)} ml denně`);
-    };
-    rel(h('total_ml'), 'mléka'); rel(h('pump_ml'), 'odsátého mléka');
+    if (ls.value != null) parts.push(ls.change == null || Math.abs(ls.change) < 0.25 ? `je jeho nejdelší spánek zhruba stejný (${fmt1(ls.value)} h)` : `se jeho nejdelší spánek ${ls.change > 0 ? 'prodloužil' : 'zkrátil'} o ${fmt1(Math.abs(ls.change))} h na ${fmt1(ls.value)} h`);
+    const steady = r => r.change == null || !r.prior || Math.abs(r.change / r.prior) < 0.05;
+    const milk = h('total_ml'), pump = h('pump_ml');
+    if (milk.value != null) parts.push(steady(milk) ? `pije zhruba stejně (${fmtInt(milk.value)} ml denně)` : `pije o ${fmtInt(Math.abs(milk.change))} ml denně ${milk.change > 0 ? 'víc' : 'méně'} (${fmtInt(milk.value)} ml)`);
+    if (pump.value != null) parts.push(steady(pump) ? `odsává se zhruba stejně (${fmtInt(pump.value)} ml denně)` : `odsává se o ${fmtInt(Math.abs(pump.change))} ml denně ${pump.change > 0 ? 'víc' : 'méně'} (${fmtInt(pump.value)} ml)`);
     const ws = rowsOf('weight'), lw = ws[ws.length - 1], full = rowsOf('daily').filter(d => !d.partial), lastFull = full.length ? full[full.length - 1].day : null;
     if (lw && lastFull && Date.parse(lastFull) - Date.parse(lw.date) <= 6 * DAY) parts.push(`nové vážení ukázalo ${d3.format('.2f')(lw.weight_kg)} kg${lw.who_centile != null ? ` (${lw.who_centile}. percentil)` : ''}`);
     if (!parts.length) return '';
-    return `Tento týden: ${parts.length === 1 ? parts[0] : parts.slice(0, -1).join(', ') + ' a ' + parts[parts.length - 1]}.`;
+    return `Tento týden ${parts.length === 1 ? parts[0] : parts.slice(0, -1).join(', ') + ' a ' + parts[parts.length - 1]}.`;
   };
   const baseFillChanges = fillChanges;
   fillChanges = () => {
@@ -2150,9 +2149,8 @@ if (CS) {
       const full = rowsOf('daily').filter(d => !d.partial).slice(-7);
       const bm = d3.mean(full, d => d.bm_ml), pump = d3.mean(full, d => d.pump_ml), fm = d3.mean(full, d => d.formula_ml);
       ml.replaceChildren();
-      if (pump > 0 && bm > 0) ml.append('Za posledních 7 dní se odsálo ', b(`${fmtInt(pump)} ml`), ' denně a vypil ', b(`${fmtInt(bm)} ml`), ' mateřského mléka denně. ');
-      else ml.append('Odsává se dost mateřského mléka na to, co vypije? ');
-      ml.append('Umělé mléko tvořilo ', b(`${fmtInt(fm || 0)} ml`), ' denně.');
+      if (pump > 0) ml.append('Za posledních 7 dní se v průměru odsálo ', b(`${fmtInt(pump)} ml`), ' mateřského mléka denně. ');
+      ml.append('Vypil ', b(`${fmtInt(bm || 0)} ml`), ' mateřského a ', b(`${fmtInt(fm || 0)} ml`), ' umělého mléka denně.');
     }
     const sl = document.getElementById('sleep-lede');
     if (sl && dash.data('headline').status === 'ok' && h('longest_sleep_h').value != null) {
@@ -2165,7 +2163,9 @@ if (CS) {
       const ws = rowsOf('weight'), w = ws[ws.length - 1], w0 = ws[ws.length - 2];
       if (w) {
         gl.replaceChildren();
-        gl.append('Poslední vážení: ', b(`${d3.format('.2f')(w.weight_kg)} kg`), `, ${fmtDayLong(pday(w.date))}, ve věku ${ageWD(w.age_days)} `);
+        const wk = Math.floor(w.age_days / 7), dd = w.age_days % 7;
+        const age = `${wk ? `${wk} ${wk === 1 ? 'týdne' : 'týdnů'}` : ''}${wk && dd ? ' a ' : ''}${dd || !wk ? `${dd} ${dd === 1 ? 'dne' : 'dnů'}` : ''}`;
+        gl.append('Poslední vážení: ', b(`${d3.format('.2f')(w.weight_kg)} kg`), `, ${fmtDayLong(pday(w.date))}, ve věku ${age}. `);
         if (w.who_centile != null) gl.append('To je ', b(`${w.who_centile}. percentil`), `, tedy ${betweenLines(w.z_score).toLowerCase()}. `);
         if (w0 && w0.who_centile != null) gl.append(`Při předchozím vážení to byl ${w0.who_centile}. percentil.`);
       }
@@ -2248,10 +2248,10 @@ function drawAll() {
   const lastBf = evs.filter(e => e.type === 'Breastfeed').pop(), lastAny = evs.length ? evs[evs.length - 1] : null;
   const bfEnded = lastBf && lastAny && Date.parse(lastAny.day) - Date.parse(lastBf.day) > 14 * DAY;
   const bfl = document.getElementById('bf-last');
-  if (bfl) bfl.textContent = bfEnded ? `. The last one was on ${fmtDay(pday(lastBf.day))}` : '';
+  if (bfl) bfl.textContent = bfEnded ? `. The last one was on ${fmtDay(pday(lastBf.day))}.` : '';
 
   // Time spent pumping and milk pumped
-  legend('pumptime-legend', [{ name: 'Minutes pumping per day', color: PAL.blue }, { name: bfEnded ? `Minutes breastfeeding a day, until ${fmtDay(pday(lastBf.day))}` : 'Minutes breastfeeding per day', color: PAL.rose }, { name: 'Milk pumped per day (ml)', color: PAL.ink, line: 1 }]);
+  legend('pumptime-legend', [{ name: 'Minutes pumping a day', color: PAL.blue }, { name: bfEnded ? `Minutes breastfeeding a day, until ${fmtDay(pday(lastBf.day))}` : 'Minutes breastfeeding a day', color: PAL.rose }, { name: 'Milk pumped a day (ml)', color: PAL.ink, line: 1 }]);
   const pt = document.getElementById('pumptime');
   if (setState(pt, ['pumping'])) {
     const r = rowsOf('pumping').map(d => ({ x: d.week, bar: d.minutes_per_day, bar2: d.bf_min_per_day, line: d.ml_per_day, s: d.sessions_per_day, m: d.avg_session_min, days: d.days, pd: d.pump_days }));
@@ -2584,7 +2584,7 @@ document.querySelectorAll('[data-pip]').forEach(el => { el.innerHTML = pipSVG(el
     window.BABY_NAME = named ? String(named['Profile Name']).trim() : null;
     applyName();
     const last = d3.max(STORE.events, e => Math.max(e.start, e.end || 0));
-    asof.textContent = last ? `Data up to ${d3.utcFormat('%a %-d %b %Y, %H:%M')(new Date(last))}` : '';
+    asof.textContent = last ? `Last entry: ${d3.utcFormat('%a %-d %b %Y, %H:%M')(new Date(last))}` : '';
     show(true);
     requestAnimationFrame(() => {
       DRAW && DRAW();
