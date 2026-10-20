@@ -238,7 +238,7 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
   .rb-card-grid { gap: 8px; } .rb-card { min-height: 0; padding: 10px 12px 12px; border-radius: 14px; }
   .rb-card-label { font-size: var(--t-xs); white-space: nowrap; }
   .rb-card-value { font-size: 1.875rem; margin-top: 6px; } .rb-card-unit { font-size: var(--t-xs); }
-  .rb-card-pip { width: 72px; right: 2px; bottom: auto; top: 22px; }
+  .rb-card-pip { width: 64px; right: 4px; bottom: auto; top: 36px; }
   .rb-card-sub { max-width: none; padding-top: 6px; } .rb-split, .rb-cscale { max-width: calc(100% - 64px); margin-top: 8px; }
 }
 @media (prefers-color-scheme: dark) {
@@ -315,10 +315,10 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
       <div class="rb-card-grid">
         <a class="rb-card rb-c-marigold" href="#growth"><span class="rb-card-label">Age</span><span class="rb-card-value"><span id="card-age" class="dash-skeleton">-</span><span class="rb-card-unit">weeks</span></span><span class="rb-card-sub" id="card-age-sub"></span><span class="rb-card-pip" data-pip="bib"></span></a>
         <a class="rb-card rb-c-white" href="#growth"><span class="rb-card-label">Weight</span><span class="rb-card-value"><span class="rb-own"><span data-source="headline" data-where="metric=weight_kg" data-field="value" class="dash-skeleton">-</span></span><span class="rb-card-unit">kg</span></span><span class="rb-cscale" id="card-cscale" role="img" aria-label="Position among the centile lines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b id="card-cdot" hidden></b></span><span class="rb-card-sub"><b><span data-source="headline" data-where="metric=who_centile" data-field="value" class="dash-skeleton">-</span><span class="fi-ord"></span> centile</b><span id="card-wchange"></span></span><span class="rb-card-pip" data-pip="tape"></span></a>
-        <a class="rb-card rb-c-sky" href="#milk"><span class="rb-card-label">Milk a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=total_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub" data-change="total_ml" data-unit="ml" data-up="more" data-down="less"></span><span class="rb-card-pip" data-pip="bottle"></span></a>
+        <a class="rb-card rb-c-sky" href="#milk"><span class="rb-card-label">Average milk a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=total_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub" data-change="total_ml" data-unit="ml" data-up="more" data-down="less"></span><span class="rb-card-pip" data-pip="bottle"></span></a>
         <a class="rb-card rb-c-pink" href="#milk"><span class="rb-card-label">Breast milk share</span><span class="rb-card-value"><span data-source="headline" data-where="metric=breast_milk_share" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">%</span></span><span class="rb-split" role="img" id="card-split" aria-label="Breast milk share of all milk"><span id="card-split-bar" style="width:0"></span></span><span class="rb-card-sub" data-change="breast_milk_share" data-unit="points" data-up="higher" data-down="lower"></span><span class="rb-card-pip" data-pip="magnify"></span></a>
-        <a class="rb-card rb-c-white" href="#milk"><span class="rb-card-label">Pumped a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=pump_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub" data-change="pump_ml" data-unit="ml" data-up="more" data-down="less"></span><span class="rb-card-pip" data-pip="clock"></span></a>
-        <a class="rb-card rb-c-navy" href="#sleep"><span class="rb-card-label">Longest sleep</span><span class="rb-card-value"><span data-source="headline" data-where="metric=longest_sleep_h" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">hours</span></span><span class="rb-card-sub" data-change="longest_sleep_h" data-unit="h" data-up="longer" data-down="shorter"></span><span class="rb-card-pip" data-pip="sleep"></span></a>
+        <a class="rb-card rb-c-white" href="#milk"><span class="rb-card-label">Average pumped a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=pump_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub" data-change="pump_ml" data-unit="ml" data-up="more" data-down="less"></span><span class="rb-card-pip" data-pip="clock"></span></a>
+        <a class="rb-card rb-c-navy" href="#sleep"><span class="rb-card-label">Average longest sleep</span><span class="rb-card-value"><span data-source="headline" data-where="metric=longest_sleep_h" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">hours</span></span><span class="rb-card-sub" data-change="longest_sleep_h" data-unit="h" data-up="longer" data-down="shorter"></span><span class="rb-card-pip" data-pip="sleep"></span></a>
       </div>
       <div class="rb-card-actions">
         <button class="rb-share" id="share-week" type="button"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10M6 7l4-4 4 4M4 11v5.5h12V11"/></svg><span>Share this week as an image</span></button>
@@ -392,6 +392,16 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
           <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
             <p>His daily milk total divided by his weight, averaged for each week. Bigger babies drink more, so this gives a fairer comparison over time than raw ml. Weight between weigh-ins is estimated on a straight line between them, and the chart stops at the latest weigh-in. The pale outlined bars are the early weeks when he was also breastfed directly, which has no volume, so they read too low.</p>
           </details>
+        </div>
+      </div>
+
+      <div class="rb-group" id="pumpweek">
+        <h3 class="rb-h3">Pumping, last 7 full days<small>Daily averages, compared with the 7 days before</small></h3>
+        <div class="rb-record">
+          <div class="rb-field"><span class="rb-label">Sessions a day</span><span class="rb-value"><span data-pw="sessions" class="dash-skeleton">-</span></span><span class="rb-sub" data-pwc="sessions"></span></div>
+          <div class="rb-field"><span class="rb-label">Typical session</span><span class="rb-value"><span data-pw="session_min" class="dash-skeleton">-</span> <span class="rb-unit">min</span></span><span class="rb-sub" data-pwc="session_min"></span></div>
+          <div class="rb-field"><span class="rb-label">Time pumping a day</span><span class="rb-value"><span data-pw="minutes" class="dash-skeleton">-</span> <span class="rb-unit">min</span></span><span class="rb-sub" data-pwc="minutes"></span></div>
+          <div class="rb-field"><span class="rb-label">Milk per session</span><span class="rb-value"><span data-pw="ml_session" class="dash-skeleton">-</span> <span class="rb-unit">ml</span></span><span class="rb-sub" data-pwc="ml_session"></span></div>
         </div>
       </div>
 
@@ -1799,10 +1809,10 @@ async function shareWeek(btn) {
     const cards = [
       { c: 'marigold', label: 'Age', value: String(Math.floor(prof.age_days / 7)), unit: 'weeks', sub: prof.age_days % 7 ? `and ${prof.age_days % 7} ${prof.age_days % 7 === 1 ? 'day' : 'days'}` : '', pip: 'bib' },
       { c: 'white', label: 'Weight', value: w.value == null ? '-' : d3.format('.2f')(w.value), unit: 'kg', sub: cen.value == null ? '' : `${cen.value}${ordinal(cen.value)} centile`, pip: 'tape', red: true },
-      { c: 'sky', label: 'Milk a day', value: fmtInt(hl('total_ml').value), unit: 'ml', sub: words('total_ml', 'ml', 'more', 'less'), pip: 'bottle' },
+      { c: 'sky', label: 'Average milk a day', value: fmtInt(hl('total_ml').value), unit: 'ml', sub: words('total_ml', 'ml', 'more', 'less'), pip: 'bottle' },
       { c: 'pink', label: 'Breast milk share', value: fmtInt(share.value), unit: '%', sub: words('breast_milk_share', 'points', 'higher', 'lower'), pip: 'magnify', bar: share.value },
-      { c: 'white', label: 'Pumped a day', value: fmtInt(hl('pump_ml').value), unit: 'ml', sub: words('pump_ml', 'ml', 'more', 'less'), pip: 'clock' },
-      { c: 'navy', label: 'Longest sleep', value: fmt1(hl('longest_sleep_h').value), unit: 'hours', sub: words('longest_sleep_h', 'h', 'longer', 'shorter'), pip: 'sleep' }
+      { c: 'white', label: 'Average pumped a day', value: fmtInt(hl('pump_ml').value), unit: 'ml', sub: words('pump_ml', 'ml', 'more', 'less'), pip: 'clock' },
+      { c: 'navy', label: 'Average longest sleep', value: fmt1(hl('longest_sleep_h').value), unit: 'hours', sub: words('longest_sleep_h', 'h', 'longer', 'shorter'), pip: 'sleep' }
     ];
     const pips = await Promise.all(cards.map(k => pipImage(k.pip).catch(() => null)));
     const W = 1080, H = 1314, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
@@ -1846,6 +1856,41 @@ async function shareWeek(btn) {
 }
 (document.getElementById('share-week') || {}).onclick = ev => shareWeek(ev.currentTarget);
 
+// Pumping over the last 7 full days against the 7 before.
+dash.calc('pumpweek', {
+  title: 'Pumping, last 7 days',
+  description: 'Pump sessions a day, typical session length, minutes pumping a day and milk per session over the last 7 full days, and the same for the 7 days before.',
+  inputs: ['events', 'daily'],
+  fn: (events, daily) => {
+    const full = daily.filter(d => !d.partial);
+    const win = rows => {
+      const days = new Set(rows.map(d => d.day)), p = events.filter(e => e.type === 'Pump' && days.has(e.day));
+      const n = p.length, timed = p.filter(e => e.pump_min > 0), min = p.reduce((s, e) => s + e.pump_min, 0), ml = p.reduce((s, e) => s + e.pump_ml, 0);
+      return !rows.length || !n ? null : { sessions: n / rows.length, session_min: timed.length ? timed.reduce((s, e) => s + e.pump_min, 0) / timed.length : null, minutes: min / rows.length, ml_session: ml / n };
+    };
+    const cur = win(full.slice(-7)), prev = win(full.slice(-14, -7));
+    return ['sessions', 'session_min', 'minutes', 'ml_session'].map(k => ({ metric: k, value: cur ? cur[k] : null, prior: prev ? prev[k] : null }));
+  }
+});
+const PW = { sessions: [fmt1, '', 'more', 'fewer', 0.05], session_min: [fmtInt, 'min', 'longer', 'shorter', 0.5], minutes: [fmtInt, 'min', 'more', 'less', 0.5], ml_session: [fmtInt, 'ml', 'more', 'less', 0.5] };
+function fillPumpWeek() {
+  const ok = dash.data('pumpweek').status === 'ok', rows = ok ? rowsOf('pumpweek') : [];
+  const box = document.getElementById('pumpweek');
+  if (box) box.hidden = ok && rows.every(r => r.value == null);
+  rows.forEach(r => {
+    const [dp, unit, up, down, small] = PW[r.metric];
+    const v = document.querySelector(`[data-pw="${r.metric}"]`), c = document.querySelector(`[data-pwc="${r.metric}"]`);
+    if (v) { v.classList.remove('dash-skeleton'); v.textContent = r.value == null ? '-' : dp(r.value); }
+    if (!c) return;
+    c.replaceChildren();
+    if (r.value == null || r.prior == null) return;
+    const d = r.value - r.prior;
+    if (Math.abs(d) < small) { c.textContent = 'Same as the week before'; return; }
+    const b = document.createElement('b'); b.textContent = `${dp(Math.abs(d))}${unit ? ' ' + unit : ''}`;
+    c.append(b, ` ${d > 0 ? up : down} than the week before`);
+  });
+}
+
 function drawAll() {
   // Headline marks
   const hs = dash.data('headline').status;
@@ -1863,7 +1908,7 @@ function drawAll() {
   const pEl = document.querySelector('[data-source="profile"]');
   if (pEl) { const ps = dash.data('profile').status; if (ps === 'ok') { pEl.classList.remove('dash-skeleton'); pEl.textContent = fmtDayYear(pday(rowsOf('profile')[0].birth_date)); } else pEl.classList.toggle('dash-skeleton', !BAD.includes(ps)); }
 
-  drawToday(); drawLedes(); fillChanges();
+  drawToday(); drawLedes(); fillChanges(); fillPumpWeek();
   const wsEl = document.getElementById('week-summary'); if (wsEl) wsEl.textContent = hs === 'ok' ? weekSentence() : '';
   if (hs === 'ok' && !window.__counted) { window.__counted = true; countUp(); }
 

@@ -262,7 +262,7 @@ A record-book palette: one cover red, navy print on white paper and a family of 
 
 ### Tertiary
 - **His Own Red** (series-own): the one series per chart that is the baby's own headline measure (weigh-ins on the centile chart, total he drank, ml per kg), the weight figure on the Weight card and the dot on its centile scale. In dark mode it lifts to a coral red (dark-series-own).
-- **Sticker Fields** (card-marigold, card-sky, card-pink, card-navy, each with an ink and a secondary ink; white cards use record paper and navy print): the five glance-card fields. Marigold carries Age, sky carries Milk a day (with a faint 14px graph-paper grid), pink carries Breast milk share, navy carries Longest sleep, and white carries Weight and Pumped a day. Dark mode uses the dark-card set, with a 1px inset edge (dark-card-white-edge, dark-card-navy-edge) on the white and navy cards so they separate from the paper.
+- **Sticker Fields** (card-marigold, card-sky, card-pink, card-navy, each with an ink and a secondary ink; white cards use record paper and navy print): the five glance-card fields. Marigold carries Age, sky carries Average milk a day (with a faint 14px graph-paper grid), pink carries Breast milk share, navy carries Average longest sleep, and white carries Weight and Average pumped a day. Dark mode uses the dark-card set, with a 1px inset edge (dark-card-white-edge, dark-card-navy-edge) on the white and navy cards so they separate from the paper.
 
 ### Neutral
 - **Record Paper** (record-paper) and **Paper Shade** (record-paper-shade): the page and sheet ground; the shade fills table headers, hovered controls and loading skeletons.
@@ -336,11 +336,11 @@ Few and firm.
 - **Forget link:** an underlined text button in the footer, in secondary ink, navy on hover.
 
 ### Glance cards (signature)
-Six link cards, playful but organised, that answer "how is he doing" before the tabs: Age, Weight, Milk a day, Breast milk share, Pumped a day and Longest sleep, each opening its section.
+Six link cards, playful but organised, that answer "how is he doing" before the tabs: Age, Weight, Average milk a day, Breast milk share, Average pumped a day and Average longest sleep, each opening its section. Any card showing a 7-day average says "Average" in its label, on the page and in the share image.
 - **Shape:** 16px corners (14px on phones), at least 158px tall on desktop, padding 16px 18px 18px (10px 12px 12px on phones).
 - **Fields:** marigold, white, sky with a faint 14px graph-paper grid, pink and navy, each with its own ink and secondary ink in light and dark.
 - **Content:** card label, an 800-weight number with its unit, and a sub-line at the bottom with the change in bold. Weight sets its number in his own red and adds a nine-tick centile scale (ticks in centile blue, the 50th heavier, a red dot ringed in the card colour where he sits). Breast milk share adds an 8px split bar: the filled share in the card ink over a 22% tint of it.
-- **Pip:** one Pip variant per card (bib, tape, bottle, magnify, clock, sleep), 128px at the bottom right (72px on phones), each at its own rotation; sub-lines and bars stop short of it.
+- **Pip:** one Pip variant per card (bib, tape, bottle, magnify, clock, sleep), 128px at the bottom right, each at its own rotation; sub-lines and bars stop short of it. On phones Pip moves up beside the number (64px wide, 36px from the top, 4px from the right) so it clears the longer labels.
 - **States:** hover, focus and active lift the card 3px onto the card-lift shadow and wiggle the Pip; active settles back with a slight press. Focus-visible is a 3px ink outline, offset 3px, over a 3px white inner ring. Under reduced motion the wiggle and transitions are off.
 - **Count-up (the page's one authored motion moment):** once per loaded export, each card number counts up from the week before (Weight from the previous weigh-in) to the current value over 1.1s with an exponential ease-out (1 - 2^(-10t)), and the breast-milk split bar grows from the prior share over the same 1.1s (cubic-bezier(.16, 1, .3, 1)). It never repeats on resize or redraw and is skipped entirely under prefers-reduced-motion.
 
@@ -357,7 +357,7 @@ A native checkbox under the sheet title ("Compare with 4 weeks earlier"): 16px b
 - **Mobile:** horizontal scroll with no scrollbar and a right-edge fade.
 
 ### Record rows
-Printed form fields. A grid of cells drawn with a shared 1px strong rule (top and left on the row, right and bottom on each cell), square corners, padding 9px 14px 14px. Inside: a small semibold label, the large tabular value with its unit, and a short sub-line in secondary ink with its key change in bold.
+Printed form fields, used for the Since birth totals and for "Pumping, last 7 full days" in Milk (Sessions a day, Typical session, Time pumping a day, Milk per session), which sits above the pumping chart, carries a worded change against the 7 days before in each sub-line ("10 ml less than the week before", "Same as the week before"), and hides itself when the export has no pump entries. A grid of cells drawn with a shared 1px strong rule (top and left on the row, right and bottom on each cell), square corners, padding 9px 14px 14px. Inside: a small semibold label, the large tabular value with its unit, and a short sub-line in secondary ink with its key change in bold.
 
 ### Chart sheets
 - **Corner Style:** square.
@@ -389,11 +389,12 @@ On the dashboard, Pip appears only on the glance cards, one variant per card. On
 - **Do** open every section with the 2px cover-red rule, the headline and an answer sentence before any chart.
 - **Do** draw every new chart on the graph paper (minor and major lines, framed plot) with Public Sans axes at 11.5px, using only the chart inks with their fixed meanings (breast milk navy, pumped and sleep blue, formula and bottles marigold, breastfeeds rose) plus his own red, each at least 3:1 against its ground.
 - **Do** present headline numbers on the record pages as record rows: small label above a large tabular value, hairline cells, square corners.
+- **Do** label every weekly figure as an average ("Average milk a day"), on cards, rows and the share image alike.
 - **Do** keep a new glance card to the existing pattern: one of the five sticker fields, label, 800-weight number, bottom sub-line, its own Pip and rotation, and a link to its section.
 - **Do** keep red for the cover, section rules, the active state, alerts and the one series or figure that is his own measure.
 - **Do** keep dark mode on the oxblood-black paper (dark-record-paper) with the dark token set, never an inverted light theme.
 - **Do** mark a new first or record on a chart with a milestone flag (dotted muted-ink rule, ringed top dot, haloed 11px label) rather than a callout box or icon; never draw a flag in a series ink.
-- **Do** write every change against the week before out in full: "<amount> <unit> more/less/higher/lower/longer/shorter than the week before", and for weight "up/down <kg> since the weigh-in before"; never "on last week" or a bare signed number. In the week sentence, a change under 5% (0.25 h for sleep) reads "about the same", never "steady".
+- **Do** write every change against the week before out in full: "<amount> <unit> more/less/higher/lower/longer/shorter than the week before", and for weight "up/down <kg> since the weigh-in before"; never "on last week" or a bare signed number; no change reads "Same as the week before". In the week sentence, a change under 5% (0.25 h for sleep) reads "about the same", never "steady".
 - **Do** describe direct breastfeeding as history once the last logged breastfeed is more than 14 days before the export: its key and totals carry the end date ("Minutes breastfeeding a day, until <date>"; "The last one was on <date>").
 - **Do** keep tap targets at 44px on the cover and at least 38px for chart controls, and keep every motion off under reduced motion.
 
