@@ -59,7 +59,7 @@ button, input, select { font: inherit; color: inherit; }
 .rb-id > div { display: contents; }
 .rb-id .rb-name { grid-area: name; }
 .rb-id > .rb-btn { grid-area: btn; }
-.rb-id .rb-meta { grid-column: 1 / -1; }
+.rb-id .rb-meta, .rb-id .rb-week { grid-column: 1 / -1; }
 .rb-name { margin: 0; font-weight: 800; font-size: var(--t-2xl); line-height: 1.05; letter-spacing: -.02em; }
 .rb-meta { margin: 6px 0 0; color: var(--cover-soft); font-size: var(--t-sm); }
 .rb-meta > span { white-space: nowrap; }
@@ -250,6 +250,24 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
   .rb-c-navy { --bg: #1a2240; --fg: #eef1fb; --fg-2: #b6c0de; box-shadow: inset 0 0 0 1px #2f3a60, 0 12px 26px -12px rgba(0, 0, 0, .7); }
 }
 
+/* this week's sentence, share button, compare toggle, nights */
+.rb-week { margin: 12px 0 0; max-width: 62ch; font-size: var(--t-md); font-weight: 600; line-height: 1.45; color: #fff; text-wrap: pretty; }
+.rb-small-meta { font-size: var(--t-xs); }
+.rb-card-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 6px 14px; margin-top: 12px; }
+.rb-share { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border: 1px solid var(--rule-strong); border-radius: 6px; background: var(--paper); color: var(--ink); font-weight: 600; font-size: var(--t-xs); cursor: pointer; transition: background-color .15s ease-out; }
+.rb-share:hover { background: var(--paper-2); }
+.rb-share:disabled { opacity: .6; cursor: progress; }
+.rb-share svg { width: 16px; height: 16px; }
+.rb-share-note { font-size: var(--t-xs); color: var(--ink-2); }
+.rb-share-note:empty { display: none; }
+.rb-compare-head { flex-direction: column; align-items: flex-start; gap: 2px; }
+.rb-check { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-size: var(--t-xs); font-weight: 600; color: var(--ink-2); cursor: pointer; white-space: nowrap; }
+.rb-check input { width: 16px; height: 16px; margin: 0; accent-color: var(--cover); cursor: pointer; }
+.rb-n-label { font: 700 12.5px var(--font); fill: var(--ink); }
+.rb-n-sub { font: 500 11.5px var(--font); fill: var(--ink-2); }
+.rb-n-row { fill: transparent; }
+.rb-n-row:hover { fill: var(--paper-2); }
+
 /* milestone flags */
 .rb-mark-line { stroke: var(--ink-2); stroke-width: 1.2; stroke-dasharray: 1 3; stroke-linecap: round; }
 .rb-mark-dot { fill: var(--ink-2); stroke: var(--paper); stroke-width: 1.5; }
@@ -284,7 +302,8 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
         <div>
           <h1 class="rb-name" id="top" data-named="{name}">Your baby</h1>
           <p class="rb-meta" id="asof"></p>
-          <p class="rb-meta">Weekly figures are daily averages over the last 7 full days, compared with the 7 days before.</p>
+          <p class="rb-week" id="week-summary"></p>
+          <p class="rb-meta rb-small-meta">Weekly figures are daily averages over the last 7 full days, compared with the 7 days before.</p>
         </div>
         <label class="rb-btn rb-btn-white"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13V3M6 7l4-4 4 4M3.5 13v3.5h13V13"/></svg>Load newer export<input type="file" accept=".csv,text/csv,text/comma-separated-values"></label>
       </div>
@@ -295,11 +314,15 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
     <div class="rb-wrap">
       <div class="rb-card-grid">
         <a class="rb-card rb-c-marigold" href="#growth"><span class="rb-card-label">Age</span><span class="rb-card-value"><span id="card-age" class="dash-skeleton">-</span><span class="rb-card-unit">weeks</span></span><span class="rb-card-sub" id="card-age-sub"></span><span class="rb-card-pip" data-pip="bib"></span></a>
-        <a class="rb-card rb-c-white" href="#growth"><span class="rb-card-label">Weight</span><span class="rb-card-value"><span class="rb-own"><span data-source="headline" data-where="metric=weight_kg" data-field="value" class="dash-skeleton">-</span></span><span class="rb-card-unit">kg</span></span><span class="rb-cscale" id="card-cscale" role="img" aria-label="Position among the centile lines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b id="card-cdot" hidden></b></span><span class="rb-card-sub"><b><span data-source="headline" data-where="metric=who_centile" data-field="value" class="dash-skeleton">-</span><span class="fi-ord"></span> centile</b>, <span data-source="headline" data-where="metric=weight_kg" data-field="change" class="dash-skeleton">-</span> kg</span><span class="rb-card-pip" data-pip="tape"></span></a>
-        <a class="rb-card rb-c-sky" href="#milk"><span class="rb-card-label">Milk a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=total_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub"><b><span data-source="headline" data-where="metric=total_ml" data-field="change" class="dash-skeleton">-</span> ml</b> on last week</span><span class="rb-card-pip" data-pip="bottle"></span></a>
-        <a class="rb-card rb-c-pink" href="#milk"><span class="rb-card-label">Breast milk share</span><span class="rb-card-value"><span data-source="headline" data-where="metric=breast_milk_share" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">%</span></span><span class="rb-split" role="img" id="card-split" aria-label="Breast milk share of all milk"><span id="card-split-bar" style="width:0"></span></span><span class="rb-card-sub"><b><span data-source="headline" data-where="metric=breast_milk_share" data-field="change" class="dash-skeleton">-</span> points</b> on last week</span><span class="rb-card-pip" data-pip="magnify"></span></a>
-        <a class="rb-card rb-c-white" href="#milk"><span class="rb-card-label">Pumped a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=pump_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub"><b><span data-source="headline" data-where="metric=pump_ml" data-field="change" class="dash-skeleton">-</span> ml</b> on last week</span><span class="rb-card-pip" data-pip="clock"></span></a>
-        <a class="rb-card rb-c-navy" href="#sleep"><span class="rb-card-label">Longest sleep</span><span class="rb-card-value"><span data-source="headline" data-where="metric=longest_sleep_h" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">hours</span></span><span class="rb-card-sub"><b><span data-source="headline" data-where="metric=longest_sleep_h" data-field="change" class="dash-skeleton">-</span> h</b> on last week</span><span class="rb-card-pip" data-pip="sleep"></span></a>
+        <a class="rb-card rb-c-white" href="#growth"><span class="rb-card-label">Weight</span><span class="rb-card-value"><span class="rb-own"><span data-source="headline" data-where="metric=weight_kg" data-field="value" class="dash-skeleton">-</span></span><span class="rb-card-unit">kg</span></span><span class="rb-cscale" id="card-cscale" role="img" aria-label="Position among the centile lines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b id="card-cdot" hidden></b></span><span class="rb-card-sub"><b><span data-source="headline" data-where="metric=who_centile" data-field="value" class="dash-skeleton">-</span><span class="fi-ord"></span> centile</b><span id="card-wchange"></span></span><span class="rb-card-pip" data-pip="tape"></span></a>
+        <a class="rb-card rb-c-sky" href="#milk"><span class="rb-card-label">Milk a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=total_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub" data-change="total_ml" data-unit="ml" data-up="more" data-down="less"></span><span class="rb-card-pip" data-pip="bottle"></span></a>
+        <a class="rb-card rb-c-pink" href="#milk"><span class="rb-card-label">Breast milk share</span><span class="rb-card-value"><span data-source="headline" data-where="metric=breast_milk_share" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">%</span></span><span class="rb-split" role="img" id="card-split" aria-label="Breast milk share of all milk"><span id="card-split-bar" style="width:0"></span></span><span class="rb-card-sub" data-change="breast_milk_share" data-unit="points" data-up="higher" data-down="lower"></span><span class="rb-card-pip" data-pip="magnify"></span></a>
+        <a class="rb-card rb-c-white" href="#milk"><span class="rb-card-label">Pumped a day</span><span class="rb-card-value"><span data-source="headline" data-where="metric=pump_ml" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">ml</span></span><span class="rb-card-sub" data-change="pump_ml" data-unit="ml" data-up="more" data-down="less"></span><span class="rb-card-pip" data-pip="clock"></span></a>
+        <a class="rb-card rb-c-navy" href="#sleep"><span class="rb-card-label">Longest sleep</span><span class="rb-card-value"><span data-source="headline" data-where="metric=longest_sleep_h" data-field="value" class="dash-skeleton">-</span><span class="rb-card-unit">hours</span></span><span class="rb-card-sub" data-change="longest_sleep_h" data-unit="h" data-up="longer" data-down="shorter"></span><span class="rb-card-pip" data-pip="sleep"></span></a>
+      </div>
+      <div class="rb-card-actions">
+        <button class="rb-share" id="share-week" type="button"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10M6 7l4-4 4 4M4 11v5.5h12V11"/></svg><span>Share this week as an image</span></button>
+        <span class="rb-share-note" id="share-note" role="status"></span>
       </div>
     </div>
   </section>
@@ -343,7 +366,7 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
       <p class="rb-lede" id="milk-lede">Is enough breast milk being pumped to cover what he drinks, and how much of the rest is formula?</p>
 
       <div class="rb-sheet">
-        <h3 class="rb-h3" id="supply-title">Milk pumped and milk he drank, ml per day</h3>
+        <div class="rb-sheet-head rb-compare-head"><h3 class="rb-h3" id="supply-title">Milk pumped and milk he drank, ml per day</h3><label class="rb-check"><input type="checkbox" data-compare> Compare with 4 weeks earlier</label></div>
         <div class="fi-legend" id="supply-legend"></div>
         <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
         <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
@@ -387,6 +410,15 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
       <p class="rb-lede" id="sleep-lede">Every day so far on one chart, so you can watch his routine take shape.</p>
 
       <div class="rb-sheet">
+        <h3 class="rb-h3" id="nights7-title">The last seven nights, 19:00 to 07:00</h3>
+        <div class="fi-legend" id="nights7-legend"></div>
+        <div class="fi-chart dash-skeleton" id="nights7" data-source="timeline daily" style="min-height:300px"></div>
+        <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
+          <p>One row per night, newest at the bottom, from 19:00 to 07:00 the next morning. The bands are sleep, and the outlined band is that night's longest stretch. The short marks are bottles. The total beside each night is all the sleep logged in those 12 hours. Tap a night for details.</p>
+        </details>
+      </div>
+
+      <div class="rb-sheet">
         <div class="rb-sheet-head">
           <h3 class="rb-h3" id="rhythm-title">Sleep and feeds, one row per day</h3>
           <div class="fi-seg" role="group" aria-label="Where each row starts">
@@ -422,7 +454,7 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
 
       <div class="rb-pair">
         <div class="rb-sheet">
-          <h3 class="rb-h3" id="longest-title">Longest single sleep each day, hours</h3>
+          <div class="rb-sheet-head rb-compare-head"><h3 class="rb-h3" id="longest-title">Longest single sleep each day, hours</h3><label class="rb-check"><input type="checkbox" data-compare> Compare with 4 weeks earlier</label></div>
           <div class="fi-legend" id="longest-legend"></div>
           <div class="fi-chart dash-skeleton" id="longest" data-source="rolling daily"></div>
           <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
@@ -430,7 +462,7 @@ body.dragging .rb-cover { box-shadow: inset 0 0 0 3px #fff; }
           </details>
         </div>
         <div class="rb-sheet">
-          <h3 class="rb-h3" id="total-title">Total sleep in the day, hours</h3>
+          <div class="rb-sheet-head rb-compare-head"><h3 class="rb-h3" id="total-title">Total sleep in the day, hours</h3><label class="rb-check"><input type="checkbox" data-compare> Compare with 4 weeks earlier</label></div>
           <div class="fi-legend" id="total-legend"></div>
           <div class="fi-chart dash-skeleton" id="totalsleep" data-source="rolling daily"></div>
           <details class="rb-how"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>How to read this chart</summary>
@@ -1543,7 +1575,8 @@ function drawLedes() {
     const ls = h('longest_sleep_h'), ts = h('sleep_h');
     sl.replaceChildren();
     const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
-    sl.append('Over the last 7 days his longest single sleep averaged ', b(`${fmt1(ls.value)} hours`), ls.change != null ? ` (${signed(ls.change, fmt1)} h on the week before)` : '', ts.value != null ? `, and he slept ${fmt1(ts.value)} hours a day in total.` : '.');
+    const lp = changeParts('longest_sleep_h', 'h', 'longer', 'shorter');
+    sl.append('Over the last 7 days his longest single sleep averaged ', b(`${fmt1(ls.value)} hours`), lp ? (lp.same ? ' (the same as the week before)' : ` (${lp.num}${lp.rest})`) : '', ts.value != null ? `, and he slept ${fmt1(ts.value)} hours a day in total.` : '.');
   }
   const gl = document.getElementById('growth-lede');
   if (gl && dash.data('weight').status === 'ok') {
@@ -1635,6 +1668,184 @@ function countUp() {
   if (bar && share && share.prior != null) { bar.style.transition = 'none'; bar.style.width = `${share.prior}%`; bar.offsetWidth; bar.style.transition = 'width 1.1s cubic-bezier(.16, 1, .3, 1)'; bar.style.width = `${share.value}%`; }
 }
 
+// Changes against the week before, in words: "42 ml less than the week before".
+const CHANGE_DP = { longest_sleep_h: fmt1, sleep_h: fmt1, weight_kg: d3.format('.2f') };
+function changeParts(metric, unit, up, down) {
+  const r = rowsOf('headline').find(h => h.metric === metric);
+  if (!r || r.change == null) return null;
+  const dp = CHANGE_DP[metric] || fmtInt, small = dp === fmtInt ? 0.5 : 0.05;
+  if (Math.abs(r.change) < small) return { same: true, value: r.value };
+  return { num: `${dp(Math.abs(r.change))} ${unit}`, rest: ` ${r.change > 0 ? up : down} than the week before`, change: r.change, value: r.value, prior: r.prior };
+}
+function fillChanges() {
+  document.querySelectorAll('[data-change]').forEach(el => {
+    const p = changeParts(el.dataset.change, el.dataset.unit, el.dataset.up, el.dataset.down);
+    el.replaceChildren();
+    if (!p) return;
+    if (p.same) { el.textContent = 'Same as the week before'; return; }
+    const b = document.createElement('b'); b.textContent = p.num; el.append(b, p.rest);
+  });
+  const wc = document.getElementById('card-wchange'), w = rowsOf('headline').find(h => h.metric === 'weight_kg');
+  if (wc) wc.textContent = w && w.change != null ? `, ${w.change >= 0 ? 'up' : 'down'} ${d3.format('.2f')(Math.abs(w.change))} kg since the weigh-in before` : '';
+}
+
+// One sentence for the band: what changed this week.
+function weekSentence() {
+  const h = id => rowsOf('headline').find(r => r.metric === id) || {};
+  const parts = [];
+  const ls = h('longest_sleep_h');
+  if (ls.value != null) parts.push(ls.change == null || Math.abs(ls.change) < 0.25 ? `longest sleep is about the same at ${fmt1(ls.value)} h` : `longest sleep is ${ls.change > 0 ? 'up' : 'down'} ${fmt1(Math.abs(ls.change))} h to ${fmt1(ls.value)} h`);
+  const rel = (r, word, unit) => {
+    if (r.value == null) return;
+    const steady = r.change == null || !r.prior || Math.abs(r.change / r.prior) < 0.05;
+    parts.push(steady ? `${word} is about the same at ${fmtInt(r.value)} ${unit}` : `${word} is ${r.change > 0 ? 'up' : 'down'} ${fmtInt(Math.abs(r.change))} ml to ${fmtInt(r.value)} ${unit}`);
+  };
+  rel(h('total_ml'), 'milk', 'ml a day');
+  rel(h('pump_ml'), 'pumping', 'ml a day');
+  const ws = rowsOf('weight'), lw = ws[ws.length - 1], full = rowsOf('daily').filter(d => !d.partial), lastFull = full.length ? full[full.length - 1].day : null;
+  if (lw && lastFull && Date.parse(lastFull) - Date.parse(lw.date) <= 6 * DAY) parts.push(`there's a new weigh-in of ${d3.format('.2f')(lw.weight_kg)} kg${lw.who_centile != null ? ` (${lw.who_centile}${ordinal(lw.who_centile)} centile)` : ''}`);
+  if (!parts.length) return '';
+  const list = parts.length === 1 ? parts[0] : parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1];
+  return `This week, ${list}.`;
+}
+
+// The last seven nights, 19:00 to 07:00, one row each.
+function lastNights(box) {
+  box.replaceChildren();
+  const tl = rowsOf('timeline'), evs = rowsOf('events');
+  if (!tl.length || !evs.length) { emptyMsg(box, 'Nothing logged yet'); return; }
+  const lastT = d3.max(evs, e => Math.max(e.start, e.end || 0)), lastDay = Math.floor(lastT / DAY) * DAY;
+  const starts = [];
+  for (let d = lastDay; starts.length < 7 && d > lastDay - 40 * DAY; d -= DAY) { const s = d + 19 * 36e5; if (s + 12 * 36e5 <= lastT) starts.unshift(s); }
+  if (!starts.length) { emptyMsg(box, 'No full night logged yet'); return; }
+  const W = Math.max(260, box.clientWidth), narrow = W < 520;
+  const rowH = 44, top = 24, labW = narrow ? 58 : 72, statW = narrow ? 0 : 156, n = starts.length;
+  const H = top + n * rowH + 2;
+  box.style.minHeight = H + 'px';
+  const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('class', 'fi-svg').attr('role', 'img').attr('aria-label', 'Sleep and feeds for the last seven nights');
+  const x = d3.scaleLinear([0, 720], [labW, W - statW - (narrow ? 4 : 12)]);
+  const pg = svg.append('g');
+  pg.selectAll('line.v').data(d3.range(0, 721, 60).sort((a, b) => (a % 120 === 0) - (b % 120 === 0))).join('line').attr('class', m => 'v ' + (m % 120 === 0 ? 'rb-major' : 'rb-minor'))
+    .attr('x1', m => Math.round(x(m)) + 0.5).attr('x2', m => Math.round(x(m)) + 0.5).attr('y1', top).attr('y2', top + n * rowH);
+  pg.selectAll('line.h').data(d3.range(0, n + 1)).join('line').attr('class', i => 'h ' + (i === 0 || i === n ? 'rb-major' : 'rb-minor'))
+    .attr('x1', x(0)).attr('x2', x(720)).attr('y1', i => top + i * rowH - 0.5).attr('y2', i => top + i * rowH - 0.5);
+  const ax = svg.append('g').attr('class', 'fi-axis');
+  d3.range(0, 721, narrow ? 180 : 120).forEach(m => ax.append('text').attr('x', x(m)).attr('y', top - 8).attr('text-anchor', m === 0 ? 'start' : m === 720 ? 'end' : 'middle').text(`${String((19 + m / 60) % 24).padStart(2, '0')}:00`));
+  const anyBf = tl.some(t => t.kind === 'breastfeed' && t.end > starts[0] && t.start < starts[n - 1] + 12 * 36e5);
+  legend('nights7-legend', [{ name: 'Asleep', color: PAL.blue }, { name: 'Longest stretch', color: PAL.ink, outline: 1 }, { name: 'Bottle', color: PAL.gold }].concat(anyBf ? [{ name: 'Breastfeed', color: PAL.rose }] : []));
+  const fmtM = m => (m < 0 ? 0 : m > 720 ? 720 : m);
+  starts.forEach((s, i) => {
+    const e = s + 12 * 36e5, y = top + i * rowH, g = svg.append('g');
+    const items = tl.filter(t => t.end > s && t.start < e);
+    const sl = items.filter(t => t.kind === 'sleep');
+    const asleep = sl.reduce((a, t) => a + Math.min(t.end, e) - Math.max(t.start, s), 0) / 36e5;
+    const longest = sl.reduce((m, t) => (!m || t.end - t.start > m.end - m.start ? t : m), null);
+    const feeds = items.filter(t => t.kind !== 'sleep');
+    g.append('rect').attr('class', 'rb-n-row').attr('x', 0).attr('y', y).attr('width', W).attr('height', rowH);
+    sl.forEach(t => {
+      const a = x(fmtM((t.start - s) / 6e4)), b = x(fmtM((t.end - s) / 6e4));
+      g.append('rect').attr('x', a).attr('y', y + 9).attr('width', Math.max(2, b - a)).attr('height', rowH - 18).attr('rx', 2).attr('fill', PAL.blue)
+        .attr('stroke', t === longest ? PAL.ink : null).attr('stroke-width', t === longest ? 2 : null);
+    });
+    feeds.forEach(t => {
+      const a = x(fmtM((t.start - s) / 6e4));
+      g.append('rect').attr('x', a - 2).attr('y', y + 13).attr('width', 4).attr('height', rowH - 26).attr('rx', 2).attr('fill', t.kind === 'breastfeed' ? PAL.rose : PAL.gold).attr('stroke', 'var(--paper)').attr('stroke-width', 1);
+    });
+    g.append('text').attr('class', 'rb-n-label').attr('x', 0).attr('y', y + (narrow ? 19 : 26)).text(fmtWeekday(new Date(s)));
+    if (narrow) g.append('text').attr('class', 'rb-n-sub').attr('x', 0).attr('y', y + 34).text(`${fmt1(asleep)} h`);
+    else {
+      g.append('text').attr('class', 'rb-n-label').attr('x', W - statW + 4).attr('y', y + 19).text(`${fmt1(asleep)} h asleep`);
+      g.append('text').attr('class', 'rb-n-sub').attr('x', W - statW + 4).attr('y', y + 34).text(longest ? `Longest ${fmt1((longest.end - longest.start) / 36e5)} h` : 'No sleep logged');
+    }
+    g.on('pointerdown pointermove', ev => {
+      const [bx, by] = d3.pointer(ev, box);
+      const lines = [{ color: PAL.blue, name: 'Asleep', value: `${fmt1(asleep)} h` }];
+      if (longest) lines.push({ name: 'Longest stretch', value: `${fmtHM(new Date(longest.start))} to ${fmtHM(new Date(longest.end))} (${fmt1((longest.end - longest.start) / 36e5)} h)` });
+      lines.push({ color: PAL.gold, name: 'Bottles', value: String(feeds.filter(t => t.kind === 'bottle').length) });
+      const nb = feeds.filter(t => t.kind === 'breastfeed').length;
+      if (nb) lines.push({ color: PAL.rose, name: 'Breastfeeds', value: String(nb) });
+      showTip(box, bx, by, `Night of ${fmtDayLong(new Date(s))}`, lines);
+    }).on('pointerleave', ev => { if (ev.pointerType !== 'touch') hideTip(box); });
+  });
+}
+
+// Compare with 4 weeks earlier: the same line, moved forward 28 days, faint and dashed.
+let compareMode = false;
+const shift28 = (vals, maxX) => vals.filter(v => v.y != null).map(v => ({ x: new Date(+v.x + 28 * DAY), y: v.y })).filter(v => +v.x <= maxX);
+document.querySelectorAll('[data-compare]').forEach(cb => cb.addEventListener('change', () => {
+  compareMode = cb.checked;
+  document.querySelectorAll('[data-compare]').forEach(o => { o.checked = compareMode; });
+  if (READY && DRAW) DRAW();
+}));
+
+// Share this week as an image: drawn on a canvas in the browser, then shared or saved.
+const SHARE_CARDS = { marigold: ['#f6b93f', '#2b1d03', '#553e0c'], white: ['#ffffff', '#1b2340', '#4b5474'], sky: ['#aecbf4', '#12203f', '#2f4169'], pink: ['#f7c3cd', '#3b1220', '#66303f'], navy: ['#1d2b4f', '#ffffff', '#c3cdea'] };
+function roundRectPath(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+function wrapLines(c, text, maxW) { const out = []; let line = ''; text.split(' ').forEach(w => { const t = line ? line + ' ' + w : w; if (c.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t; }); if (line) out.push(line); return out; }
+function pipImage(kind) {
+  return new Promise((res, rej) => { const img = new Image(); img.onload = () => res(img); img.onerror = rej; img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(pipSVG(kind).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ')); });
+}
+async function shareWeek(btn) {
+  const note = document.getElementById('share-note');
+  if (!READY) return;
+  btn.disabled = true; note.textContent = 'Making the image';
+  try {
+    const F = (w, s) => `${w} ${s}px "Public Sans", system-ui, sans-serif`;
+    await Promise.all([F(800, 100), F(700, 36), F(600, 32), F(500, 28)].map(f => document.fonts.load(f)));
+    const hl = id => rowsOf('headline').find(r => r.metric === id) || {};
+    const prof = rowsOf('profile')[0], last = d3.max(rowsOf('events'), e => Math.max(e.start, e.end || 0));
+    const words = (metric, unit, up, down) => { const p = changeParts(metric, unit, up, down); return !p ? '' : p.same ? 'Same as the week before' : `${p.num}${p.rest}`; };
+    const w = hl('weight_kg'), cen = hl('who_centile'), share = hl('breast_milk_share');
+    const cards = [
+      { c: 'marigold', label: 'Age', value: String(Math.floor(prof.age_days / 7)), unit: 'weeks', sub: prof.age_days % 7 ? `and ${prof.age_days % 7} ${prof.age_days % 7 === 1 ? 'day' : 'days'}` : '', pip: 'bib' },
+      { c: 'white', label: 'Weight', value: w.value == null ? '-' : d3.format('.2f')(w.value), unit: 'kg', sub: cen.value == null ? '' : `${cen.value}${ordinal(cen.value)} centile`, pip: 'tape', red: true },
+      { c: 'sky', label: 'Milk a day', value: fmtInt(hl('total_ml').value), unit: 'ml', sub: words('total_ml', 'ml', 'more', 'less'), pip: 'bottle' },
+      { c: 'pink', label: 'Breast milk share', value: fmtInt(share.value), unit: '%', sub: words('breast_milk_share', 'points', 'higher', 'lower'), pip: 'magnify', bar: share.value },
+      { c: 'white', label: 'Pumped a day', value: fmtInt(hl('pump_ml').value), unit: 'ml', sub: words('pump_ml', 'ml', 'more', 'less'), pip: 'clock' },
+      { c: 'navy', label: 'Longest sleep', value: fmt1(hl('longest_sleep_h').value), unit: 'hours', sub: words('longest_sleep_h', 'h', 'longer', 'shorter'), pip: 'sleep' }
+    ];
+    const pips = await Promise.all(cards.map(k => pipImage(k.pip).catch(() => null)));
+    const W = 1080, H = 1314, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    const x = cv.getContext('2d');
+    x.font = F(600, 32);
+    const sent = wrapLines(x, weekSentence(), W - 144);
+    const gap = 26, cw = (W - 144 - gap) / 2, ch = 262, y0 = Math.max(404, 272 + (sent.length - 1) * 44 + 72);
+    cv.height = H + (y0 - 404);
+    x.fillStyle = '#ffffff'; x.fillRect(0, 0, W, cv.height);
+    x.fillStyle = '#b3202a'; x.fillRect(0, 0, W, y0 + 116);
+    x.fillStyle = '#ffffff'; x.font = F(800, 92); x.fillText(window.BABY_NAME || 'This week', 72, 148);
+    x.fillStyle = '#ffe1de'; x.font = F(600, 32); const fullDays = rowsOf('daily').filter(d => !d.partial); x.fillText(`Week to ${d3.utcFormat('%a %-d %b %Y')(fullDays.length ? pday(fullDays[fullDays.length - 1].day) : new Date(last))}`, 72, 206);
+    x.fillStyle = '#ffffff'; x.font = F(600, 32);
+    sent.forEach((l, i) => x.fillText(l, 72, 272 + i * 44));
+    cards.forEach((k, i) => {
+      const [bg, fg, fg2] = SHARE_CARDS[k.c], cx = 72 + (i % 2) * (cw + gap), cy = y0 + Math.floor(i / 2) * (ch + gap);
+      x.save(); x.shadowColor = 'rgba(70, 8, 16, .22)'; x.shadowBlur = 34; x.shadowOffsetY = 14; roundRectPath(x, cx, cy, cw, ch, 30); x.fillStyle = bg; x.fill(); x.restore();
+      if (k.c === 'white') { roundRectPath(x, cx + .5, cy + .5, cw - 1, ch - 1, 30); x.strokeStyle = '#d5dcea'; x.lineWidth = 2; x.stroke(); }
+      x.save(); roundRectPath(x, cx, cy, cw, ch, 30); x.clip();
+      if (pips[i]) x.drawImage(pips[i], cx + cw - 146, cy + 14, 126, 69);
+      x.restore();
+      x.fillStyle = fg; x.font = F(700, 32); x.fillText(k.label, cx + 30, cy + 56);
+      x.font = F(800, 96); x.fillStyle = k.red ? '#b3202a' : fg; x.fillText(k.value, cx + 28, cy + 148);
+      const vw = x.measureText(k.value).width; x.font = F(600, 32); x.fillStyle = fg2; x.fillText(k.unit, cx + 34 + vw, cy + 148);
+      if (k.bar != null) { roundRectPath(x, cx + 30, cy + 166, 200, 10, 5); x.fillStyle = fg2 + '55'; x.fill(); roundRectPath(x, cx + 30, cy + 166, 200 * Math.max(0, Math.min(1, k.bar / 100)), 10, 5); x.fillStyle = fg; x.fill(); }
+      x.font = F(500, 26); x.fillStyle = fg2;
+      wrapLines(x, k.sub, cw - 60).slice(0, 2).forEach((l, j) => x.fillText(l, cx + 30, cy + (k.bar != null ? 216 : 200) + j * 32));
+    });
+    const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+    const file = new File([blob], `week-to-${new Date(last).toISOString().slice(0, 10)}.png`, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'This week' }); note.textContent = ''; }
+      catch (e) { note.textContent = e && e.name === 'AbortError' ? '' : "Couldn't open sharing. Try again."; }
+    } else {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      note.textContent = 'Image saved to your downloads';
+    }
+  } catch (e) { note.textContent = "Couldn't make the image. Try again."; }
+  finally { btn.disabled = false; clearTimeout(shareWeek.t); shareWeek.t = setTimeout(() => { note.textContent = ''; }, 5000); }
+}
+(document.getElementById('share-week') || {}).onclick = ev => shareWeek(ev.currentTarget);
+
 function drawAll() {
   // Headline marks
   const hs = dash.data('headline').status;
@@ -1652,7 +1863,8 @@ function drawAll() {
   const pEl = document.querySelector('[data-source="profile"]');
   if (pEl) { const ps = dash.data('profile').status; if (ps === 'ok') { pEl.classList.remove('dash-skeleton'); pEl.textContent = fmtDayYear(pday(rowsOf('profile')[0].birth_date)); } else pEl.classList.toggle('dash-skeleton', !BAD.includes(ps)); }
 
-  drawToday(); drawLedes();
+  drawToday(); drawLedes(); fillChanges();
+  const wsEl = document.getElementById('week-summary'); if (wsEl) wsEl.textContent = hs === 'ok' ? weekSentence() : '';
   if (hs === 'ok' && !window.__counted) { window.__counted = true; countUp(); }
 
   // Totals since birth
@@ -1666,7 +1878,7 @@ function drawAll() {
   });
 
   // 1. Supply vs demand
-  legend('supply-legend', [{ name: 'Breast milk pumped', color: PAL.blue, line: 1 }, { name: 'Breast milk he drank', color: PAL.ink, line: 1 }, { name: 'Formula he drank', color: PAL.gold, line: 1 }, { name: 'Total he drank', color: PAL.red, line: 1 }]);
+  legend('supply-legend', [{ name: 'Breast milk pumped', color: PAL.blue, line: 1 }, { name: 'Breast milk he drank', color: PAL.ink, line: 1 }, { name: 'Formula he drank', color: PAL.gold, line: 1 }, { name: 'Total he drank', color: PAL.red, line: 1 }].concat(compareMode ? [{ name: 'Total, 4 weeks earlier', color: PAL.red, dash: 1 }] : []));
   const supply = document.getElementById('supply');
   if (setState(supply, ['rolling', 'daily'])) {
     const r = rowsOf('rolling'), daily = rowsOf('daily');
@@ -1674,7 +1886,9 @@ function drawAll() {
     const s = k => r.map(d => ({ x: pday(d.day), y: d[k] }));
     lineChart(supply, {
       height: 280,
-      series: [{ name: 'Breast milk pumped', color: PAL.blue, values: s('pump_ml') }, { name: 'Breast milk he drank', color: PAL.ink, values: s('bm_ml') }, { name: 'Formula he drank', color: PAL.gold, values: s('formula_ml') }, { name: 'Total he drank', color: PAL.red, width: 2.5, values: s('total_ml') }],
+      xDomain: d3.extent(r, d => pday(d.day)),
+      series: [{ name: 'Breast milk pumped', color: PAL.blue, values: s('pump_ml') }, { name: 'Breast milk he drank', color: PAL.ink, values: s('bm_ml') }, { name: 'Formula he drank', color: PAL.gold, values: s('formula_ml') }, { name: 'Total he drank', color: PAL.red, width: 2.5, values: s('total_ml') }]
+        .concat(compareMode ? [{ name: 'Total, 4 weeks earlier', color: PAL.red, dashed: true, opacity: 0.65, values: shift28(s('total_ml'), +pday(r[r.length - 1].day)) }] : []),
       tipFmt: v => `${fmtInt(v)} ml`,
       tipTitle: v => `Daily average, 7 days to ${fmtDayLong(new Date(v))}`,
       shades: bfDays.length ? [{ x0: pday(daily[0].day), x1: pday(bfDays[bfDays.length - 1].day), label: 'Also breastfed directly' }] : [],
@@ -1708,27 +1922,33 @@ function drawAll() {
   legend('rhythm-legend', [{ name: 'Asleep', color: PAL.blue }, { name: 'Bottle', color: PAL.gold }, { name: 'Breastfeed', color: PAL.rose }, { name: 'Long daytime gap with no sleep logged', color: 'var(--cds-chart-status-critical)' }]);
   const rh = document.getElementById('rhythm');
   drawRhythm();
+  const n7 = document.getElementById('nights7');
+  if (n7 && setState(n7, ['timeline', 'events'])) lastNights(n7);
 
   // 3. Longest stretch + total sleep
-  legend('longest-legend', [{ name: 'Each day', color: PAL.blue, opacity: 0.75 }, { name: '7-day average', color: PAL.ink, line: 1 }]);
+  legend('longest-legend', [{ name: 'Each day', color: PAL.blue, opacity: 0.75 }, { name: '7-day average', color: PAL.ink, line: 1 }].concat(compareMode ? [{ name: 'Average, 4 weeks earlier', color: PAL.ink, dash: 1 }] : []));
   const lg = document.getElementById('longest');
   if (setState(lg, ['rolling', 'daily'])) {
     const ok7 = rowsOf('daily').filter(d => d.sleep_complete), r = rowsOf('rolling');
     lineChart(lg, {
       series: [{ name: 'That day', color: PAL.blue, dotsOnly: true, values: ok7.map(d => ({ x: pday(d.day), y: d.longest_sleep_h })), fmt: v => `${fmt1(v)} h` },
-               { name: '7-day average', color: PAL.ink, values: r.map(d => ({ x: pday(d.day), y: d.longest_sleep_h })), fmt: v => `${fmt1(v)} h` }],
+               { name: '7-day average', color: PAL.ink, values: r.map(d => ({ x: pday(d.day), y: d.longest_sleep_h })), fmt: v => `${fmt1(v)} h` }]
+        .concat(compareMode ? [{ name: '4 weeks earlier', color: PAL.ink, dashed: true, opacity: 0.65, values: shift28(r.map(d => ({ x: pday(d.day), y: d.longest_sleep_h })), +pday(r[r.length - 1].day)), fmt: v => `${fmt1(v)} h` }] : []),
+      xDomain: d3.extent(r.filter(d => d.longest_sleep_h != null), d => pday(d.day)),
       yFmt: v => `${v} h`,
       marks: rowsOf('milestones').filter(m => m.chart === 'sleep').map(m => ({ x: pday(m.day), label: m.label }))
     });
   }
-  legend('total-legend', [{ name: 'Each day', color: PAL.blue, opacity: 0.75 }, { name: '7-day average', color: PAL.ink, line: 1 }]);
+  legend('total-legend', [{ name: 'Each day', color: PAL.blue, opacity: 0.75 }, { name: '7-day average', color: PAL.ink, line: 1 }].concat(compareMode ? [{ name: 'Average, 4 weeks earlier', color: PAL.ink, dash: 1 }] : []));
   const ts = document.getElementById('totalsleep');
   if (setState(ts, ['rolling', 'daily'])) {
     const ok7 = rowsOf('daily').filter(d => d.sleep_complete), r = rowsOf('rolling');
     lineChart(ts, {
       yMin: 8,
       series: [{ name: 'That day', color: PAL.blue, dotsOnly: true, values: ok7.map(d => ({ x: pday(d.day), y: d.sleep_h })), fmt: v => `${fmt1(v)} h` },
-               { name: '7-day average', color: PAL.ink, values: r.map(d => ({ x: pday(d.day), y: d.sleep_h })), fmt: v => `${fmt1(v)} h` }],
+               { name: '7-day average', color: PAL.ink, values: r.map(d => ({ x: pday(d.day), y: d.sleep_h })), fmt: v => `${fmt1(v)} h` }]
+        .concat(compareMode ? [{ name: '4 weeks earlier', color: PAL.ink, dashed: true, opacity: 0.65, values: shift28(r.map(d => ({ x: pday(d.day), y: d.sleep_h })), +pday(r[r.length - 1].day)), fmt: v => `${fmt1(v)} h` }] : []),
+      xDomain: d3.extent(r.filter(d => d.sleep_h != null), d => pday(d.day)),
       yFmt: v => `${v} h`
     });
   }

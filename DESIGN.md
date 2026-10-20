@@ -153,6 +153,15 @@ components:
     height: "44px"
   button-cover-hover:
     backgroundColor: "#ffeceb"
+  button-share:
+    backgroundColor: "{colors.record-paper}"
+    textColor: "{colors.navy-print}"
+    typography: "{typography.label}"
+    rounded: "{rounded.control}"
+    padding: "0 14px"
+    height: "40px"
+  button-share-hover:
+    backgroundColor: "{colors.record-paper-shade}"
   link-forget:
     textColor: "{colors.navy-print-2}"
     typography: "{typography.label}"
@@ -224,7 +233,7 @@ The record pages are dense like a filled-in form. Each section opens with a red 
 Light mode is white paper; dark mode is deep oxblood-black paper (the cover goes slightly deeper, the grid turns ink-blue on near-black, the navy chart ink becomes a warm pale stone so it differs in hue from the dark chart blue, the baby's own red brightens to stay legible, the card fields darken to deep marigold, sky, plum and navy). The direction contract named #170d0f for dark paper; the build ships #160c0f and that is the recorded value.
 
 **Key Characteristics:**
-- Red cover band at the top: the name and the load button on one row, the export time and a line saying weekly figures are 7-day averages against the 7 days before.
+- Red cover band at the top: the name and the load button on one row, then the export time, a this-week sentence in white, and a small line saying weekly figures are 7-day averages against the 7 days before.
 - Six glance cards tucked over the cover's bottom edge: the one playful, rounded, coloured place in the system.
 - Blue graph paper with minor and major lines under every chart.
 - Printed form-field rows: hairline cells, small label above value, square corners.
@@ -243,11 +252,12 @@ A record-book palette: one cover red, navy print on white paper and a family of 
 ### Secondary
 - **Centile Blue** (centile-blue, centile-50): the nine printed centile lines and their right-edge labels; the 50th is darker and heavier. It also draws the ticks of the centile scale on the Weight card and the focus ring on paper.
 - **Chart Inks** (series-ink, series-blue, series-gold, series-rose, series-grey): every data series that is not his own measure or an alert. Each ink holds at least 3:1 against its ground in both modes, and each has a fixed meaning that carries across charts:
-  - **Navy ink** (series-ink; a warm pale stone in dark mode, distinct in hue from the dark blue): breast milk he drank, the 7-day average lines, feeds in busiest hours, and the first person in night feeds.
-  - **Chart blue** (series-blue): milk pumped, sleep (including the sleep bands in the row-per-day rhythm chart), pumps in busiest hours, and the second person.
-  - **Marigold** (series-gold): formula, drawn as a solid line, never dashed; bottles in the rhythm chart, nappies in busiest hours, and the third person.
+  - **Navy ink** (series-ink; a warm pale stone in dark mode, distinct in hue from the dark blue): breast milk he drank, the 7-day average lines, the 2px outline on each night's longest stretch, feeds in busiest hours, and the first person in night feeds.
+  - **Chart blue** (series-blue): milk pumped, sleep (including the sleep bands in the row-per-day rhythm chart and the last seven nights chart), pumps in busiest hours, and the second person.
+  - **Marigold** (series-gold): formula, drawn as a solid line, never dashed; bottles in the rhythm and last-seven-nights charts, nappies in busiest hours, and the third person.
   - **Rose** (series-rose): direct breastfeeds, in the rhythm chart too, and the fourth person.
   - **Grey** (series-grey): an "other" or remainder bucket.
+  - A dashed line at 0.65 opacity means only "4 weeks earlier": the comparison copy of a series, moved 28 days forward, in that series' ink and keyed with the dashed swatch. No other series is dashed.
   - Daily dots behind a 7-day average render at 0.75 opacity. Faded bars (weeks also breastfed, partial night weeks) fade only the fill (fill-opacity), never the outline or the ink itself. The old blue tint (--s-tint) is still defined in the stylesheet but no chart uses it, so it is not a system token.
 
 ### Tertiary
@@ -263,7 +273,7 @@ A record-book palette: one cover red, navy print on white paper and a family of 
 ### Named Rules
 **The Cover Red Rule.** Red belongs to the cover. On paper it appears only as the section rule, the active tab or segment, an alert, and his own measure; never as a fill for a sheet, card or ordinary series.
 
-**The One Red Series Rule.** Red in a chart means only his own measure or an alert: at most one red series per chart (his weigh-ins, total he drank, ml per kg; a caveat version of the same series is allowed, as in the ml-per-kg "also breastfed" bars: a faded fill with a full-strength 1.5px red outline, keyed by an outlined tint swatch), plus alert marks such as a long daytime gap with no sleep logged. Every other series uses the chart inks with their fixed meanings. The glance cards are the one place the palette widens further: their sticker fields are backgrounds, never series, and never enter a chart.
+**The One Red Series Rule.** Red in a chart means only his own measure or an alert: at most one red series per chart (his weigh-ins, total he drank, ml per kg; a caveat version of the same series is allowed, as in the ml-per-kg "also breastfed" bars: a faded fill with a full-strength 1.5px red outline, keyed by an outlined tint swatch), plus alert marks such as a long daytime gap with no sleep logged. The dashed 0.65-opacity "4 weeks earlier" copy of his own measure counts as the same series, not a second red one. Every other series uses the chart inks with their fixed meanings. The glance cards are the one place the palette widens further: their sticker fields are backgrounds, never series, and never enter a chart.
 
 ## Typography
 
@@ -282,10 +292,11 @@ Public Sans is embedded in the page as base64 woff2 (variable weight 400 to 800,
 - **Title** (700, 1.0625rem, 1.3): group and chart-sheet titles; an inline small note at the label size may follow on the same baseline.
 - **Card label** (700, 0.9375rem; 0.8125rem on phones): the glance-card name, in sentence case.
 - **Record value** (700, 1.75rem, 1.15, tabular; 1.5rem in dense rows and on mobile): the numbers in record rows, with the unit at 0.9375rem, weight 500, in secondary ink.
+- **Week sentence** (600, 1.0625rem, 1.45, white, max 62ch): the this-week sentence on the cover band, above a 0.8125rem explainer line in blush.
 - **Lede** (400, 1.0625rem, 1.55, max 64ch): the answer sentence that opens each section; key figures in bold.
 - **Body** (400, 1rem, 1.5): running text.
 - **Label** (600, 0.8125rem): printed field labels, control text, legends, notes, card sub-lines and table headers. Sentence case; never uppercase, never letter-spaced.
-- **Chart axis** (400, 11.5px, tabular): axis ticks and shade labels; centile labels are 600 at 11px.
+- **Chart axis** (400, 11.5px, tabular): axis ticks and shade labels; centile labels are 600 at 11px. Row labels in the last seven nights chart are 700 at 12.5px, with a 500 11.5px sub-line.
 
 ### Named Rules
 **The One Family Rule.** Public Sans sets everything, including chart axes and tooltips; no second face, no monospace.
@@ -294,7 +305,7 @@ Public Sans is embedded in the page as base64 woff2 (variable weight 400 to 800,
 
 ## Layout
 
-A single centred column (max 72rem) with 16px side padding, 32px from 768px up. The cover band is a small grid with no wordmark: the name and the Load newer export button share the first row (20px column gap, 12px on phones), and the export time and the 7-day averages line run full width below. The glance strip pulls up 68px into the band (the band keeps 92px of bottom padding for it; 48px and 64px on phones), three cards across, two across under 900px, with a 14px gap (8px on phones). Then a sticky tab bar on paper with a hairline bottom rule holds the six sections (Since birth, Milk, Sleep, Growth, Shifts, Notes), with Since birth first, directly under the glance cards; on narrow screens it scrolls horizontally with a fade at the right edge. Each section is a record page: 44px above, a 2px red rule, the headline, the lede, then groups 28px apart.
+A single centred column (max 72rem) with 16px side padding, 32px from 768px up. The cover band is a small grid with no wordmark: the name and the Load newer export button share the first row (20px column gap, 12px on phones), and the export time, the week sentence and the small 7-day explainer line run full width below. The glance strip pulls up 68px into the band (the band keeps 92px of bottom padding for it; 48px and 64px on phones), three cards across, two across under 900px, with a 14px gap (8px on phones). The Share this week as an image button and its status note sit under the cards. Then a sticky tab bar on paper with a hairline bottom rule holds the six sections (Since birth, Milk, Sleep, Growth, Shifts, Notes), with Since birth first, directly under the glance cards; on narrow screens it scrolls horizontally with a fade at the right edge. Each section is a record page: 44px above, a 2px red rule, the headline, the lede, then groups 28px apart.
 
 Record rows are an auto-fit grid of cells at least 13rem wide; dense rows are three across. Under 600px they become two across, and an odd last cell spans both columns. Chart sheets stack 24px apart; pairs sit side by side when each can have 27rem, with a 20px gap, otherwise they stack. Small-multiple charts use an auto-fit grid of 15rem minimum. The footer, behind a hairline, holds the privacy line, the link to the previous version and "Forget data on this device". Interactive targets are at least 44px on the cover and 38px for chart controls.
 
@@ -321,6 +332,7 @@ Few and firm.
 - **Shape:** gently rounded (6px), 44px tall.
 - **Cover button:** white on the cover band with deep-red text and a stroked upload icon, 0.9375rem bold; the file input fills it invisibly. It is the page's one primary action ("Load newer export"; "Load Nara export" on the landing).
 - **Hover / Focus:** hover tints to a pale blush (#ffeceb); press drops 1px; focus on the cover is a 2px white outline offset 2px.
+- **Secondary (Share this week as an image):** paper fill, 1px strong rule, 6px corners, 40px tall, 0.8125rem semibold print ink with a 16px stroked icon; hover fills with paper shade; disabled at 0.6 opacity while the image is made. A small status note in secondary ink sits beside it.
 - **Forget link:** an underlined text button in the footer, in secondary ink, navy on hover.
 
 ### Glance cards (signature)
@@ -335,6 +347,9 @@ Six link cards, playful but organised, that answer "how is he doing" before the 
 ### Segmented controls and date navigation
 - **Style:** a 1px strong-rule frame with 6px corners, 38px tall, label-size semibold text in secondary ink, internal dividers in the strong rule.
 - **State:** hover fills with paper shade; the pressed segment fills with cover red and white text. Arrow buttons and the date field share the frame and height.
+
+### Compare checkbox
+A native checkbox under the sheet title ("Compare with 4 weeks earlier"): 16px box with accent-color cover red, 0.8125rem semibold label in secondary ink, 32px tall. Ticking it adds the dashed 0.65-opacity copy of the main series moved 28 days forward.
 
 ### Navigation (section tabs)
 - **Style:** sticky, paper background, hairline bottom rule; 0.9375rem semibold in secondary ink.
@@ -353,11 +368,17 @@ Printed form fields. A grid of cells drawn with a shared 1px strong rule (top an
 ### Graph paper and the centile chart (signature)
 Every chart is drawn on centile-chart paper: major lines on the y-axis ticks, minor lines dividing each major square into five (or two, when squares get small), the same pitch across, and a major-colour frame around the plot. The growth chart reproduces the boys' chart page in chart units (0.1 kg and one-week squares, heavier every kilo and every four weeks), with the nine centile lines 0.4th to 99.6th labelled at the right edge, the 50th heavier, and the baby's weigh-ins as a red line with paper-ringed dots on top.
 
+### Last seven nights chart
+One 44px row per night from 19:00 to 07:00 on hourly graph paper (major line every 2 hours). Sleep is a chart-blue band; the night's longest stretch is outlined 2px in navy ink; bottles are 4px marigold marks with a paper edge. Each row has a bold 12.5px label and an 11.5px sub-line at the left, and the row fills with paper shade on hover.
+
 ### Milestone flags
 Small flags for the baby's firsts, drawn over the graph paper in neutral annotation ink, so a flag never reads as a data series. Each is a dotted 1.2px rule in muted print ink (navy-print-2; dash 1 3, round caps) the full plot height, a 3.5px dot in the same ink on the plot's top edge with a 1.5px paper ring, and an 11px weight-600 label in print ink with a 3px paper halo. Labels sit beside the rule (to the right, or to the left near the right edge) in up to three stacked rows 15px apart, starting below any shaded band's label; a label that cannot fit without overlapping is dropped, and its rule and dot stay. In use: First N h and the longest so far on the longest-sleep chart, First pump and First formula on the milk chart, and Back to birth weight on the centile chart.
 
 ### Tooltip
 Paper background, 1px strong rule, 4px corners, tooltip lift, label-size text with a bold title row and tabular values right-aligned against colour swatches. On touch it sits clear of the finger.
+
+### Share image
+A 1080px-wide PNG drawn in the light palette whatever the mode, 1314px tall for a sentence of up to three lines and growing with it: the cards start at max(404, 272 + (lines - 1) x 44 + 72)px and the cover-red band runs 116px past that start (520px at the base size). The band holds the name (800, 92px), "Week to <date>" in blush, labelled by the week's last full day, and the week sentence in white (600, 32px, 44px lines), then the six glance cards in a 2 x 3 grid with 30px corners, a soft oxblood shadow, the white cards edged in the hairline rule, and each Pip at the top right. It carries no footer text. It is shared through the native share sheet or downloaded.
 
 ### Pip
 On the dashboard, Pip appears only on the glance cards, one variant per card. On the landing, the hero Pip is a die-cut sticker (11rem) above the title. Pip never sits on record paper or in a chart.
@@ -372,6 +393,7 @@ On the dashboard, Pip appears only on the glance cards, one variant per card. On
 - **Do** keep red for the cover, section rules, the active state, alerts and the one series or figure that is his own measure.
 - **Do** keep dark mode on the oxblood-black paper (dark-record-paper) with the dark token set, never an inverted light theme.
 - **Do** mark a new first or record on a chart with a milestone flag (dotted muted-ink rule, ringed top dot, haloed 11px label) rather than a callout box or icon; never draw a flag in a series ink.
+- **Do** write every change against the week before out in full: "<amount> <unit> more/less/higher/lower/longer/shorter than the week before", and for weight "up/down <kg> since the weigh-in before"; never "on last week" or a bare signed number. In the week sentence, a change under 5% (0.25 h for sleep) reads "about the same", never "steady".
 - **Do** describe direct breastfeeding as history once the last logged breastfeed is more than 14 days before the export: its key and totals carry the end date ("Minutes breastfeeding a day, until <date>"; "The last one was on <date>").
 - **Do** keep tap targets at 44px on the cover and at least 38px for chart controls, and keep every motion off under reduced motion.
 
@@ -380,6 +402,7 @@ On the dashboard, Pip appears only on the glance cards, one variant per card. On
 - **Don't** use rounded colour cards outside the glance strip; sheets and record rows stay square hairline paper.
 - **Don't** put Pip on record paper or in charts, or let Pip lead a record page.
 - **Don't** add shadows to sheets, rows, tabs or buttons; only the glance cards and the tooltip lift.
+- **Don't** dash any series other than the "4 weeks earlier" comparison.
 - **Don't** animate charts, record rows or tabs, or replay the count-up; it runs once per loaded export.
 - **Don't** introduce a second typeface or set labels in uppercase or wide letter-spacing.
 - **Don't** use the sticker field colours as chart series, add series colours outside the chart inks and his own red, or reassign an ink's meaning from one chart to the next.
