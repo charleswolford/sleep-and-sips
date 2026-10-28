@@ -68,6 +68,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 
 
 
+
 .fi { --fi-green: #4f9a2a; --fi-yellow: #e2a400; --fi-red: #d9432b; --fi-plum: #7d3c98; --fi-blue: #2b7bbf; --fi-orange: #ea7a17; --fi-pink: #d24f86;
   --fi-paper: color-mix(in srgb, var(--color-panel) 90%, #f2c14e);
   font-family: var(--font-anthropic-sans); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
@@ -256,7 +257,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <p class="fi-intro">Is enough breast milk being pumped to cover what <span data-named="{name}">the baby</span> drinks, and how much of the rest is formula? A few things that help when reading the charts below: weeks start on a Monday and are labelled with that Monday's date, and partial days (the day he was born and the day of the export) are left out.</p>
     <div class="fi-card" style="--sec: var(--fi-plum)">
       <h3 class="fi-h3" id="supply-title">Milk pumped and milk he drank, ml per day</h3>
-      <p class="fi-note">Each line is a smoothed average of the 7 days up to that date, so day-to-day noise doesn't hide the trend. If the purple line (pumped) sits above the green line (breast milk he drank), more is being pumped than he drinks. If orange (formula) rises while purple falls, formula is making up the difference. In the shaded early weeks he was also breastfed directly, which has no volume, so the bottle lines there undercount what he drank. Pumping only appears from the first logged pump. Tap a day to see the gap between breast milk pumped and breast milk he drank.</p>
+      <p class="fi-note">Each line is a smoothed average of the 7 days up to that date, so day-to-day noise doesn't hide the trend. If the purple line (pumped) sits above the green line (breast milk he drank), more is being pumped than he drinks. If orange (formula) rises while purple falls, formula is making up the difference. In the shaded early weeks he was also breastfed directly, which has no volume, so the bottle lines there undercount what he drank. Pumping only appears from the first logged pump.</p>
       <div class="fi-legend" id="supply-legend"></div>
       <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
     </div>
@@ -1242,8 +1243,7 @@ function drawAll() {
       series: [{ name: 'Breast milk pumped', color: PAL.plum, values: s('pump_ml') }, { name: 'Breast milk he drank', color: PAL.green, values: s('bm_ml') }, { name: 'Formula he drank', color: PAL.orange, values: s('formula_ml') }, { name: 'Total he drank', color: PAL.red, width: 3, values: s('total_ml') }],
       tipFmt: v => `${fmtInt(v)} ml`,
       tipTitle: v => `Daily average, 7 days to ${fmtDayLong(new Date(v))}`,
-      shades: bfDays.length ? [{ x0: pday(daily[0].day), x1: pday(bfDays[bfDays.length - 1].day), label: 'Also breastfed directly' }] : [],
-      tipExtra: xs => { const d = r.find(q => +pday(q.day) === xs); if (!d || d.pump_ml == null || d.bm_ml == null) return []; const g = d.pump_ml - d.bm_ml; return [{ name: g >= 0 ? 'Pumped more than he drank by' : 'He drank more than was pumped by', value: `${fmtInt(Math.abs(g))} ml a day` }]; }
+      shades: bfDays.length ? [{ x0: pday(daily[0].day), x1: pday(bfDays[bfDays.length - 1].day), label: 'Also breastfed directly' }] : []
     });
   }
 

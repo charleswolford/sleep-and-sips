@@ -68,6 +68,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 
 
 
+
 .fi { --fi-green: #4f9a2a; --fi-yellow: #e2a400; --fi-red: #d9432b; --fi-plum: #7d3c98; --fi-blue: #2b7bbf; --fi-orange: #ea7a17; --fi-pink: #d24f86;
   --fi-paper: color-mix(in srgb, var(--color-panel) 90%, #f2c14e);
   font-family: var(--font-anthropic-sans); color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
@@ -256,7 +257,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <p class="fi-intro">Odsává se dost mateřského mléka na to, co vypije, a kolik zbytku tvoří umělé mléko? Pro čtení grafů níže: týdny začínají pondělím a jsou označené datem toho pondělí a neúplné dny (den narození a den exportu) jsou vynechané.</p>
     <div class="fi-card" style="--sec: var(--fi-plum)">
       <h3 class="fi-h3" id="supply-title">Odsáté a vypité mléko, ml denně</h3>
-      <p class="fi-note">Každá čára je průměr 7 dní do daného data, aby denní výkyvy nezakryly trend. Když je fialová čára (odsáté) nad zelenou (vypité mateřské mléko), odsává se víc, než vypije. Když oranžová (umělé mléko) roste a fialová klesá, rozdíl dorovnává umělé mléko. V podbarvených prvních týdnech byl také kojen přímo, což nemá objem, takže čáry z lahví tam ukazují méně, než skutečně vypil. Odsávání se zobrazuje až od prvního zaznamenaného odsátí. Klepnutím na den uvidíte rozdíl mezi odsátým a vypitým mateřským mlékem.</p>
+      <p class="fi-note">Každá čára je průměr 7 dní do daného data, aby denní výkyvy nezakryly trend. Když je fialová čára (odsáté) nad zelenou (vypité mateřské mléko), odsává se víc, než vypije. Když oranžová (umělé mléko) roste a fialová klesá, rozdíl dorovnává umělé mléko. V podbarvených prvních týdnech byl také kojen přímo, což nemá objem, takže čáry z lahví tam ukazují méně, než skutečně vypil. Odsávání se zobrazuje až od prvního zaznamenaného odsátí.</p>
       <div class="fi-legend" id="supply-legend"></div>
       <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
     </div>
@@ -1249,8 +1250,7 @@ function drawAll() {
       series: [{ name: 'Odsáté mateřské mléko', color: PAL.plum, values: s('pump_ml') }, { name: 'Vypité mateřské mléko', color: PAL.green, values: s('bm_ml') }, { name: 'Vypité umělé mléko', color: PAL.orange, values: s('formula_ml') }, { name: 'Celkem vypito', color: PAL.red, width: 3, values: s('total_ml') }],
       tipFmt: v => `${fmtInt(v)} ml`,
       tipTitle: v => `Denní průměr, 7 dní do ${fmtDayLong(new Date(v))}`,
-      shades: bfDays.length ? [{ x0: pday(daily[0].day), x1: pday(bfDays[bfDays.length - 1].day), label: 'Také kojen přímo' }] : [],
-      tipExtra: xs => { const d = r.find(q => +pday(q.day) === xs); if (!d || d.pump_ml == null || d.bm_ml == null) return []; const g = d.pump_ml - d.bm_ml; return [{ name: g >= 0 ? 'Odsáto víc, než vypil, o' : 'Vypil víc, než se odsálo, o', value: `${fmtInt(Math.abs(g))} ml denně` }]; }
+      shades: bfDays.length ? [{ x0: pday(daily[0].day), x1: pday(bfDays[bfDays.length - 1].day), label: 'Také kojen přímo' }] : []
     });
   }
 
