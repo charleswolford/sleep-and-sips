@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Sleep and Sips</title>
-<script>try { if (localStorage.getItem("sas-lang") === "cs" && !/cs\.html$/.test(location.pathname)) location.replace("cs.html"); } catch (e) {}</script>
+<script>try { localStorage.removeItem("sas-lang"); } catch (e) {}</script>
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
@@ -51,7 +51,6 @@ html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); fon
 .err { color: var(--color-bad); font-weight: 600; }
 .bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-sm) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-bottom: var(--cds-gap-lg); }
 .bar .grow { flex: 1 1 auto; }
-.lang-row { align-self: flex-end; font-size: var(--cds-font-size-caption); }
 .plain { font: inherit; background: none; border: 0; color: var(--color-fg-muted); text-decoration: underline; cursor: pointer; padding: 0; }
 .drop-hint { border: 2px dashed transparent; border-radius: 18px; }
 body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-radius: 18px; }
@@ -143,7 +142,6 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 <body>
 <main class="page">
   <div class="landing" id="landing">
-    <div class="lang-row"><a class="plain lang-link" href="cs.html" data-lang="cs" lang="cs">Česky</a></div>
     <div class="pip-slot pip-hero" data-pip="hero"></div>
     <h1 class="fi-title">Sleep and Sips</h1>
     <p>Load the latest export from Nara Baby to see the baby's charts. The file is read on this device only. Nothing is uploaded or sent anywhere.</p>
@@ -155,7 +153,6 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <span class="grow" id="asof"></span>
     <label class="load small">Load newer export<input type="file" accept=".csv,text/csv,text/comma-separated-values"></label>
     <button class="plain" id="clear" type="button">Forget data on this device</button>
-    <a class="plain lang-link" href="cs.html" data-lang="cs" lang="cs">Česky</a>
   </div>
 
   <div class="fi" id="dashboard" hidden>
@@ -253,11 +250,11 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
   </section>
 
   <section class="fi-sec" id="milk" style="--sec: var(--fi-plum)">
-    <div class="fi-h2-row"><h2 class="fi-h2">Milk supply and demand</h2><div class="pip-slot pip-sm" data-pip="bottle"></div></div>
-    <p class="fi-intro">Is enough breast milk being pumped to cover what <span data-named="{name}">the baby</span> drinks, and how much of the rest is formula? A few things that help when reading the charts below: weeks start on a Monday and are labelled with that Monday's date, and partial days (the day he was born and the day of the export) are left out.</p>
+    <div class="fi-h2-row"><h2 class="fi-h2">Breast milk and formula</h2><div class="pip-slot pip-sm" data-pip="bottle"></div></div>
+    <p class="fi-intro">How much of what <span data-named="{name}">the baby</span> drinks is breast milk and how much is formula, and how that mix changes over time. A few things that help when reading the charts below: weeks start on a Monday and are labelled with that Monday's date, and partial days (the day he was born and the day of the export) are left out.</p>
     <div class="fi-card" style="--sec: var(--fi-plum)">
       <h3 class="fi-h3" id="supply-title">Milk pumped and milk he drank, ml per day</h3>
-      <p class="fi-note">Each line is a smoothed average of the 7 days up to that date, so day-to-day noise doesn't hide the trend. If the purple line (pumped) sits above the green line (breast milk he drank), more is being pumped than he drinks. If orange (formula) rises while purple falls, formula is making up the difference. In the shaded early weeks he was also breastfed directly, which has no volume, so the bottle lines there undercount what he drank. Pumping only appears from the first logged pump.</p>
+      <p class="fi-note">Each line is a smoothed average of the 7 days up to that date, so day-to-day noise doesn't hide the trend. Purple (pumped) and green (breast milk he drank) run close together because he drinks everything that is pumped. Orange (formula) is what tops him up to his total, the red line. In the shaded early weeks he was also breastfed directly, which has no volume, so the bottle lines there undercount what he drank. Pumping only appears from the first logged pump.</p>
       <div class="fi-legend" id="supply-legend"></div>
       <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
     </div>
@@ -1592,7 +1589,6 @@ document.querySelectorAll('[data-pip]').forEach(el => { el.innerHTML = pipSVG(el
     r.readAsText(file);
   }
   document.querySelectorAll('input[type=file]').forEach(inp => inp.addEventListener('change', () => { readFile(inp.files[0]); inp.value = ''; }));
-  document.querySelectorAll('.lang-link').forEach(a => a.addEventListener('click', () => { try { localStorage.setItem('sas-lang', a.dataset.lang); } catch (e) {} }));
   document.getElementById('clear').addEventListener('click', () => {
     try { localStorage.removeItem(KEY); } catch (e) {}
     READY = false; window.BABY_NAME = null; applyName(); landing.hidden = false; dashEl.hidden = true; bar.hidden = true; window.scrollTo(0, 0);
