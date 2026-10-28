@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Sleep and Sips</title>
-<script>try { localStorage.removeItem("sas-lang"); } catch (e) {}</script>
+<script>try { localStorage.removeItem("sas-lang"); var t = localStorage.getItem("sas-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
@@ -22,10 +22,15 @@
   --cds-pad-xs: .25rem; --cds-pad-sm: .5rem; --cds-pad-md: .875rem; --cds-pad-lg: 1.25rem;
   --cds-radius: 10px; --cds-chart-grid: rgba(43,38,32,.08); --cds-chart-axis: rgba(43,38,32,.28); --cds-chart-muted: #9b917f; --cds-chart-reference: rgba(43,38,32,.4); --cds-chart-status-critical: #d9432b;
   --cds-surface-popover: #fffdf7; --cds-border: #e6dcc6; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.14); --cds-text-secondary: #6f665a; --cds-dur-slow: .3s; }
-@media (prefers-color-scheme: dark) { :root {
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --color-bg: #16140f; --color-panel: #24211a; --color-fg: #f3ede0; --color-fg-muted: #a9a08f; --color-border-line: #3a352a;
   --cds-chart-grid: rgba(255,255,255,.08); --cds-chart-axis: rgba(255,255,255,.28); --cds-chart-reference: rgba(255,255,255,.4);
   --cds-surface-popover: #2c2820; --cds-border: #3a352a; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.5); --cds-text-secondary: #a9a08f; } }
+:root[data-theme="dark"] { color-scheme: dark;
+  --color-bg: #16140f; --color-panel: #24211a; --color-fg: #f3ede0; --color-fg-muted: #a9a08f; --color-border-line: #3a352a;
+  --cds-chart-grid: rgba(255,255,255,.08); --cds-chart-axis: rgba(255,255,255,.28); --cds-chart-reference: rgba(255,255,255,.4);
+  --cds-surface-popover: #2c2820; --cds-border: #3a352a; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.5); --cds-text-secondary: #a9a08f; }
+:root[data-theme="light"] { color-scheme: light; }
 html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); -webkit-text-size-adjust: 100%; }
 .page { max-width: 1100px; margin: 0 auto; padding: 20px 16px 48px; }
 [hidden] { display: none !important; }
@@ -51,6 +56,13 @@ html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); fon
 .err { color: var(--color-bad); font-weight: 600; }
 .bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-sm) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-bottom: var(--cds-gap-lg); }
 .bar .grow { flex: 1 1 auto; }
+.theme-row { align-self: flex-end; }
+.theme-tog { position: relative; display: inline-flex; align-items: center; gap: 2px; padding: 3px; border-radius: 999px; border: 1px solid var(--color-border-line); background: var(--color-panel); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.theme-tog::before { content: ''; position: absolute; top: 3px; left: 3px; width: 34px; height: 34px; border-radius: 50%; background: var(--color-bg); box-shadow: inset 0 0 0 1px var(--color-border-line); transition: transform .25s ease; }
+:root.is-dark .theme-tog::before { transform: translateX(36px); }
+.theme-ic { position: relative; width: 34px; height: 34px; display: block; transition: opacity .25s, filter .25s, transform .25s; }
+.theme-ic svg { width: 100%; height: 100%; display: block; overflow: visible; }
+:root:not(.is-dark) .theme-moon, :root.is-dark .theme-sun { opacity: .55; filter: saturate(.5); transform: scale(.82); }
 .plain { font: inherit; background: none; border: 0; color: var(--color-fg-muted); text-decoration: underline; cursor: pointer; padding: 0; }
 .drop-hint { border: 2px dashed transparent; border-radius: 18px; }
 body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-radius: 18px; }
@@ -92,6 +104,12 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 .fi-card { background: var(--fi-paper); border: 1px solid var(--color-border-line); border-radius: 18px; padding: var(--cds-pad-lg); box-shadow: inset 0 6px 0 var(--sec); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
 .fi-h3 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
 .fi-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.45; }
+.fi-more { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.fi-more > .fi-note { margin-top: var(--cds-gap-xs); }
+.fi-more > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: .5em; padding: 2px 0; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+.fi-more > summary::-webkit-details-marker { display: none; }
+.fi-more > summary::before { content: ''; width: .42em; height: .42em; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); transition: transform .15s; margin-left: 2px; }
+.fi-more[open] > summary::before { transform: rotate(45deg); }
 .fi-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
 .fi-key { display: inline-flex; align-items: center; gap: .4em; }
 .fi-sw { display: inline-block; width: .8em; height: .8em; border-radius: 50%; flex: none; }
@@ -103,6 +121,8 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 .fi-datenav { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
 .fi-datenav[hidden] { display: none; }
 .fi-navbtn { font: inherit; font-size: 1.25rem; line-height: 1; width: 2.25rem; height: 2.25rem; border-radius: 999px; border: 1px solid var(--color-border-line); background: transparent; color: var(--color-fg); cursor: pointer; }
+.fi-range { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-xs) var(--cds-gap-sm); }
+.fi-rlabel { display: inline-flex; align-items: center; gap: .4em; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
 .fi-date { font: inherit; font-size: var(--cds-font-size-body); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-radius: 10px; border: 1px solid var(--color-border-line); background: var(--color-panel); color: var(--color-fg); min-height: 2.25rem; }
 .fi-mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--cds-gap-lg) var(--cds-gap-md); }
 .fi-mini { display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
@@ -142,6 +162,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 <body>
 <main class="page">
   <div class="landing" id="landing">
+    <div class="theme-row"><button class="theme-tog" type="button" data-theme-tog aria-label="Switch between light and dark"><span class="theme-ic theme-sun" data-ic="sun"></span><span class="theme-ic theme-moon" data-ic="moon"></span></button></div>
     <div class="pip-slot pip-hero" data-pip="hero"></div>
     <h1 class="fi-title">Sleep and Sips</h1>
     <p>Load the latest export from Nara Baby to see the baby's charts. The file is read on this device only. Nothing is uploaded or sent anywhere.</p>
@@ -153,6 +174,7 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <span class="grow" id="asof"></span>
     <label class="load small">Load newer export<input type="file" accept=".csv,text/csv,text/comma-separated-values"></label>
     <button class="plain" id="clear" type="button">Forget data on this device</button>
+    <button class="theme-tog" type="button" data-theme-tog aria-label="Switch between light and dark"><span class="theme-ic theme-sun" data-ic="sun"></span><span class="theme-ic theme-moon" data-ic="moon"></span></button>
   </div>
 
   <div class="fi" id="dashboard" hidden>
@@ -254,13 +276,19 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <p class="fi-intro">How much of what <span data-named="{name}">the baby</span> drinks is breast milk and how much is formula, and how that mix changes over time. A few things that help when reading the charts below: weeks start on a Monday and are labelled with that Monday's date, and partial days (the day he was born and the day of the export) are left out.</p>
     <div class="fi-card" style="--sec: var(--fi-plum)">
       <h3 class="fi-h3" id="supply-title">Milk pumped and milk he drank, ml per day</h3>
-      <p class="fi-note">Each line is a smoothed average of the 7 days up to that date, so day-to-day noise doesn't hide the trend. Purple (pumped) and green (breast milk he drank) run close together because he drinks everything that is pumped. Orange (formula) is what tops him up to his total, the red line. In the shaded early weeks he was also breastfed directly, which has no volume, so the bottle lines there undercount what he drank. Pumping only appears from the first logged pump.</p>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">Each line is a smoothed average of the 7 days up to that date, so day-to-day noise doesn't hide the trend. Purple (pumped) and green (breast milk he drank) run close together because he drinks everything that is pumped. Orange (formula) is what tops him up to his total, the red line. In the shaded early weeks he was also breastfed directly, which has no volume, so the bottle lines there undercount what he drank. Pumping only appears from the first logged pump.</p>
+      </details>
       <div class="fi-legend" id="supply-legend"></div>
       <div class="fi-chart dash-skeleton" id="supply" data-source="rolling daily"></div>
     </div>
     <div class="fi-card" style="--sec: var(--fi-plum)">
       <h3 class="fi-h3" id="pumptime-title">Time spent pumping and milk pumped, per day</h3>
-      <p class="fi-note">Columns show the average minutes spent pumping each day, week by week (left scale). The light grey columns show the average minutes of direct breastfeeding each day in those weeks (also left scale). The line shows the average breast milk pumped each day, in ml (right scale). Time comes from the duration logged for each session, so it doesn't include setting up, washing, or sterilising. Tap a week to see sessions per day and the typical session length.</p>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">Columns show the average minutes spent pumping each day, week by week (left scale). The light grey columns show the average minutes of direct breastfeeding each day in those weeks (also left scale). The line shows the average breast milk pumped each day, in ml (right scale). Time comes from the duration logged for each session, so it doesn't include setting up, washing, or sterilising. Tap a week to see sessions per day and the typical session length.</p>
+      </details>
       <div class="fi-legend" id="pumptime-legend"></div>
       <div class="fi-chart dash-skeleton" id="pumptime" data-source="pumping"></div>
     </div>
@@ -271,8 +299,11 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <p class="fi-intro">Every day so far on one chart, so you can watch his routine take shape.</p>
     <div class="fi-card" style="--sec: var(--fi-blue)">
       <h3 class="fi-h3" id="rhythm-title">Sleep and feeds, one row per day</h3>
-      <p class="fi-note">Each thin row is one day, with the oldest at the top and the newest at the bottom. Read each row left to right across the 24 hours shown along the top. Blue bands are sleep, orange marks are bottles, and pink marks are breastfeeds. A red mark at the left edge means that day's sleep log looks incomplete. Sleep was not logged in the first weeks, so the top rows show feeds only. Tap, or slide your finger along a row, to see details.</p>
-      <p class="fi-note">"Noon to noon" starts each row at midday, so a whole night sits in the middle of one row instead of being split across two. Over time you should see the blue night bands get longer and more solid.</p>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">Each thin row is one day, with the oldest at the top and the newest at the bottom. Read each row left to right across the 24 hours shown along the top. Blue bands are sleep, orange marks are bottles, and pink marks are breastfeeds. A red mark at the left edge means that day's sleep log looks incomplete. Sleep was not logged in the first weeks, so the top rows show feeds only. Tap, or slide your finger along a row, to see details.</p>
+        <p class="fi-note">"Noon to noon" starts each row at midday, so a whole night sits in the middle of one row instead of being split across two. Over time you should see the blue night bands get longer and more solid.</p>
+      </details>
       <div class="fi-seg" role="group" aria-label="Where each row starts">
         <button class="fi-btn" type="button" data-mode="noon" aria-pressed="true">Noon to noon</button>
         <button class="fi-btn" type="button" data-mode="midnight" aria-pressed="false">Midnight to midnight</button>
@@ -305,7 +336,10 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <p class="fi-intro">Partial days (the day he was born and the day of the export) are left out of these charts. The Data quality section at the bottom lists those days.</p>
     <div class="fi-card" style="--sec: var(--fi-blue)">
       <h3 class="fi-h3" id="longest-title">Longest single sleep each day, hours</h3>
-      <p class="fi-note">Each faint dot is one day's longest unbroken sleep. The solid line is the average of the 7 days up to that date. A rising line means longer stretches. The smaller chart underneath shows total sleep across the whole day, which changes much more slowly.</p>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">Each faint dot is one day's longest unbroken sleep. The solid line is the average of the 7 days up to that date. A rising line means longer stretches. The smaller chart underneath shows total sleep across the whole day, which changes much more slowly.</p>
+      </details>
       <div class="fi-legend" id="longest-legend"></div>
       <div class="fi-chart dash-skeleton" id="longest" data-source="rolling daily"></div>
       <div class="fi-mini-h" id="total-title">Total sleep in the day, hours</div>
@@ -313,7 +347,10 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     </div>
     <div class="fi-card" style="--sec: var(--fi-yellow)">
       <h3 class="fi-h3" id="wake-title">Time awake between sleeps, minutes</h3>
-      <p class="fi-note">Often called wake windows: how long he stays awake from waking up to falling asleep again. There is one small chart for each part of the day, all on the same scale so you can compare them. Each point is the typical (median) time awake that week. The night chart shows how long he was up during night wakings. A break in a line is a week without enough complete sleep logs. Gaps over 5 hours are treated as missed logs and left out.</p>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">Often called wake windows: how long he stays awake from waking up to falling asleep again. There is one small chart for each part of the day, all on the same scale so you can compare them. Each point is the typical (median) time awake that week. The night chart shows how long he was up during night wakings. A break in a line is a week without enough complete sleep logs. Gaps over 5 hours are treated as missed logs and left out.</p>
+      </details>
       <div class="fi-chart dash-skeleton" id="wake" data-source="wake"></div>
     </div>
   </section>
@@ -323,17 +360,47 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <div class="fi-grid2">
       <div class="fi-card" style="--sec: var(--fi-red)">
         <h3 class="fi-h3" id="perkg-title">Milk for his size: ml per kg of body weight per day</h3>
-        <p class="fi-note">His daily milk total divided by his weight, averaged for each week. Bigger babies drink more, so this gives a fairer comparison over time than raw ml. Weight between weigh-ins is estimated on a straight line between them, and the chart stops at the latest weigh-in. Faded bars are weeks with direct breastfeeds, which have no volume, so they read too low.</p>
+        <details class="fi-more">
+          <summary>How to read this</summary>
+          <p class="fi-note">His daily milk total divided by his weight, averaged for each week. Bigger babies drink more, so this gives a fairer comparison over time than raw ml. Weight between weigh-ins is estimated on a straight line between them, and the chart stops at the latest weigh-in. Faded bars are weeks with direct breastfeeds, which have no volume, so they read too low.</p>
+        </details>
         <div class="fi-legend" id="perkg-legend"></div>
         <div class="fi-chart dash-skeleton" id="perkg" data-source="intake"></div>
         <p class="fi-note" id="perkg-stale"></p>
       </div>
       <div class="fi-card" style="--sec: var(--fi-orange)">
         <h3 class="fi-h3" id="mix-title">How feeding has changed since birth</h3>
-        <p class="fi-note">One bar per week. Each bar adds up to 100% of that week's feeds, split by type. Tap or hover a bar to see the number of feeds per day.</p>
+        <details class="fi-more">
+          <summary>How to read this</summary>
+          <p class="fi-note">One bar per week. Each bar adds up to 100% of that week's feeds, split by type. Tap or hover a bar to see the number of feeds per day. Change the dates to look at a shorter period.</p>
+        </details>
+        <div class="fi-range">
+          <label class="fi-rlabel">From <input class="fi-date" type="date" id="mix-from"></label>
+          <label class="fi-rlabel">To <input class="fi-date" type="date" id="mix-to"></label>
+        </div>
         <div class="fi-legend" id="mix-legend"></div>
         <div class="fi-chart dash-skeleton" id="mix" data-source="feedmix"></div>
       </div>
+    </div>
+  </section>
+
+  <section class="fi-sec" id="nappies" style="--sec: var(--fi-yellow)">
+    <h2 class="fi-h2">Nappies</h2>
+    <div class="fi-card" style="--sec: var(--fi-yellow)">
+      <h3 class="fi-h3" id="nappy-title">Nappies per day</h3>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">Each block is one nappy, and the dashed line is the average per day. It starts on the last 14 days; change the dates or use the arrows to look at another period. A wet and dirty nappy counts towards both the wet and the dirty average. The day he was born and the day of the export are only partly logged, so they are faded and left out of the averages.</p>
+      </details>
+      <div class="fi-range">
+        <button class="fi-navbtn" type="button" id="nappy-prev" aria-label="Earlier">&#8249;</button>
+        <label class="fi-rlabel">From <input class="fi-date" type="date" id="nappy-from"></label>
+        <label class="fi-rlabel">To <input class="fi-date" type="date" id="nappy-to"></label>
+        <button class="fi-navbtn" type="button" id="nappy-next" aria-label="Later">&#8250;</button>
+      </div>
+      <div class="fi-stat" id="nappy-stat" data-source="nappies"></div>
+      <div class="fi-legend" id="nappy-legend"></div>
+      <div class="fi-chart dash-skeleton" id="nappy" data-source="nappies"></div>
     </div>
   </section>
 
@@ -341,7 +408,10 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <div class="fi-h2-row"><h2 class="fi-h2">Growth</h2><div class="pip-slot pip-sm" data-pip="tape"></div></div>
     <div class="fi-card" style="--sec: var(--fi-red)">
       <h3 class="fi-h3" id="weight-title">Weight by age, compared with the WHO growth standard for boys</h3>
-      <p class="fi-note">The red line is <span data-named="{name}'s">the baby's</span> weigh-ins; the bottom axis is his age in weeks. The green bands show the usual range of weights for healthy boys of the same age. The dashed line is the middle (50th centile). The darkest band holds the middle half of boys (25th to 75th centile), the next band the 10th to 90th, and the palest the 3rd to 97th. A centile of 25, for example, means about 25 in 100 boys of the same age weigh less. Following a band over time matters more than any single weigh-in, and your health visitor is the right person to interpret it.</p>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">The red line is <span data-named="{name}'s">the baby's</span> weigh-ins; the bottom axis is his age in weeks. The green bands show the usual range of weights for healthy boys of the same age. The dashed line is the middle (50th centile). The darkest band holds the middle half of boys (25th to 75th centile), the next band the 10th to 90th, and the palest the 3rd to 97th. A centile of 25, for example, means about 25 in 100 boys of the same age weigh less. Following a band over time matters more than any single weigh-in, and your health visitor is the right person to interpret it.</p>
+      </details>
       <div class="fi-legend" id="weight-legend"></div>
       <div class="fi-chart dash-skeleton" id="weight" data-source="who weight profile"></div>
       <div class="fi-tablebox">
@@ -358,14 +428,20 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <p class="fi-intro">When the work happens through the day and night, from the last 28 days of logs. These charts go by who logged each entry, which isn't always who did the care, so use them as a starting point for working out who covers what, not as a scorecard.</p>
     <div class="fi-card" style="--sec: var(--fi-green)">
       <h3 class="fi-h3" id="busy-title">Busiest hours of the day</h3>
-      <p class="fi-note">Average number of feeds, nappy changes, and pump sessions in each hour, per day. The tallest bars are when an extra pair of hands makes the most difference. Tap a bar to see how many times each happened in that hour over the last 28 days.</p>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">Average number of feeds, nappy changes, and pump sessions in each hour, per day. The tallest bars are when an extra pair of hands makes the most difference. Tap a bar to see how many times each happened in that hour over the last 28 days.</p>
+      </details>
       <p class="fi-callout" id="busy-callout">Busiest hours: <b><span data-source="busiest" data-where="rank=1" data-field="hour" class="dash-skeleton">-</span></b>, <b><span data-source="busiest" data-where="rank=2" data-field="hour" class="dash-skeleton">-</span></b>, and <b><span data-source="busiest" data-where="rank=3" data-field="hour" class="dash-skeleton">-</span></b></p>
       <div class="fi-legend" id="busy-legend"></div>
       <div class="fi-chart dash-skeleton" id="busy" data-source="load_hours"></div>
     </div>
     <div class="fi-card" style="--sec: var(--fi-blue)">
       <h3 class="fi-h3" id="nights-title">Night feeds each week (22:00 to 06:00)</h3>
-      <p class="fi-note">The total number of night feeds each week, split by who logged them. Faded bars are partial weeks, such as the current one, so they read lower. Tap a week to see the counts, including night pump sessions, which add to whoever is pumping's night.</p>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">The total number of night feeds each week, split by who logged them. Faded bars are partial weeks, such as the current one, so they read lower. Tap a week to see the counts, including night pump sessions, which add to whoever is pumping's night.</p>
+      </details>
       <div class="fi-legend" id="nights-legend"></div>
       <div class="fi-chart dash-skeleton" id="nights" data-source="nights"></div>
     </div>
@@ -375,7 +451,10 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
     <div class="fi-h2-row"><h2 class="fi-h2">Data quality</h2><div class="pip-slot pip-sm" data-pip="magnify"></div></div>
     <div class="fi-card" style="--sec: var(--fi-yellow)">
       <h3 class="fi-h3" id="quality-title">Days left out of the sleep charts</h3>
-      <p class="fi-note">Partial days and days before sleep logging started. The milk charts still use every full day.</p>
+      <details class="fi-more">
+        <summary>How to read this</summary>
+        <p class="fi-note">Partial days and days before sleep logging started. The milk charts still use every full day.</p>
+      </details>
       <div class="fi-tablebox">
         <table class="fi-table" id="quality-table" data-source="quality" data-row-key="day">
           <thead><tr><th data-field="day">Day</th><th data-field="issue">Reason</th><th data-field="sleep_logged_h" class="fi-num">Sleep logged (hours)</th><th data-field="sleeps" class="fi-num">Sleeps logged</th></tr></thead>
@@ -797,6 +876,22 @@ dash.calc('pumping', {
       avg_session_min: w.timed ? Math.round(w.minutes / w.timed) : null,
       bf_min_per_day: Math.round(w.bf_min / w.days)
     }));
+  }
+});
+
+dash.calc('nappies', {
+  title: 'Nappies per day',
+  description: 'One row per day from birth to the export: wet, dirty, wet and dirty, and dry nappies. The birth day and the export day are partial.',
+  inputs: ['events', 'daily'],
+  fn: (events, daily) => {
+    const by = {};
+    daily.forEach(d => { by[d.day] = { day: d.day, wet: 0, dirty: 0, both: 0, dry: 0, total: 0, partial: !!d.partial }; });
+    events.filter(e => e.type === 'Diaper').forEach(e => {
+      const r = by[e.day]; if (!r) return;
+      const k = /Wet/.test(e.diaper_kind) && /Dirty/.test(e.diaper_kind) ? 'both' : /Dirty/.test(e.diaper_kind) ? 'dirty' : /Dry/.test(e.diaper_kind) ? 'dry' : 'wet';
+      r[k] += 1; r.total += 1;
+    });
+    return daily.map(d => by[d.day]);
   }
 });
 </script>
@@ -1325,19 +1420,10 @@ function drawAll() {
   }
 
   // 5. Feed mix
-  const modes = [['Breastfeed', PAL.pink, 'Breastfed directly'], ['Bottle: breast milk', PAL.green, 'Breast milk'], ['Bottle: formula', PAL.orange, 'Formula']];
-  legend('mix-legend', modes.map(([n, c, label]) => ({ name: label, color: c })));
-  const mx = document.getElementById('mix');
-  if (setState(mx, ['feedmix'])) {
-    const r = rowsOf('feedmix');
-    const weeks = [...new Set(r.map(d => d.week))].sort();
-    const data = weeks.map(w => { const o = { x: w }; modes.forEach(([m], i) => { const d = r.find(q => q.week === w && q.mode === m); o['k' + i] = d ? d.share_pct : 0; o['p' + i] = d ? d.per_day : 0; }); return o; });
-    stackBars(mx, {
-      data, keys: modes.map(([n, c], i) => ({ key: 'k' + i, name: n, color: c })), yMax: 100, height: 190, yFmt: v => `${v}%`, xFmt: weekLabel,
-      tipTitle: d => `Week of ${weekLabel(d.x)}`,
-      tipLines: d => modes.map(([n, c, label], i) => ({ color: c, name: label, value: `${d['k' + i]}% (${fmt1(d['p' + i])} a day)`, show: d['p' + i] > 0 })).filter(l => l.show)
-    });
-  }
+  drawMix();
+
+  // Nappies
+  drawNappies();
 
   // 6. Intake per kg
   legend('perkg-legend', [{ name: 'Bottle-fed only', color: PAL.red }, { name: 'Also breastfed (reads too low)', color: PAL.red, opacity: 0.35 }]);
@@ -1485,6 +1571,145 @@ const rhythmStep = n => { if (!rhythmDate) return; rhythmDate = new Date(Date.pa
 const rdi = document.getElementById('rhythm-date');
 if (rdi) rdi.addEventListener('change', () => { if (rdi.value) { rhythmDate = rdi.value; drawRhythm(); } });
 
+// Feed mix, with a date range
+let mixFrom = null, mixTo = null;
+function drawMix() {
+  const modes = [['Breastfeed', PAL.pink, 'Breastfed directly'], ['Bottle: breast milk', PAL.green, 'Breast milk'], ['Bottle: formula', PAL.orange, 'Formula']];
+  legend('mix-legend', modes.map(([n, c, label]) => ({ name: label, color: c })));
+  const mx = document.getElementById('mix');
+  if (!mx || !setState(mx, ['feedmix', 'daily'])) return;
+  const daily = rowsOf('daily');
+  const f = document.getElementById('mix-from'), t = document.getElementById('mix-to');
+  if (daily.length) {
+    const lo = daily[0].day, hi = daily[daily.length - 1].day;
+    if (!mixFrom || mixFrom < lo || mixFrom > hi) mixFrom = lo;
+    if (!mixTo || mixTo < lo || mixTo > hi) mixTo = hi;
+    if (mixFrom > mixTo) [mixFrom, mixTo] = [mixTo, mixFrom];
+    [f, t].forEach(i => { if (i) { i.min = lo; i.max = hi; } });
+    if (f) f.value = mixFrom; if (t) t.value = mixTo;
+  }
+  const wk = s => { const ms = Date.parse(s); return new Date(ms - ((new Date(ms).getUTCDay() + 6) % 7) * DAY).toISOString().slice(0, 10); };
+  const r = rowsOf('feedmix');
+  const weeks = [...new Set(r.map(d => d.week))].sort().filter(w => !mixFrom || (w >= wk(mixFrom) && w <= mixTo));
+  const data = weeks.map(w => { const o = { x: w }; modes.forEach(([m], i) => { const d = r.find(q => q.week === w && q.mode === m); o['k' + i] = d ? d.share_pct : 0; o['p' + i] = d ? d.per_day : 0; }); return o; });
+  stackBars(mx, {
+    data, keys: modes.map(([n, c], i) => ({ key: 'k' + i, name: n, color: c })), yMax: 100, height: 190, yFmt: v => `${v}%`, xFmt: weekLabel,
+    emptyText: 'No full weeks between these dates',
+    tipTitle: d => `Week of ${weekLabel(d.x)}`,
+    tipLines: d => modes.map(([n, c, label], i) => ({ color: c, name: label, value: `${d['k' + i]}% (${fmt1(d['p' + i])} a day)`, show: d['p' + i] > 0 })).filter(l => l.show)
+  });
+}
+['mix-from', 'mix-to'].forEach(id => {
+  const i = document.getElementById(id);
+  if (i) i.addEventListener('change', () => { if (!i.value) return; if (id === 'mix-from') mixFrom = i.value; else mixTo = i.value; drawMix(); });
+});
+
+// Nappies, one block per nappy
+const NAP = { wet: '#e9c46a', dirty: '#9c6b16', dry: '#c9c2b6' };
+let napFrom = null, napTo = null;
+const addDays = (s, n) => new Date(Date.parse(s) + n * DAY).toISOString().slice(0, 10);
+function nappyChart(box, rows, avg) {
+  box.replaceChildren();
+  if (!rows.length) { emptyMsg(box, 'No days between these dates'); return; }
+  const W = Math.max(260, box.clientWidth), H = 260;
+  const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('class', 'fi-svg');
+  const top = 12, bot = H - 24;
+  const yMax = Math.max(10, d3.max(rows, d => d.total) + 1);
+  const y = d3.scaleLinear([0, yMax], [bot, top]);
+  const ticks = Math.max(3, Math.floor((bot - top) / 48));
+  const grid = svg.append('g').attr('class', 'fi-gridl');
+  const ml = yAxisFit(svg, y, ticks, fmtInt);
+  grid.selectAll('line').data(y.ticks(ticks)).join('line').attr('x1', ml).attr('x2', W - 10).attr('y1', d => y(d)).attr('y2', d => y(d));
+  const x = d3.scaleBand(rows.map(d => d.day), [ml + 4, W - 10]).padding(rows.length > 40 ? 0.08 : 0.16);
+  const bw = Math.min(36, x.bandwidth()), off = (x.bandwidth() - bw) / 2;
+  const unit = y(0) - y(1), gap = unit > 6 ? (bw > 8 ? 1.5 : 1) : 0, rx = bw > 8 ? 2 : 0;
+  const g = svg.append('g');
+  rows.forEach(d => {
+    const x0 = x(d.day) + off, op = d.partial ? 0.35 : 1;
+    let i = 0;
+    const block = kind => {
+      const y0 = y(i + 1) + gap / 2, h = unit - gap;
+      if (kind === 'both') {
+        g.append('rect').attr('x', x0).attr('y', y0).attr('width', bw).attr('height', h).attr('rx', rx).attr('fill', NAP.wet).attr('opacity', op);
+        g.append('path').attr('d', `M${x0},${y0} h${bw} L${x0},${y0 + h} Z`).attr('fill', NAP.dirty).attr('opacity', op);
+      } else g.append('rect').attr('x', x0).attr('y', y0).attr('width', bw).attr('height', h).attr('rx', rx).attr('fill', NAP[kind]).attr('opacity', op);
+      i += 1;
+    };
+    for (let k = 0; k < d.wet; k++) block('wet');
+    for (let k = 0; k < d.both; k++) block('both');
+    for (let k = 0; k < d.dirty; k++) block('dirty');
+    for (let k = 0; k < d.dry; k++) block('dry');
+  });
+  if (avg != null) svg.append('line').attr('x1', ml).attr('x2', W - 10).attr('y1', y(avg)).attr('y2', y(avg))
+    .attr('stroke', 'var(--color-fg)').attr('stroke-width', 1.5).attr('stroke-dasharray', '5 4');
+  const fmtX = rows.length <= 10 ? (v => fmtWeekday(pday(v))) : (v => fmtDay(pday(v)));
+  xTicksFit(svg, x, bot, { values: rows.map(d => d.day), fmt: fmtX });
+  const hlr = svg.append('rect').attr('fill', 'none').attr('stroke', 'var(--color-fg-muted)').attr('stroke-width', 1).attr('rx', 3).style('display', 'none');
+  svg.append('g').selectAll('rect').data(rows).join('rect')
+    .attr('x', d => x(d.day)).attr('width', x.bandwidth()).attr('y', top).attr('height', bot - top).attr('fill', 'transparent')
+    .on('pointerdown pointermove', (ev, d) => {
+      hlr.style('display', null).attr('x', x(d.day) + off - 2).attr('width', bw + 4).attr('y', y(Math.max(d.total, 0.2)) - 2).attr('height', bot - y(Math.max(d.total, 0.2)) + 2);
+      const [bx, by] = d3.pointer(ev, box);
+      const lines = [{ color: NAP.wet, name: 'Wet', value: String(d.wet) }, { color: NAP.dirty, name: 'Dirty', value: String(d.dirty) }, { color: NAP.dirty, name: 'Wet and dirty', value: String(d.both) }, { color: NAP.dry, name: 'Dry', value: String(d.dry) }]
+        .filter(l => l.value !== '0').concat([{ name: 'Total', value: String(d.total) }]);
+      showTip(box, bx, by, fmtDayLong(pday(d.day)) + (d.partial ? ', partly logged' : ''), lines);
+    })
+    .on('pointerleave', (ev) => { if (ev.pointerType === 'touch') return; hlr.style('display', 'none'); hideTip(box); });
+}
+function drawNappies() {
+  legend('nappy-legend', [{ name: 'Wet', color: NAP.wet }, { name: 'Dirty', color: NAP.dirty }, { name: 'Dry', color: NAP.dry }, { name: 'Average per day', color: 'var(--color-fg)', line: 1 }]);
+  const box = document.getElementById('nappy'), stat = document.getElementById('nappy-stat');
+  if (!box || !setState(box, ['nappies'])) { if (stat) stat.replaceChildren(); return; }
+  const all = rowsOf('nappies');
+  if (!all.length) { nappyChart(box, [], null); return; }
+  const lo = all[0].day, hi = all[all.length - 1].day;
+  if (!napTo || napTo < lo || napTo > hi) napTo = hi;
+  if (!napFrom || napFrom < lo || napFrom > hi) napFrom = addDays(napTo, -13) < lo ? lo : addDays(napTo, -13);
+  if (napFrom > napTo) [napFrom, napTo] = [napTo, napFrom];
+  const f = document.getElementById('nappy-from'), t = document.getElementById('nappy-to');
+  [f, t].forEach(i => { if (i) { i.min = lo; i.max = hi; } });
+  if (f) f.value = napFrom; if (t) t.value = napTo;
+  const rows = all.filter(d => d.day >= napFrom && d.day <= napTo);
+  const full = rows.filter(d => !d.partial);
+  const mean = (rs, fn) => rs.length ? rs.reduce((s, d) => s + fn(d), 0) / rs.length : null;
+  const avg = mean(full, d => d.total), wet = mean(full, d => d.wet + d.both), dirty = mean(full, d => d.dirty + d.both);
+  nappyChart(box, rows, avg);
+  if (!stat) return;
+  stat.replaceChildren();
+  if (avg == null) { const p = document.createElement('span'); p.className = 'fi-sub'; p.textContent = 'No fully logged days between these dates.'; stat.append(p); return; }
+  const big = document.createElement('div'); big.className = 'fi-big';
+  const u = document.createElement('span'); u.className = 'fi-unit'; u.textContent = ' nappies a day on average';
+  big.append(fmt1(avg), u);
+  const sub = document.createElement('span'); sub.className = 'fi-sub';
+  sub.textContent = `Wet ${fmt1(wet)} a day, dirty ${fmt1(dirty)} a day, over ${full.length} fully logged ${full.length === 1 ? 'day' : 'days'}.`;
+  stat.append(big, sub);
+  const len = Math.round((Date.parse(napTo) - Date.parse(napFrom)) / DAY) + 1;
+  const pFrom = addDays(napFrom, -len), pTo = addDays(napFrom, -1);
+  const prev = all.filter(d => d.day >= pFrom && d.day <= pTo && !d.partial);
+  if (pFrom >= lo && prev.length) {
+    const diff = Math.round((avg - mean(prev, d => d.total)) * 10) / 10;
+    const c = document.createElement('span'); c.className = 'fi-sub';
+    c.textContent = diff === 0 ? `About the same as the ${len} days before.` : `${fmt1(Math.abs(diff))} ${diff > 0 ? 'more' : 'fewer'} a day than the ${len} days before.`;
+    stat.append(c);
+  }
+}
+const napShift = dir => {
+  if (!napFrom || dash.data('nappies').status !== 'ok') return;
+  const all = rowsOf('nappies'); if (!all.length) return;
+  const lo = all[0].day, hi = all[all.length - 1].day;
+  const len = Math.round((Date.parse(napTo) - Date.parse(napFrom)) / DAY) + 1;
+  let a = addDays(napFrom, dir * len), b = addDays(napTo, dir * len);
+  if (a < lo) { a = lo; b = addDays(lo, len - 1) > hi ? hi : addDays(lo, len - 1); }
+  if (b > hi) { b = hi; a = addDays(hi, -(len - 1)) < lo ? lo : addDays(hi, -(len - 1)); }
+  napFrom = a; napTo = b; drawNappies();
+};
+(document.getElementById('nappy-prev') || {}).onclick = () => napShift(-1);
+(document.getElementById('nappy-next') || {}).onclick = () => napShift(1);
+['nappy-from', 'nappy-to'].forEach(id => {
+  const i = document.getElementById(id);
+  if (i) i.addEventListener('change', () => { if (!i.value) return; if (id === 'nappy-from') napFrom = i.value; else napTo = i.value; drawNappies(); });
+});
+
 dash.onData(drawAll);
 </script>
 <script>function pipSVG(kind) {
@@ -1601,6 +1826,73 @@ document.querySelectorAll('[data-pip]').forEach(el => { el.innerHTML = pipSVG(el
   let saved = null;
   try { saved = localStorage.getItem(KEY); } catch (e) {}
   if (saved) load(saved, false);
+})();
+</script>
+<script>
+(function () {
+  var n = 0;
+  function paper(id, seed) {
+    return '<filter id="' + id + '" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">'
+      + '<feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" seed="' + seed + '" result="n"/>'
+      + '<feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d"/>'
+      + '<feTurbulence type="fractalNoise" baseFrequency="0.06 0.75" numOctaves="3" seed="' + (seed + 4) + '" result="s"/>'
+      + '<feColorMatrix in="s" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 1.25" result="sa"/>'
+      + '<feComposite in="sa" in2="d" operator="in" result="dk"/>'
+      + '<feComponentTransfer in="dk" result="dk2"><feFuncA type="linear" slope="0.3"/></feComponentTransfer>'
+      + '<feColorMatrix in="s" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 2.4 -1.35" result="la"/>'
+      + '<feComposite in="la" in2="d" operator="in" result="lt"/>'
+      + '<feComponentTransfer in="lt" result="lt2"><feFuncA type="linear" slope="0.35"/></feComponentTransfer>'
+      + '<feMerge><feMergeNode in="d"/><feMergeNode in="dk2"/><feMergeNode in="lt2"/></feMerge></filter>';
+  }
+  function sun() {
+    var id = 'tp' + (++n), rays = '', cols = ['#f2711c', '#e8432a', '#f9b120'];
+    for (var i = 0; i < 11; i++) {
+      var a = i / 11 * Math.PI * 2 + (i % 2 ? .09 : -.05), len = 16.6 + (i % 3) * 1.2, w = .26 + (i % 2) * .05;
+      var p = function (ang, r) { return (20 + Math.cos(ang) * r).toFixed(1) + ' ' + (20 + Math.sin(ang) * r).toFixed(1); };
+      rays += '<path d="M' + p(a - w, 9.6) + ' L' + p(a + .03, len) + ' L' + p(a + w, 9.6) + 'Z" fill="' + cols[i % 3] + '"/>';
+    }
+    return '<svg viewBox="0 0 40 40" aria-hidden="true"><defs>' + paper(id, 3) + '</defs><g filter="url(#' + id + ')">' + rays
+      + '<circle cx="20" cy="20" r="10.2" fill="#f39a1e"/>'
+      + '<ellipse cx="17.9" cy="17.7" rx="6.8" ry="6" fill="#f9c22c"/>'
+      + '<path d="M13.6 25 Q20 30.2 27.8 22.8 Q28 27.4 21.8 29.6 Q15.9 30 13.6 25Z" fill="#e8552a"/>'
+      + '<ellipse cx="23.6" cy="15.4" rx="3.2" ry="2.3" fill="#fbe07a" transform="rotate(-24 23.6 15.4)"/>'
+      + '</g></svg>';
+  }
+  function moon() {
+    var id = 'tp' + (++n), mk = 'tm' + n;
+    return '<svg viewBox="0 0 40 40" aria-hidden="true"><defs>' + paper(id, 11)
+      + '<mask id="' + mk + '"><rect width="40" height="40" fill="#fff"/><circle cx="26.5" cy="14.5" r="11" fill="#000"/></mask></defs>'
+      + '<g filter="url(#' + id + ')">'
+      + '<g mask="url(#' + mk + ')"><circle cx="19" cy="21" r="13" fill="#f2d468"/>'
+      + '<ellipse cx="13.5" cy="25" rx="7" ry="8" fill="#f8e7a2"/>'
+      + '<ellipse cx="18" cy="31" rx="6" ry="3" fill="#e9b949"/></g>'
+      + '<path d="M31.5 25.5 l1.1 2.6 2.6 1.1 -2.6 1.1 -1.1 2.6 -1.1 -2.6 -2.6 -1.1 2.6 -1.1Z" fill="#5aa9e6"/>'
+      + '<path d="M33 7 l.8 1.9 1.9 .8 -1.9 .8 -.8 1.9 -.8 -1.9 -1.9 -.8 1.9 -.8Z" fill="#f9b120"/>'
+      + '</g></svg>';
+  }
+  document.querySelectorAll('[data-ic]').forEach(function (el) { el.innerHTML = el.dataset.ic === 'sun' ? sun() : moon(); });
+  var root = document.documentElement, mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  var metas = document.querySelectorAll('meta[name="theme-color"]');
+  function isDark() { var t = root.getAttribute('data-theme'); return t ? t === 'dark' : !!(mq && mq.matches); }
+  function sync() {
+    var d = isDark();
+    root.classList.toggle('is-dark', d);
+    metas.forEach(function (m) { m.setAttribute('content', d ? '#16140f' : '#fbf6ea'); });
+    document.querySelectorAll('[data-theme-tog]').forEach(function (b) {
+      b.setAttribute('aria-label', d ? 'Switch to light mode' : 'Switch to dark mode');
+      b.title = d ? 'Light mode' : 'Dark mode';
+    });
+  }
+  document.querySelectorAll('[data-theme-tog]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var next = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('sas-theme', next); } catch (e) {}
+      sync();
+    });
+  });
+  if (mq && mq.addEventListener) mq.addEventListener('change', sync);
+  sync();
 })();
 </script>
 </body>
