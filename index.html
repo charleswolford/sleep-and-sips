@@ -121,8 +121,6 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
 .fi-datenav { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
 .fi-datenav[hidden] { display: none; }
 .fi-navbtn { font: inherit; font-size: 1.25rem; line-height: 1; width: 2.25rem; height: 2.25rem; border-radius: 999px; border: 1px solid var(--color-border-line); background: transparent; color: var(--color-fg); cursor: pointer; }
-.fi-range { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-xs) var(--cds-gap-sm); }
-.fi-rlabel { display: inline-flex; align-items: center; gap: .4em; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
 .fi-date { font: inherit; font-size: var(--cds-font-size-body); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-radius: 10px; border: 1px solid var(--color-border-line); background: var(--color-panel); color: var(--color-fg); min-height: 2.25rem; }
 .fi-mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--cds-gap-lg) var(--cds-gap-md); }
 .fi-mini { display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
@@ -372,11 +370,19 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
         <h3 class="fi-h3" id="mix-title">How feeding has changed since birth</h3>
         <details class="fi-more">
           <summary>How to read this</summary>
-          <p class="fi-note">One bar per week. Each bar adds up to 100% of that week's feeds, split by type. Tap or hover a bar to see the number of feeds per day. Change the dates to look at a shorter period.</p>
+          <p class="fi-note">All days shows one bar per week; One week and One day show one bar per day. Each bar adds up to 100% of that week's or that day's feeds, split by type. Tap or hover a bar to see the number of feeds.</p>
         </details>
-        <div class="fi-range">
-          <label class="fi-rlabel">From <input class="fi-date" type="date" id="mix-from"></label>
-          <label class="fi-rlabel">To <input class="fi-date" type="date" id="mix-to"></label>
+        <div class="fi-rhythm-ctl" id="mix-ctl">
+          <div class="fi-seg" role="group" aria-label="How much to show">
+            <button class="fi-btn" type="button" data-range="all" aria-pressed="true">All days</button>
+            <button class="fi-btn" type="button" data-range="week" aria-pressed="false">One week</button>
+            <button class="fi-btn" type="button" data-range="day" aria-pressed="false">One day</button>
+          </div>
+          <div class="fi-datenav" id="mix-datenav" hidden>
+            <button class="fi-navbtn" type="button" id="mix-prev" aria-label="Previous">&#8249;</button>
+            <input class="fi-date" type="date" id="mix-date" aria-label="Date to show">
+            <button class="fi-navbtn" type="button" id="mix-next" aria-label="Next">&#8250;</button>
+          </div>
         </div>
         <div class="fi-legend" id="mix-legend"></div>
         <div class="fi-chart dash-skeleton" id="mix" data-source="feedmix"></div>
@@ -390,13 +396,19 @@ body.dragging .page { outline: 3px dashed #2bb3a9; outline-offset: 6px; border-r
       <h3 class="fi-h3" id="nappy-title">Nappies per day</h3>
       <details class="fi-more">
         <summary>How to read this</summary>
-        <p class="fi-note">Each block is one nappy, and the dashed line is the average per day. It starts on the last 14 days; change the dates or use the arrows to look at another period. A wet and dirty nappy counts towards both the wet and the dirty average. The day he was born and the day of the export are only partly logged, so they are faded and left out of the averages.</p>
+        <p class="fi-note">Each block is one nappy, and the dashed line is the average per day. It starts on the latest week; use All days, One week or One day, with the date and arrows, to look at another period. A wet and dirty nappy counts towards both the wet and the dirty average. The day he was born and the day of the export are only partly logged, so they are faded and left out of the averages.</p>
       </details>
-      <div class="fi-range">
-        <button class="fi-navbtn" type="button" id="nappy-prev" aria-label="Earlier">&#8249;</button>
-        <label class="fi-rlabel">From <input class="fi-date" type="date" id="nappy-from"></label>
-        <label class="fi-rlabel">To <input class="fi-date" type="date" id="nappy-to"></label>
-        <button class="fi-navbtn" type="button" id="nappy-next" aria-label="Later">&#8250;</button>
+      <div class="fi-rhythm-ctl" id="nappy-ctl">
+        <div class="fi-seg" role="group" aria-label="How much to show">
+          <button class="fi-btn" type="button" data-range="all" aria-pressed="false">All days</button>
+          <button class="fi-btn" type="button" data-range="week" aria-pressed="true">One week</button>
+          <button class="fi-btn" type="button" data-range="day" aria-pressed="false">One day</button>
+        </div>
+        <div class="fi-datenav" id="nappy-datenav">
+          <button class="fi-navbtn" type="button" id="nappy-prev" aria-label="Previous">&#8249;</button>
+          <input class="fi-date" type="date" id="nappy-date" aria-label="Date to show">
+          <button class="fi-navbtn" type="button" id="nappy-next" aria-label="Next">&#8250;</button>
+        </div>
       </div>
       <div class="fi-stat" id="nappy-stat" data-source="nappies"></div>
       <div class="fi-legend" id="nappy-legend"></div>
@@ -892,6 +904,30 @@ dash.calc('nappies', {
       r[k] += 1; r.total += 1;
     });
     return daily.map(d => by[d.day]);
+  }
+});
+
+dash.calc('feedmix_daily', {
+  title: 'Feeds by type per day',
+  description: 'Feeds each day, split into direct breastfeeds, breast milk bottles, and formula bottles, with each type as a share of that day. A bottle with both is split between breast milk and formula by volume. The birth day and export day are partial.',
+  inputs: ['feeds', 'daily'],
+  fn: (feeds, daily) => {
+    const modes = ['Breastfeed', 'Bottle: breast milk', 'Bottle: formula'];
+    const c = {};
+    daily.forEach(d => { c[d.day] = [0, 0, 0]; });
+    feeds.forEach(f => {
+      const r = c[f.day]; if (!r) return;
+      if (f.type === 'Breastfeed') { r[0] += 1; return; }
+      const tot = f.bm_ml + f.formula_ml;
+      if (f.bm_ml > 0 && f.formula_ml > 0) { r[1] += f.bm_ml / tot; r[2] += f.formula_ml / tot; }
+      else r[f.kind === 'Bottle: formula' ? 2 : 1] += 1;
+    });
+    const out = [];
+    daily.forEach(d => {
+      const r = c[d.day], tot = r[0] + r[1] + r[2];
+      modes.forEach((m, i) => out.push({ day: d.day, mode: m, feeds: Math.round(r[i] * 10) / 10, share_pct: tot ? Math.round(r[i] / tot * 100) : 0, partial: !!d.partial }));
+    });
+    return out;
   }
 });
 </script>
@@ -1571,43 +1607,75 @@ const rhythmStep = n => { if (!rhythmDate) return; rhythmDate = new Date(Date.pa
 const rdi = document.getElementById('rhythm-date');
 if (rdi) rdi.addEventListener('change', () => { if (rdi.value) { rhythmDate = rdi.value; drawRhythm(); } });
 
-// Feed mix, with a date range
-let mixFrom = null, mixTo = null;
+// Shared All days / One week / One day control, matching the daily rhythm chart
+const RANGES = {};
+const addDays = (s, n) => new Date(Date.parse(s) + n * DAY).toISOString().slice(0, 10);
+const weekBounds = s => { const t = Date.parse(s), mon = t - ((new Date(t).getUTCDay() + 6) % 7) * DAY; return [new Date(mon).toISOString().slice(0, 10), new Date(mon + 6 * DAY).toISOString().slice(0, 10)]; };
+function rangeDays(prefix, days, lastFull) {
+  const st = RANGES[prefix];
+  const nav = document.getElementById(prefix + '-datenav'), inp = document.getElementById(prefix + '-date');
+  if (nav) nav.hidden = st.span === 'all';
+  if (!days.length) return days;
+  if (!st.date || st.date < days[0] || st.date > days[days.length - 1]) st.date = lastFull || days[days.length - 1];
+  if (inp) { inp.min = days[0]; inp.max = days[days.length - 1]; inp.value = st.date; }
+  if (st.span === 'day') return days.filter(x => x === st.date);
+  if (st.span === 'week') { const [p, q] = weekBounds(st.date); return days.filter(x => x >= p && x <= q); }
+  return days;
+}
+function setupRange(prefix, initial, draw) {
+  RANGES[prefix] = { span: initial, date: null };
+  const box = document.getElementById(prefix + '-ctl'); if (!box) return;
+  const btns = box.querySelectorAll('.fi-btn[data-range]');
+  btns.forEach(btn => btn.addEventListener('click', () => {
+    RANGES[prefix].span = btn.dataset.range;
+    btns.forEach(o => o.setAttribute('aria-pressed', String(o === btn)));
+    draw();
+  }));
+  const step = n => { const st = RANGES[prefix]; if (!st.date) return; st.date = addDays(st.date, n * (st.span === 'week' ? 7 : 1)); draw(); };
+  (document.getElementById(prefix + '-prev') || {}).onclick = () => step(-1);
+  (document.getElementById(prefix + '-next') || {}).onclick = () => step(1);
+  const inp = document.getElementById(prefix + '-date');
+  if (inp) inp.addEventListener('change', () => { if (inp.value) { RANGES[prefix].date = inp.value; draw(); } });
+}
+const lastFullDay = rows => (rows.filter(r => !r.partial).slice(-1)[0] || rows[rows.length - 1] || {}).day;
+
+// Feed mix: weeks for All days, days for One week and One day
+const fmtFeeds = v => Math.round(v * 10) % 10 === 0 ? fmtInt(v) : fmt1(v);
 function drawMix() {
   const modes = [['Breastfeed', PAL.pink, 'Breastfed directly'], ['Bottle: breast milk', PAL.green, 'Breast milk'], ['Bottle: formula', PAL.orange, 'Formula']];
   legend('mix-legend', modes.map(([n, c, label]) => ({ name: label, color: c })));
   const mx = document.getElementById('mix');
-  if (!mx || !setState(mx, ['feedmix', 'daily'])) return;
+  if (!mx || !setState(mx, ['feedmix', 'feedmix_daily', 'daily'])) return;
   const daily = rowsOf('daily');
-  const f = document.getElementById('mix-from'), t = document.getElementById('mix-to');
-  if (daily.length) {
-    const lo = daily[0].day, hi = daily[daily.length - 1].day;
-    if (!mixFrom || mixFrom < lo || mixFrom > hi) mixFrom = lo;
-    if (!mixTo || mixTo < lo || mixTo > hi) mixTo = hi;
-    if (mixFrom > mixTo) [mixFrom, mixTo] = [mixTo, mixFrom];
-    [f, t].forEach(i => { if (i) { i.min = lo; i.max = hi; } });
-    if (f) f.value = mixFrom; if (t) t.value = mixTo;
+  const days = rangeDays('mix', daily.map(r => r.day), lastFullDay(daily));
+  const keys = modes.map(([n, c], i) => ({ key: 'k' + i, name: n, color: c }));
+  if (RANGES.mix.span === 'all') {
+    const r = rowsOf('feedmix');
+    const weeks = [...new Set(r.map(x => x.week))].sort();
+    const data = weeks.map(w => { const o = { x: w }; modes.forEach(([m], i) => { const q = r.find(z => z.week === w && z.mode === m); o['k' + i] = q ? q.share_pct : 0; o['p' + i] = q ? q.per_day : 0; }); return o; });
+    stackBars(mx, {
+      data, keys, yMax: 100, height: 190, yFmt: v => `${v}%`, xFmt: weekLabel,
+      tipTitle: x => `Week of ${weekLabel(x.x)}`,
+      tipLines: x => modes.map(([n, c, label], i) => ({ color: c, name: label, value: `${x['k' + i]}% (${fmt1(x['p' + i])} a day)`, show: x['p' + i] > 0 })).filter(l => l.show)
+    });
+    return;
   }
-  const wk = s => { const ms = Date.parse(s); return new Date(ms - ((new Date(ms).getUTCDay() + 6) % 7) * DAY).toISOString().slice(0, 10); };
-  const r = rowsOf('feedmix');
-  const weeks = [...new Set(r.map(d => d.week))].sort().filter(w => !mixFrom || (w >= wk(mixFrom) && w <= mixTo));
-  const data = weeks.map(w => { const o = { x: w }; modes.forEach(([m], i) => { const d = r.find(q => q.week === w && q.mode === m); o['k' + i] = d ? d.share_pct : 0; o['p' + i] = d ? d.per_day : 0; }); return o; });
+  const r = rowsOf('feedmix_daily'), want = new Set(days);
+  const data = days.map(day => { const o = { x: day }; modes.forEach(([m], i) => { const q = r.find(z => z.day === day && z.mode === m); o['k' + i] = q ? q.share_pct : 0; o['n' + i] = q ? q.feeds : 0; o.partial = q ? q.partial : false; }); return o; })
+    .filter(o => want.has(o.x) && (o.n0 + o.n1 + o.n2) > 0);
   stackBars(mx, {
-    data, keys: modes.map(([n, c], i) => ({ key: 'k' + i, name: n, color: c })), yMax: 100, height: 190, yFmt: v => `${v}%`, xFmt: weekLabel,
-    emptyText: 'No full weeks between these dates',
-    tipTitle: d => `Week of ${weekLabel(d.x)}`,
-    tipLines: d => modes.map(([n, c, label], i) => ({ color: c, name: label, value: `${d['k' + i]}% (${fmt1(d['p' + i])} a day)`, show: d['p' + i] > 0 })).filter(l => l.show)
+    data, keys, yMax: 100, height: 190, yFmt: v => `${v}%`, xFmt: v => fmtWeekday(pday(v)),
+    emptyText: 'No feeds logged on this date',
+    opacityFor: x => x.partial ? 0.4 : 1,
+    tipTitle: x => fmtDayLong(pday(x.x)) + (x.partial ? ', partly logged' : ''),
+    tipLines: x => modes.map(([n, c, label], i) => ({ color: c, name: label, value: `${x['k' + i]}% (${fmtFeeds(x['n' + i])} ${x['n' + i] === 1 ? 'feed' : 'feeds'})`, show: x['n' + i] > 0 })).filter(l => l.show)
+      .concat([{ name: 'Total', value: `${fmtFeeds(x.n0 + x.n1 + x.n2)} feeds` }])
   });
 }
-['mix-from', 'mix-to'].forEach(id => {
-  const i = document.getElementById(id);
-  if (i) i.addEventListener('change', () => { if (!i.value) return; if (id === 'mix-from') mixFrom = i.value; else mixTo = i.value; drawMix(); });
-});
+setupRange('mix', 'all', drawMix);
 
 // Nappies, one block per nappy
 const NAP = { wet: '#e9c46a', dirty: '#9c6b16', dry: '#c9c2b6' };
-let napFrom = null, napTo = null;
-const addDays = (s, n) => new Date(Date.parse(s) + n * DAY).toISOString().slice(0, 10);
 function nappyChart(box, rows, avg) {
   box.replaceChildren();
   if (!rows.length) { emptyMsg(box, 'No days between these dates'); return; }
@@ -1661,54 +1729,35 @@ function drawNappies() {
   const box = document.getElementById('nappy'), stat = document.getElementById('nappy-stat');
   if (!box || !setState(box, ['nappies'])) { if (stat) stat.replaceChildren(); return; }
   const all = rowsOf('nappies');
-  if (!all.length) { nappyChart(box, [], null); return; }
-  const lo = all[0].day, hi = all[all.length - 1].day;
-  if (!napTo || napTo < lo || napTo > hi) napTo = hi;
-  if (!napFrom || napFrom < lo || napFrom > hi) napFrom = addDays(napTo, -13) < lo ? lo : addDays(napTo, -13);
-  if (napFrom > napTo) [napFrom, napTo] = [napTo, napFrom];
-  const f = document.getElementById('nappy-from'), t = document.getElementById('nappy-to');
-  [f, t].forEach(i => { if (i) { i.min = lo; i.max = hi; } });
-  if (f) f.value = napFrom; if (t) t.value = napTo;
-  const rows = all.filter(d => d.day >= napFrom && d.day <= napTo);
-  const full = rows.filter(d => !d.partial);
-  const mean = (rs, fn) => rs.length ? rs.reduce((s, d) => s + fn(d), 0) / rs.length : null;
-  const avg = mean(full, d => d.total), wet = mean(full, d => d.wet + d.both), dirty = mean(full, d => d.dirty + d.both);
-  nappyChart(box, rows, avg);
+  const days = new Set(rangeDays('nappy', all.map(r => r.day), lastFullDay(all)));
+  const rows = all.filter(r => days.has(r.day));
+  const full = rows.filter(r => !r.partial);
+  const mean = (rs, fn) => rs.length ? rs.reduce((t, r) => t + fn(r), 0) / rs.length : null;
+  const avg = mean(full, r => r.total), wet = mean(full, r => r.wet + r.both), dirty = mean(full, r => r.dirty + r.both);
+  nappyChart(box, rows, RANGES.nappy.span === 'day' ? null : avg);
   if (!stat) return;
   stat.replaceChildren();
-  if (avg == null) { const p = document.createElement('span'); p.className = 'fi-sub'; p.textContent = 'No fully logged days between these dates.'; stat.append(p); return; }
+  if (avg == null) { const p = document.createElement('span'); p.className = 'fi-sub'; p.textContent = 'This day is only partly logged, so it is left out of the averages.'; stat.append(p); return; }
+  const span = RANGES.nappy.span, one = span === 'day';
   const big = document.createElement('div'); big.className = 'fi-big';
-  const u = document.createElement('span'); u.className = 'fi-unit'; u.textContent = ' nappies a day on average';
-  big.append(fmt1(avg), u);
+  const u = document.createElement('span'); u.className = 'fi-unit'; u.textContent = one ? ' nappies' : ' nappies a day on average';
+  big.append(one ? fmtInt(avg) : fmt1(avg), u);
   const sub = document.createElement('span'); sub.className = 'fi-sub';
-  sub.textContent = `Wet ${fmt1(wet)} a day, dirty ${fmt1(dirty)} a day, over ${full.length} fully logged ${full.length === 1 ? 'day' : 'days'}.`;
+  sub.textContent = one ? `Wet ${fmtInt(wet)}, dirty ${fmtInt(dirty)}.` : `Wet ${fmt1(wet)} a day, dirty ${fmt1(dirty)} a day, over ${full.length} fully logged ${full.length === 1 ? 'day' : 'days'}.`;
   stat.append(big, sub);
-  const len = Math.round((Date.parse(napTo) - Date.parse(napFrom)) / DAY) + 1;
-  const pFrom = addDays(napFrom, -len), pTo = addDays(napFrom, -1);
-  const prev = all.filter(d => d.day >= pFrom && d.day <= pTo && !d.partial);
-  if (pFrom >= lo && prev.length) {
-    const diff = Math.round((avg - mean(prev, d => d.total)) * 10) / 10;
+  if (span === 'all') return;
+  const back = span === 'week' ? 7 : 1;
+  const prevDays = new Set([...days].map(x => addDays(x, -back)));
+  const prev = all.filter(r => prevDays.has(r.day) && !r.partial);
+  if (prev.length) {
+    const diff = Math.round((avg - mean(prev, r => r.total)) * 10) / 10;
+    const what = span === 'week' ? 'the week before' : 'the day before';
     const c = document.createElement('span'); c.className = 'fi-sub';
-    c.textContent = diff === 0 ? `About the same as the ${len} days before.` : `${fmt1(Math.abs(diff))} ${diff > 0 ? 'more' : 'fewer'} a day than the ${len} days before.`;
+    c.textContent = diff === 0 ? `The same as ${what}.` : one ? `${fmtInt(Math.abs(diff))} ${diff > 0 ? 'more' : 'fewer'} than ${what}.` : `${fmt1(Math.abs(diff))} ${diff > 0 ? 'more' : 'fewer'} a day than ${what}.`;
     stat.append(c);
   }
 }
-const napShift = dir => {
-  if (!napFrom || dash.data('nappies').status !== 'ok') return;
-  const all = rowsOf('nappies'); if (!all.length) return;
-  const lo = all[0].day, hi = all[all.length - 1].day;
-  const len = Math.round((Date.parse(napTo) - Date.parse(napFrom)) / DAY) + 1;
-  let a = addDays(napFrom, dir * len), b = addDays(napTo, dir * len);
-  if (a < lo) { a = lo; b = addDays(lo, len - 1) > hi ? hi : addDays(lo, len - 1); }
-  if (b > hi) { b = hi; a = addDays(hi, -(len - 1)) < lo ? lo : addDays(hi, -(len - 1)); }
-  napFrom = a; napTo = b; drawNappies();
-};
-(document.getElementById('nappy-prev') || {}).onclick = () => napShift(-1);
-(document.getElementById('nappy-next') || {}).onclick = () => napShift(1);
-['nappy-from', 'nappy-to'].forEach(id => {
-  const i = document.getElementById(id);
-  if (i) i.addEventListener('change', () => { if (!i.value) return; if (id === 'nappy-from') napFrom = i.value; else napTo = i.value; drawNappies(); });
-});
+setupRange('nappy', 'week', drawNappies);
 
 dash.onData(drawAll);
 </script>
